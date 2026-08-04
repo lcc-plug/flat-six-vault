@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check } from "lucide-react";
+import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload } from "lucide-react";
 
 // ---------- Design tokens ----------
 const C = {
@@ -89,12 +89,31 @@ function genId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-function plateId(pin, catalog) {
-  const abbrev = pin.series.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 3);
-  const sameSeries = catalog.filter((p) => p.series === pin.series);
-  const idx = sameSeries.findIndex((p) => p.id === pin.id) + 1;
-  const yy = String(pin.year).slice(-2);
-  return `${abbrev}\u00B7${yy}\u00B7${String(idx).padStart(3, "0")}`;
+// ---------- Photo upload (resize + inline as data URL) ----------
+function resizeImageFile(file, maxDim = 1000, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error);
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Couldn't read that image."));
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = maxDim / Math.max(width, height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 // ---------- Badge ----------
@@ -172,6 +191,54 @@ function Field({ label, children }) {
       </span>
       <div style={{ marginTop: 6 }}>{children}</div>
     </label>
+  );
+}
+
+function ImageField({ value, onChange }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleFile(e) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setBusy(true);
+    setError("");
+    try {
+      onChange(await resizeImageFile(file));
+    } catch {
+      setError("Couldn't load that photo — try a different file.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Field label="Photo">
+      {value && (
+        <div style={{ position: "relative", marginBottom: 8 }}>
+          <img src={value} alt="" style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, background: C.panelRaised }} />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            style={{ position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: 9999, background: "rgba(21,23,26,0.75)", border: `1px solid ${C.line}`, color: C.chalk, display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <X size={13} />
+          </button>
+        </div>
+      )}
+      <label
+        style={{
+          ...mono, display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: C.steel,
+          border: `1px dashed ${C.line}`, borderRadius: 8, padding: "8px 12px", cursor: "pointer",
+        }}
+      >
+        <Upload size={13} />
+        {busy ? "Processing…" : value ? "Replace photo" : "Upload photo"}
+        <input type="file" accept="image/*" onChange={handleFile} style={{ display: "none" }} />
+      </label>
+      {error && <div style={{ ...mono, fontSize: 11, color: "#F0A0A3", marginTop: 6 }}>{error}</div>}
+    </Field>
   );
 }
 
@@ -347,7 +414,6 @@ export default function App() {
         <div style={{ flex: 1, paddingBottom: 90 }}>
           {tab === "catalog" && (
             <CatalogTab
-              catalog={catalog}
               filtered={filteredCatalog}
               search={search}
               setSearch={setSearch}
@@ -412,7 +478,6 @@ export default function App() {
         {detailPin && (
           <PinDetailModal
             pin={detailPin}
-            catalog={catalog}
             entry={detailEntry}
             onClose={() => setDetailPinId(null)}
             onSaveCatalogEdit={upsertCatalogPin}
@@ -445,7 +510,7 @@ function NavButton({ icon: Icon, label, active, onClick }) {
 }
 
 // ---------- Catalog Tab ----------
-function CatalogTab({ catalog, filtered, search, setSearch, seriesList, seriesFilter, setSeriesFilter, onAdd, onAddToCollection, onOpenDetail }) {
+function CatalogTab({ filtered, search, setSearch, seriesList, seriesFilter, setSeriesFilter, onAdd, onAddToCollection, onOpenDetail }) {
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ position: "relative", marginBottom: 12 }}>
@@ -478,8 +543,8 @@ function CatalogTab({ catalog, filtered, search, setSearch, seriesList, seriesFi
           >
             <PinBadge code={pin.chassisCode} />
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15 }}>{pin.name}</div>
-              <div style={{ ...mono, fontSize: 11, color: C.amber, marginTop: 2 }}>{plateId(pin, catalog)}</div>
+              <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+              <div style={{ height: 10 }} />
               <div style={{ ...body, fontSize: 13, color: C.steel, marginTop: 4 }}>
                 {pin.series} · {pin.year} · {pin.variant}
               </div>
@@ -553,7 +618,7 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
             >
               <PinBadge code={pin.chassisCode} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15 }}>{pin.name}</div>
+                <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ ...body, fontSize: 13, color: C.steel, marginTop: 4 }}>
                   {pin.series} · {pin.year}
                 </div>
@@ -635,7 +700,7 @@ function EmptyState({ title, body: b }) {
 }
 
 // ---------- Pin Detail Modal (view / edit / garage controls) ----------
-function PinDetailModal({ pin, catalog, entry, onClose, onSaveCatalogEdit, onAddToGarage, onUpdateGarageEntry, onRemoveFromGarage }) {
+function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage, onUpdateGarageEntry, onRemoveFromGarage }) {
   const [editMode, setEditMode] = useState(false);
   const [f, setF] = useState({ ...pin });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
@@ -670,12 +735,12 @@ function PinDetailModal({ pin, catalog, entry, onClose, onSaveCatalogEdit, onAdd
           )}
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
-            <div style={{ ...display, fontSize: 22, fontWeight: 700, lineHeight: 1.15 }}>{pin.name}</div>
+            <div style={{ ...display, fontSize: 22, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
             <button onClick={() => setEditMode(true)} style={{ background: C.panelRaised, border: `1px solid ${C.line}`, borderRadius: 8, padding: 6, color: C.steel, flexShrink: 0, marginLeft: 8 }}>
               <Pencil size={14} />
             </button>
           </div>
-          <div style={{ ...mono, fontSize: 12, color: C.amber, marginBottom: 8 }}>{plateId(pin, catalog)}</div>
+          <div style={{ height: 12, marginBottom: 8 }} />
           <div style={{ ...body, fontSize: 14, color: C.chalk, marginBottom: 4 }}>
             {pin.series} · {pin.year} · {pin.variant}
           </div>
@@ -732,7 +797,7 @@ function PinDetailModal({ pin, catalog, entry, onClose, onSaveCatalogEdit, onAdd
             <div style={{ flex: 1 }}><Field label="Edition size"><input style={inputStyle} value={f.editionSize} onChange={set("editionSize")} /></Field></div>
           </div>
           <Field label="Colorway / variant"><input style={inputStyle} value={f.variant} onChange={set("variant")} /></Field>
-          <Field label="Image URL (optional)"><input style={inputStyle} value={f.imageUrl || ""} onChange={set("imageUrl")} placeholder="https://…" /></Field>
+          <ImageField value={f.imageUrl} onChange={(v) => setF({ ...f, imageUrl: v })} />
           <Field label="Description / notes"><textarea style={{ ...inputStyle, minHeight: 70, resize: "vertical" }} value={f.notes} onChange={set("notes")} /></Field>
 
           <div style={{ display: "flex", gap: 10 }}>
@@ -769,7 +834,7 @@ function AddCatalogModal({ onClose, onSave }) {
         </div>
       </div>
       <Field label="Colorway / variant"><input style={inputStyle} value={f.variant} onChange={set("variant")} placeholder="Guards Red / Silver" /></Field>
-      <Field label="Image URL (optional)"><input style={inputStyle} value={f.imageUrl} onChange={set("imageUrl")} placeholder="https://…" /></Field>
+      <ImageField value={f.imageUrl} onChange={(v) => setF({ ...f, imageUrl: v })} />
       <Field label="Description / notes"><textarea style={{ ...inputStyle, minHeight: 60, resize: "vertical" }} value={f.notes} onChange={set("notes")} /></Field>
 
       <SaveBar disabled={!canSave} onSave={() => onSave({ ...f, year: Number(f.year) || f.year })} label="Add to catalog" />
@@ -812,7 +877,7 @@ function AddCollectionModal({ catalog, initialCatalogId, onClose, onSave }) {
         <div style={{ display: "flex", gap: 10, alignItems: "center", background: C.panelRaised, borderRadius: 10, padding: 10, marginBottom: 14 }}>
           <PinBadge code={pin.chassisCode} size={40} />
           <div>
-            <div style={{ ...display, fontSize: 16, fontWeight: 700 }}>{pin.name}</div>
+            <div style={{ ...display, fontSize: 16, fontWeight: 700, color: "#FFFFFF" }}>{pin.name}</div>
             <div style={{ ...mono, fontSize: 11, color: C.steel }}>{pin.series} · {pin.year}</div>
           </div>
           {!initialCatalogId && (
