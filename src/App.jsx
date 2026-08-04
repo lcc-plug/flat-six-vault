@@ -123,12 +123,35 @@ function CropModal({ file, onCancel, onConfirm }) {
   const imgRef = useRef(null);
   const dragRef = useRef(null);
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState("");
   const [natural, setNatural] = useState({ w: 0, h: 0 });
   const [zoom, setZoom] = useState(1);
   const [pos, setPos] = useState({ x: 0, y: 0 });
-  const objectUrl = useMemo(() => URL.createObjectURL(file), [file]);
+  const [objectUrl, setObjectUrl] = useState("");
 
-  useEffect(() => () => URL.revokeObjectURL(objectUrl), [objectUrl]);
+  useEffect(() => {
+    let url;
+    try {
+      url = URL.createObjectURL(file);
+      setObjectUrl(url);
+    } catch {
+      setError("Couldn't open that file — try a different photo.");
+    }
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [file]);
+
+  useEffect(() => {
+    if (!objectUrl) return;
+    const timeout = setTimeout(() => {
+      setReady((r) => {
+        if (!r) setError("This photo is taking too long to load — try a different one.");
+        return r;
+      });
+    }, 12000);
+    return () => clearTimeout(timeout);
+  }, [objectUrl]);
 
   const baseScale = natural.w ? CROP_VIEWPORT / Math.min(natural.w, natural.h) : 1;
   const scale = baseScale * zoom;
@@ -144,6 +167,10 @@ function CropModal({ file, onCancel, onConfirm }) {
   function handleImgLoad(e) {
     setNatural({ w: e.target.naturalWidth, h: e.target.naturalHeight });
     setReady(true);
+  }
+
+  function handleImgError() {
+    setError("Couldn't load that photo — it may be an unsupported format. Try a JPEG or PNG.");
   }
 
   function clamp(p) {
@@ -169,15 +196,19 @@ function CropModal({ file, onCancel, onConfirm }) {
   }
 
   function confirm() {
-    const canvas = document.createElement("canvas");
-    canvas.width = CROP_OUTPUT;
-    canvas.height = CROP_OUTPUT;
-    const ctx = canvas.getContext("2d");
-    const sx = -pos.x / scale;
-    const sy = -pos.y / scale;
-    const swh = CROP_VIEWPORT / scale;
-    ctx.drawImage(imgRef.current, sx, sy, swh, swh, 0, 0, CROP_OUTPUT, CROP_OUTPUT);
-    onConfirm(canvas.toDataURL("image/jpeg", 0.86));
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = CROP_OUTPUT;
+      canvas.height = CROP_OUTPUT;
+      const ctx = canvas.getContext("2d");
+      const sx = -pos.x / scale;
+      const sy = -pos.y / scale;
+      const swh = CROP_VIEWPORT / scale;
+      ctx.drawImage(imgRef.current, sx, sy, swh, swh, 0, 0, CROP_OUTPUT, CROP_OUTPUT);
+      onConfirm(canvas.toDataURL("image/jpeg", 0.86));
+    } catch {
+      setError("Couldn't process that photo — try a different one.");
+    }
   }
 
   return (
@@ -192,18 +223,28 @@ function CropModal({ file, onCancel, onConfirm }) {
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
         >
-          <img
-            ref={imgRef}
-            src={objectUrl}
-            onLoad={handleImgLoad}
-            draggable={false}
-            alt=""
-            style={{ position: "absolute", left: pos.x, top: pos.y, width: dw || "auto", height: dh || "auto", maxWidth: "none", userSelect: "none", pointerEvents: "none" }}
-          />
+          {objectUrl && (
+            <img
+              ref={imgRef}
+              src={objectUrl}
+              onLoad={handleImgLoad}
+              onError={handleImgError}
+              draggable={false}
+              alt=""
+              style={{ position: "absolute", left: pos.x, top: pos.y, width: dw || "auto", height: dh || "auto", maxWidth: "none", userSelect: "none", pointerEvents: "none" }}
+            />
+          )}
+          {!ready && !error && (
+            <div style={{ ...mono, position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: C.steel }}>
+              Loading…
+            </div>
+          )}
         </div>
+        {error && <div style={{ ...mono, fontSize: 12, color: "#F0A0A3", marginTop: 10 }}>{error}</div>}
         <input
           type="range" min="1" max="3" step="0.01" value={zoom}
           onChange={(e) => setZoom(Number(e.target.value))}
+          disabled={!ready}
           style={{ width: "100%", marginTop: 14 }}
         />
         <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
@@ -262,10 +303,20 @@ function PhotosField({ images, onChange }) {
       >
         <Upload size={13} />
         Add photo
-        <input type="file" accept="image/*" onChange={handlePick} style={{ display: "none" }} />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handlePick}
+          style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}
+        />
       </label>
       {pendingFile && (
-        <CropModal file={pendingFile} onCancel={() => setPendingFile(null)} onConfirm={handleCropConfirm} />
+        <CropModal
+          key={`${pendingFile.name}-${pendingFile.size}-${pendingFile.lastModified}`}
+          file={pendingFile}
+          onCancel={() => setPendingFile(null)}
+          onConfirm={handleCropConfirm}
+        />
       )}
     </Field>
   );
@@ -353,7 +404,7 @@ export default function App() {
     saveJSON(LS_PROFILE, next);
   }
 
-  const seriesList = useMemo(() => ["All", ...Array.from(new Set(catalog.map((p) => p.series)))], [catalog]);
+  const seriesList = useMemo(() => ["All", ...Array.from(new Set(catalog.map((p) => p.series).filter(Boolean)))], [catalog]);
 
   const filteredCatalog = useMemo(() => {
     return catalog.filter((p) => {
@@ -580,7 +631,7 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesList, seriesF
               style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column" }}
             >
               <PinPhoto pin={pin} height={180} radius={0} grayscale={!owned} />
-              <div style={{ padding: 12 }}>
+              <div style={{ padding: 12, textAlign: "center" }}>
                 <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ height: 10 }} />
                 <div style={{ ...body, fontSize: 13, color: C.steel, marginTop: 4 }}>
@@ -589,7 +640,7 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesList, seriesF
                 {pin.editionSize && (
                   <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
                 )}
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
                   <span
                     role="button"
                     onClick={(e) => { e.stopPropagation(); onAddToCollection(pin.id); }}
@@ -631,12 +682,12 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
           <span style={{ ...mono, fontSize: 13, color: C.amber, fontWeight: 600 }}>{stats.percent}%</span>
         </div>
         <ProgressBar percent={stats.percent} />
-        <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 8 }}>
+        <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 8, textAlign: "right" }}>
           {stats.owned} of {stats.totalCatalog} pins collected
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14 }}>
           <StatBlock label="OWNED" value={stats.owned} />
-          <StatBlock label="TO COMPLETE" value={stats.missing} />
+          <StatBlock label="TO COMPLETE" value={stats.missing} align="right" />
         </div>
       </div>
 
@@ -683,9 +734,9 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
   );
 }
 
-function StatBlock({ label, value }) {
+function StatBlock({ label, value, align = "left" }) {
   return (
-    <div>
+    <div style={{ textAlign: align }}>
       <div style={{ ...mono, fontSize: 10, color: C.steel, letterSpacing: "0.08em" }}>{label}</div>
       <div style={{ ...mono, fontSize: 22, fontWeight: 600, color: C.chalk, marginTop: 2 }}>{value}</div>
     </div>
