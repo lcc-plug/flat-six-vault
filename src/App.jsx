@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload } from "lucide-react";
 
 // ---------- Design tokens ----------
@@ -46,117 +46,38 @@ function saveJSON(key, value) {
   }
 }
 
-// ---------- Badge color lookup ----------
-const BADGE_COLORS = {
-  356: ["#9BA4AD", "#5C636B"],
-  911: ["#C1272D", "#7A1519"],
-  917: ["#1E5FA8", "#0E3A6B"],
-  935: ["#22252A", "#0B0C0E"],
-  959: ["#E9E9E4", "#B7B8B1"],
-  964: ["#C1272D", "#7A1519"],
-  993: ["#E8A33D", "#8A5A17"],
-  918: ["#15171A", "#34373C"],
-  RR: ["#E8A33D", "#8A5A17"],
-  TC: ["#2FA6A6", "#175C5C"],
-};
-const FALLBACKS = [
-  ["#7C8B99", "#43505C"],
-  ["#B0562F", "#6E3419"],
-  ["#4C6E4E", "#2A3F2B"],
-];
-function badgeColors(code) {
-  if (BADGE_COLORS[code]) return BADGE_COLORS[code];
-  let h = 0;
-  for (const ch of String(code)) h = (h * 31 + ch.charCodeAt(0)) % FALLBACKS.length;
-  return FALLBACKS[h];
-}
-
 // ---------- Seed catalog ----------
 const SEED_CATALOG = [
-  { id: "s1", chassisCode: "356", name: "356 Speedster Silhouette", series: "Design Icons", year: 2023, variant: "Silver / Black", editionSize: "750", notes: "Traces the profile of the original 1954 Speedster.", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s2", chassisCode: "911", name: '911 Carrera RS 2.7 "Carrera Script"', series: "Design Icons", year: 2023, variant: "Grand Prix White / Blutorange", editionSize: "1000", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s3", chassisCode: "917", name: "917 K Le Mans Winner", series: "Motorsport Legends", year: 2022, variant: "Gulf Blue / Orange", editionSize: "500", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s4", chassisCode: "959", name: "959 Paris-Dakar", series: "Motorsport Legends", year: 2022, variant: "White / Red / Blue", editionSize: "500", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s5", chassisCode: "935", name: '935 "Moby Dick"', series: "Motorsport Legends", year: 2024, variant: "Martini Racing", editionSize: "400", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s6", chassisCode: "964", name: "964 Turbo 3.6", series: "Design Icons", year: 2024, variant: "Guards Red", editionSize: "800", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s7", chassisCode: "993", name: "993 GT2 Evo", series: "Design Icons", year: 2025, variant: "Speed Yellow", editionSize: "600", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s8", chassisCode: "RR", name: "Rennsport Reunion 7 Event Pin", series: "Rennsport Reunion", year: 2025, variant: "Laguna Seca Enamel", editionSize: "2000", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s9", chassisCode: "918", name: "918 Spyder Weissach", series: "Design Icons", year: 2023, variant: "Martini Racing Livery", editionSize: "300", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
-  { id: "s10", chassisCode: "TC", name: "Taycan Turbo GT Launch Pin", series: "Modern Era", year: 2024, variant: "Frozen Blue Metallic", editionSize: "1500", notes: "", imageUrl: "", addedBy: "Starter Catalog" },
+  { id: "s1", chassisCode: "356", name: "356 Speedster Silhouette", series: "Design Icons", year: 2023, variant: "Silver / Black", editionSize: "750", notes: "Traces the profile of the original 1954 Speedster.", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s2", chassisCode: "911", name: '911 Carrera RS 2.7 "Carrera Script"', series: "Design Icons", year: 2023, variant: "Grand Prix White / Blutorange", editionSize: "1000", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s3", chassisCode: "917", name: "917 K Le Mans Winner", series: "Motorsport Legends", year: 2022, variant: "Gulf Blue / Orange", editionSize: "500", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s4", chassisCode: "959", name: "959 Paris-Dakar", series: "Motorsport Legends", year: 2022, variant: "White / Red / Blue", editionSize: "500", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s5", chassisCode: "935", name: '935 "Moby Dick"', series: "Motorsport Legends", year: 2024, variant: "Martini Racing", editionSize: "400", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s6", chassisCode: "964", name: "964 Turbo 3.6", series: "Design Icons", year: 2024, variant: "Guards Red", editionSize: "800", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s7", chassisCode: "993", name: "993 GT2 Evo", series: "Design Icons", year: 2025, variant: "Speed Yellow", editionSize: "600", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s8", chassisCode: "RR", name: "Rennsport Reunion 7 Event Pin", series: "Rennsport Reunion", year: 2025, variant: "Laguna Seca Enamel", editionSize: "2000", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s9", chassisCode: "918", name: "918 Spyder Weissach", series: "Design Icons", year: 2023, variant: "Martini Racing Livery", editionSize: "300", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
+  { id: "s10", chassisCode: "TC", name: "Taycan Turbo GT Launch Pin", series: "Modern Era", year: 2024, variant: "Frozen Blue Metallic", editionSize: "1500", notes: "", images: [], tags: "", addedBy: "Starter Catalog" },
 ];
 
 function genId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-// ---------- Photo upload (resize + inline as data URL) ----------
-function resizeImageFile(file, maxDim = 1000, quality = 0.82) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(reader.error);
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = () => reject(new Error("Couldn't read that image."));
-      img.onload = () => {
-        let { width, height } = img;
-        if (width > maxDim || height > maxDim) {
-          const scale = maxDim / Math.max(width, height);
-          width = Math.round(width * scale);
-          height = Math.round(height * scale);
-        }
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-// ---------- Badge ----------
-function PinBadge({ code, size = 56 }) {
-  const [c1, c2] = badgeColors(code);
+// ---------- Pin photo (uploaded image, or placeholder mark) ----------
+function PinPhoto({ pin, height = 160, width = "100%", radius = 10, grayscale = false }) {
+  const src = pin.images && pin.images[0];
   return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        borderRadius: "9999px",
-        background: `linear-gradient(155deg, ${c1} 0%, ${c2} 100%)`,
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.12), 0 3px 8px rgba(0,0,0,0.45)",
-        flexShrink: 0,
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: "12%",
-          left: "18%",
-          width: "38%",
-          height: "26%",
-          borderRadius: "9999px",
-          background: "radial-gradient(ellipse at center, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%)",
-        }}
-      />
-      <span
-        style={{
-          ...mono,
-          color: "#F5F3ED",
-          fontSize: size * 0.24,
-          fontWeight: 600,
-          letterSpacing: "0.02em",
-          textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-        }}
-      >
-        {code}
-      </span>
+    <div style={{ width, height, borderRadius: radius, overflow: "hidden", background: C.panelRaised, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {src ? (
+        <img
+          src={src}
+          alt={pin.name}
+          style={{ width: "100%", height: "100%", objectFit: "cover", filter: grayscale ? "grayscale(1)" : "none", transition: "filter 0.25s ease" }}
+        />
+      ) : (
+        <PinIcon size={Math.min(typeof height === "number" ? height * 0.32 : 40, 44)} color={C.line} strokeWidth={1.5} />
+      )}
     </div>
   );
 }
@@ -194,37 +115,143 @@ function Field({ label, children }) {
   );
 }
 
-function ImageField({ value, onChange }) {
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+// ---------- Crop modal: fixed-ratio square crop with pan + zoom ----------
+const CROP_VIEWPORT = 260;
+const CROP_OUTPUT = 800;
 
-  async function handleFile(e) {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file) return;
-    setBusy(true);
-    setError("");
-    try {
-      onChange(await resizeImageFile(file));
-    } catch {
-      setError("Couldn't load that photo — try a different file.");
-    } finally {
-      setBusy(false);
-    }
+function CropModal({ file, onCancel, onConfirm }) {
+  const imgRef = useRef(null);
+  const dragRef = useRef(null);
+  const [ready, setReady] = useState(false);
+  const [natural, setNatural] = useState({ w: 0, h: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const objectUrl = useMemo(() => URL.createObjectURL(file), [file]);
+
+  useEffect(() => () => URL.revokeObjectURL(objectUrl), [objectUrl]);
+
+  const baseScale = natural.w ? CROP_VIEWPORT / Math.min(natural.w, natural.h) : 1;
+  const scale = baseScale * zoom;
+  const dw = natural.w * scale;
+  const dh = natural.h * scale;
+
+  useEffect(() => {
+    if (!ready) return;
+    setPos({ x: (CROP_VIEWPORT - dw) / 2, y: (CROP_VIEWPORT - dh) / 2 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zoom, ready, natural.w, natural.h]);
+
+  function handleImgLoad(e) {
+    setNatural({ w: e.target.naturalWidth, h: e.target.naturalHeight });
+    setReady(true);
+  }
+
+  function clamp(p) {
+    const minX = CROP_VIEWPORT - dw, minY = CROP_VIEWPORT - dh;
+    return {
+      x: Math.min(0, Math.max(minX, p.x)),
+      y: Math.min(0, Math.max(minY, p.y)),
+    };
+  }
+
+  function onPointerDown(e) {
+    dragRef.current = { startX: e.clientX, startY: e.clientY, origin: pos };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }
+  function onPointerMove(e) {
+    if (!dragRef.current) return;
+    const dx = e.clientX - dragRef.current.startX;
+    const dy = e.clientY - dragRef.current.startY;
+    setPos(clamp({ x: dragRef.current.origin.x + dx, y: dragRef.current.origin.y + dy }));
+  }
+  function onPointerUp() {
+    dragRef.current = null;
+  }
+
+  function confirm() {
+    const canvas = document.createElement("canvas");
+    canvas.width = CROP_OUTPUT;
+    canvas.height = CROP_OUTPUT;
+    const ctx = canvas.getContext("2d");
+    const sx = -pos.x / scale;
+    const sy = -pos.y / scale;
+    const swh = CROP_VIEWPORT / scale;
+    ctx.drawImage(imgRef.current, sx, sy, swh, swh, 0, 0, CROP_OUTPUT, CROP_OUTPUT);
+    onConfirm(canvas.toDataURL("image/jpeg", 0.86));
   }
 
   return (
-    <Field label="Photo">
-      {value && (
-        <div style={{ position: "relative", marginBottom: 8 }}>
-          <img src={value} alt="" style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, background: C.panelRaised }} />
-          <button
-            type="button"
-            onClick={() => onChange("")}
-            style={{ position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: 9999, background: "rgba(21,23,26,0.75)", border: `1px solid ${C.line}`, color: C.chalk, display: "flex", alignItems: "center", justifyContent: "center" }}
-          >
-            <X size={13} />
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+      <div style={{ background: C.ink, border: `1px solid ${C.line}`, borderRadius: 16, padding: 18, width: CROP_VIEWPORT + 36, boxSizing: "border-box" }}>
+        <div style={{ ...display, fontSize: 18, fontWeight: 700, marginBottom: 4, color: "#FFFFFF" }}>Position photo</div>
+        <div style={{ ...body, fontSize: 12, color: C.steel, marginBottom: 12 }}>Drag to reposition, use the slider to zoom.</div>
+        <div
+          style={{ width: CROP_VIEWPORT, height: CROP_VIEWPORT, overflow: "hidden", position: "relative", borderRadius: 12, background: "#000", touchAction: "none", cursor: "grab", margin: "0 auto" }}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerLeave={onPointerUp}
+        >
+          <img
+            ref={imgRef}
+            src={objectUrl}
+            onLoad={handleImgLoad}
+            draggable={false}
+            alt=""
+            style={{ position: "absolute", left: pos.x, top: pos.y, width: dw || "auto", height: dh || "auto", maxWidth: "none", userSelect: "none", pointerEvents: "none" }}
+          />
+        </div>
+        <input
+          type="range" min="1" max="3" step="0.01" value={zoom}
+          onChange={(e) => setZoom(Number(e.target.value))}
+          style={{ width: "100%", marginTop: 14 }}
+        />
+        <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+          <button onClick={onCancel} style={{ ...mono, flex: 1, padding: "12px 0", borderRadius: 10, border: `1px solid ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em" }}>
+            CANCEL
           </button>
+          <button onClick={confirm} disabled={!ready} style={{ ...mono, flex: 1, padding: "12px 0", borderRadius: 10, border: "none", color: C.ink, background: ready ? C.amber : C.line, fontSize: 12, letterSpacing: "0.05em" }}>
+            USE PHOTO
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------- Photos field: multiple uploaded photos per pin ----------
+function PhotosField({ images, onChange }) {
+  const [pendingFile, setPendingFile] = useState(null);
+
+  function handlePick(e) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (file) setPendingFile(file);
+  }
+  function handleCropConfirm(dataUrl) {
+    onChange([...(images || []), dataUrl]);
+    setPendingFile(null);
+  }
+  function removeAt(i) {
+    onChange(images.filter((_, idx) => idx !== i));
+  }
+
+  return (
+    <Field label="Photos">
+      {images && images.length > 0 && (
+        <div style={{ display: "flex", gap: 8, overflowX: "auto", marginBottom: 8, paddingBottom: 2 }}>
+          {images.map((src, i) => (
+            <div key={i} style={{ position: "relative", flexShrink: 0 }}>
+              <img src={src} alt="" style={{ width: 76, height: 76, objectFit: "cover", borderRadius: 8, background: C.panelRaised }} />
+              <button
+                type="button"
+                onClick={() => removeAt(i)}
+                style={{ position: "absolute", top: -6, right: -6, width: 20, height: 20, borderRadius: 9999, background: C.redDeep, border: `1px solid ${C.ink}`, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}
+              >
+                <X size={11} />
+              </button>
+            </div>
+          ))}
         </div>
       )}
       <label
@@ -234,10 +261,12 @@ function ImageField({ value, onChange }) {
         }}
       >
         <Upload size={13} />
-        {busy ? "Processing…" : value ? "Replace photo" : "Upload photo"}
-        <input type="file" accept="image/*" onChange={handleFile} style={{ display: "none" }} />
+        Add photo
+        <input type="file" accept="image/*" onChange={handlePick} style={{ display: "none" }} />
       </label>
-      {error && <div style={{ ...mono, fontSize: 11, color: "#F0A0A3", marginTop: 6 }}>{error}</div>}
+      {pendingFile && (
+        <CropModal file={pendingFile} onCancel={() => setPendingFile(null)} onConfirm={handleCropConfirm} />
+      )}
     </Field>
   );
 }
@@ -290,7 +319,13 @@ export default function App() {
   useEffect(() => {
     const cat = loadJSON(LS_CATALOG, null);
     if (cat) {
-      setCatalog(cat);
+      // migrate legacy single imageUrl entries to the images array
+      const normalized = cat.map((p) => {
+        if (p.images) return p;
+        const { imageUrl, ...rest } = p;
+        return { ...rest, images: imageUrl ? [imageUrl] : [] };
+      });
+      setCatalog(normalized);
     } else {
       setCatalog(SEED_CATALOG);
       saveJSON(LS_CATALOG, SEED_CATALOG);
@@ -324,26 +359,26 @@ export default function App() {
     return catalog.filter((p) => {
       const matchesSeries = seriesFilter === "All" || p.series === seriesFilter;
       const q = search.trim().toLowerCase();
+      const tagList = (p.tags || "").split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
       const matchesSearch =
         !q ||
         p.name.toLowerCase().includes(q) ||
         p.chassisCode.toLowerCase().includes(q) ||
-        p.series.toLowerCase().includes(q);
+        p.series.toLowerCase().includes(q) ||
+        tagList.some((t) => t.includes(q));
       return matchesSeries && matchesSearch;
     });
   }, [catalog, seriesFilter, search]);
 
+  const ownedIds = useMemo(() => new Set(collection.map((c) => c.catalogId)), [collection]);
+
   const stats = useMemo(() => {
-    const ownedIds = new Set(collection.map((c) => c.catalogId));
     const totalCatalog = catalog.length;
     const owned = ownedIds.size;
     const missing = Math.max(0, totalCatalog - owned);
     const percent = totalCatalog > 0 ? Math.round((owned / totalCatalog) * 100) : 0;
-    const distinctSeries = new Set(
-      collection.map((c) => catalog.find((p) => p.id === c.catalogId)?.series).filter(Boolean)
-    ).size;
-    return { owned, totalCatalog, missing, percent, distinctSeries };
-  }, [collection, catalog]);
+    return { owned, totalCatalog, missing, percent };
+  }, [catalog, ownedIds]);
 
   function upsertCatalogPin(updatedPin) {
     const next = catalog.map((p) => (p.id === updatedPin.id ? updatedPin : p));
@@ -415,6 +450,7 @@ export default function App() {
           {tab === "catalog" && (
             <CatalogTab
               filtered={filteredCatalog}
+              ownedIds={ownedIds}
               search={search}
               setSearch={setSearch}
               seriesList={seriesList}
@@ -510,7 +546,7 @@ function NavButton({ icon: Icon, label, active, onClick }) {
 }
 
 // ---------- Catalog Tab ----------
-function CatalogTab({ filtered, search, setSearch, seriesList, seriesFilter, setSeriesFilter, onAdd, onAddToCollection, onOpenDetail }) {
+function CatalogTab({ filtered, ownedIds, search, setSearch, seriesList, seriesFilter, setSeriesFilter, onAdd, onAddToCollection, onOpenDetail }) {
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ position: "relative", marginBottom: 12 }}>
@@ -535,37 +571,40 @@ function CatalogTab({ filtered, search, setSearch, seriesList, seriesFilter, set
       )}
 
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {filtered.map((pin) => (
-          <button
-            key={pin.id}
-            onClick={() => onOpenDetail(pin.id)}
-            style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: 12, display: "flex", gap: 12, cursor: "pointer" }}
-          >
-            <PinBadge code={pin.chassisCode} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
-              <div style={{ height: 10 }} />
-              <div style={{ ...body, fontSize: 13, color: C.steel, marginTop: 4 }}>
-                {pin.series} · {pin.year} · {pin.variant}
+        {filtered.map((pin) => {
+          const owned = ownedIds.has(pin.id);
+          return (
+            <button
+              key={pin.id}
+              onClick={() => onOpenDetail(pin.id)}
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column" }}
+            >
+              <PinPhoto pin={pin} height={180} radius={0} grayscale={!owned} />
+              <div style={{ padding: 12 }}>
+                <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+                <div style={{ height: 10 }} />
+                <div style={{ ...body, fontSize: 13, color: C.steel, marginTop: 4 }}>
+                  {pin.chassisCode} · {pin.series} · {pin.year} · {pin.variant}
+                </div>
+                {pin.editionSize && (
+                  <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
+                )}
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
+                  <span
+                    role="button"
+                    onClick={(e) => { e.stopPropagation(); onAddToCollection(pin.id); }}
+                    style={{
+                      ...mono, fontSize: 11, letterSpacing: "0.04em", color: C.ink, background: C.amber,
+                      border: "none", borderRadius: 7, padding: "6px 10px", display: "inline-flex", alignItems: "center", gap: 4,
+                    }}
+                  >
+                    <Plus size={13} /> ADD TO GARAGE
+                  </span>
+                </div>
               </div>
-              {pin.editionSize && (
-                <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>Edition of {pin.editionSize}</div>
-              )}
-              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
-                <span
-                  role="button"
-                  onClick={(e) => { e.stopPropagation(); onAddToCollection(pin.id); }}
-                  style={{
-                    ...mono, fontSize: 11, letterSpacing: "0.04em", color: C.ink, background: C.amber,
-                    border: "none", borderRadius: 7, padding: "6px 10px", display: "inline-flex", alignItems: "center", gap: 4,
-                  }}
-                >
-                  <Plus size={13} /> ADD TO GARAGE
-                </span>
-              </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
 
       <button
@@ -597,7 +636,6 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14 }}>
           <StatBlock label="OWNED" value={stats.owned} />
-          <StatBlock label="SERIES" value={stats.distinctSeries} />
           <StatBlock label="TO COMPLETE" value={stats.missing} />
         </div>
       </div>
@@ -614,13 +652,13 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
             <button
               key={entry.id}
               onClick={() => onOpenDetail(pin.id)}
-              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: 12, display: "flex", gap: 12, cursor: "pointer" }}
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column" }}
             >
-              <PinBadge code={pin.chassisCode} />
-              <div style={{ flex: 1, minWidth: 0 }}>
+              <PinPhoto pin={pin} height={180} radius={0} />
+              <div style={{ padding: 12 }}>
                 <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ ...body, fontSize: 13, color: C.steel, marginTop: 4 }}>
-                  {pin.series} · {pin.year}
+                  {pin.chassisCode} · {pin.series} · {pin.year}
                 </div>
                 <div style={{ ...mono, fontSize: 11, color: C.amber, marginTop: 4 }}>
                   Qty {entry.quantity}{entry.notes ? ` · ${entry.notes}` : ""}
@@ -717,24 +755,27 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
     setEditMode(false);
   }
 
+  const owned = !!entry;
+
   return (
     <ModalShell title={editMode ? "Edit Pin" : "Pin Details"} onClose={onClose}>
       {!editMode && (
         <>
-          {pin.imageUrl ? (
-            <img
-              src={pin.imageUrl}
-              alt={pin.name}
-              style={{ width: "100%", height: 180, objectFit: "cover", borderRadius: 10, marginBottom: 14, background: C.panelRaised }}
-              onError={(e) => { e.target.style.display = "none"; }}
-            />
-          ) : (
-            <div style={{ display: "flex", justifyContent: "center", padding: "18px 0", marginBottom: 6 }}>
-              <PinBadge code={pin.chassisCode} size={96} />
+          <PinPhoto pin={pin} height={200} radius={10} grayscale={!owned} />
+          {pin.images && pin.images.length > 1 && (
+            <div style={{ display: "flex", gap: 8, overflowX: "auto", marginTop: 8 }}>
+              {pin.images.map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt=""
+                  style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 6, border: `1px solid ${C.line}`, flexShrink: 0, filter: owned ? "none" : "grayscale(1)" }}
+                />
+              ))}
             </div>
           )}
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: 14, marginBottom: 4 }}>
             <div style={{ ...display, fontSize: 22, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
             <button onClick={() => setEditMode(true)} style={{ background: C.panelRaised, border: `1px solid ${C.line}`, borderRadius: 8, padding: 6, color: C.steel, flexShrink: 0, marginLeft: 8 }}>
               <Pencil size={14} />
@@ -742,9 +783,9 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
           </div>
           <div style={{ height: 12, marginBottom: 8 }} />
           <div style={{ ...body, fontSize: 14, color: C.chalk, marginBottom: 4 }}>
-            {pin.series} · {pin.year} · {pin.variant}
+            {pin.chassisCode} · {pin.series} · {pin.year} · {pin.variant}
           </div>
-          {pin.editionSize && <div style={{ ...mono, fontSize: 12, color: C.steel, marginBottom: 8 }}>Edition of {pin.editionSize}</div>}
+          {pin.editionSize && <div style={{ ...mono, fontSize: 12, color: C.steel, marginBottom: 8 }}>{pin.editionSize}</div>}
           {pin.notes && <div style={{ ...body, fontSize: 13, color: C.steel, lineHeight: 1.5, marginTop: 8 }}>{pin.notes}</div>}
           <div style={{ ...mono, fontSize: 10, color: C.steel, marginTop: 10 }}>Added by {pin.addedBy || "Collector"}</div>
 
@@ -794,11 +835,14 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
           <Field label="Series"><input style={inputStyle} value={f.series} onChange={set("series")} /></Field>
           <div style={{ display: "flex", gap: 12 }}>
             <div style={{ flex: 1 }}><Field label="Year"><input style={inputStyle} value={f.year} onChange={set("year")} inputMode="numeric" /></Field></div>
-            <div style={{ flex: 1 }}><Field label="Edition size"><input style={inputStyle} value={f.editionSize} onChange={set("editionSize")} /></Field></div>
+            <div style={{ flex: 1 }}><Field label="Edition #"><input style={inputStyle} value={f.editionSize} onChange={set("editionSize")} /></Field></div>
           </div>
           <Field label="Colorway / variant"><input style={inputStyle} value={f.variant} onChange={set("variant")} /></Field>
-          <ImageField value={f.imageUrl} onChange={(v) => setF({ ...f, imageUrl: v })} />
+          <PhotosField images={f.images} onChange={(imgs) => setF({ ...f, images: imgs })} />
           <Field label="Description / notes"><textarea style={{ ...inputStyle, minHeight: 70, resize: "vertical" }} value={f.notes} onChange={set("notes")} /></Field>
+          <Field label="Tags (comma separated, not shown publicly)">
+            <input style={inputStyle} value={f.tags || ""} onChange={set("tags")} placeholder="e.g. martini, le mans, rare" />
+          </Field>
 
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={() => setEditMode(false)} style={{ ...mono, flex: 1, padding: "12px 0", borderRadius: 10, border: `1px solid ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em" }}>
@@ -816,7 +860,7 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
 
 // ---------- Add Catalog Modal ----------
 function AddCatalogModal({ onClose, onSave }) {
-  const [f, setF] = useState({ chassisCode: "", name: "", series: "", year: "", variant: "", editionSize: "", notes: "", imageUrl: "" });
+  const [f, setF] = useState({ chassisCode: "", name: "", series: "", year: "", variant: "", editionSize: "", notes: "", images: [], tags: "" });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const canSave = f.chassisCode && f.name && f.series && f.year;
 
@@ -830,12 +874,15 @@ function AddCatalogModal({ onClose, onSave }) {
           <Field label="Year"><input style={inputStyle} value={f.year} onChange={set("year")} placeholder="2025" inputMode="numeric" /></Field>
         </div>
         <div style={{ flex: 1 }}>
-          <Field label="Edition size"><input style={inputStyle} value={f.editionSize} onChange={set("editionSize")} placeholder="500" /></Field>
+          <Field label="Edition #"><input style={inputStyle} value={f.editionSize} onChange={set("editionSize")} placeholder="500 or Open Edition" /></Field>
         </div>
       </div>
       <Field label="Colorway / variant"><input style={inputStyle} value={f.variant} onChange={set("variant")} placeholder="Guards Red / Silver" /></Field>
-      <ImageField value={f.imageUrl} onChange={(v) => setF({ ...f, imageUrl: v })} />
+      <PhotosField images={f.images} onChange={(imgs) => setF({ ...f, images: imgs })} />
       <Field label="Description / notes"><textarea style={{ ...inputStyle, minHeight: 60, resize: "vertical" }} value={f.notes} onChange={set("notes")} /></Field>
+      <Field label="Tags (comma separated, not shown publicly)">
+        <input style={inputStyle} value={f.tags} onChange={set("tags")} placeholder="e.g. martini, le mans, rare" />
+      </Field>
 
       <SaveBar disabled={!canSave} onSave={() => onSave({ ...f, year: Number(f.year) || f.year })} label="Add to catalog" />
     </ModalShell>
@@ -875,7 +922,7 @@ function AddCollectionModal({ catalog, initialCatalogId, onClose, onSave }) {
 
       {pin && (
         <div style={{ display: "flex", gap: 10, alignItems: "center", background: C.panelRaised, borderRadius: 10, padding: 10, marginBottom: 14 }}>
-          <PinBadge code={pin.chassisCode} size={40} />
+          <PinPhoto pin={pin} height={40} width={40} radius={8} />
           <div>
             <div style={{ ...display, fontSize: 16, fontWeight: 700, color: "#FFFFFF" }}>{pin.name}</div>
             <div style={{ ...mono, fontSize: 11, color: C.steel }}>{pin.series} · {pin.year}</div>
