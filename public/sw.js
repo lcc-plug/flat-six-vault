@@ -1,34 +1,22 @@
-const CACHE_NAME = "plakette-v2";
-const CORE_ASSETS = ["/", "/index.html", "/manifest.json", "/icon-192.png", "/icon-512.png"];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).catch(() => {})
-  );
+// This app is in active daily development. A service worker that caches
+// anything at all is a liability right now — it's already trapped at least
+// one user behind a stale build across several deploys. So instead of
+// trying to get caching strategy right, this version just tears itself
+// down: unregister, wipe every cache, and force any open tabs to reload
+// straight from the network. Revisit real offline support later once the
+// app is stable (Stage 2+).
+self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
-});
-
-// Network-first: always serve the latest deploy when online, and only fall
-// back to the cache for offline use. A cache-first strategy here would leave
-// installed/home-screen users stuck on whatever build was cached at install time.
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy)).catch(() => {});
-        return response;
-      })
-      .catch(() => caches.match(event.request))
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+      await self.registration.unregister();
+      const clientsList = await self.clients.matchAll({ type: "window" });
+      clientsList.forEach((client) => client.navigate(client.url));
+    })()
   );
 });

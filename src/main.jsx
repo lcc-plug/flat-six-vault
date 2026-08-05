@@ -8,17 +8,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </React.StrictMode>
 );
 
+// This app previously registered a service worker for offline support, but
+// a cache-first bug trapped at least one user on a stale build across
+// several deploys. Actively unregister any leftover registration so the
+// browser goes back to fetching straight from the network, and don't
+// register a new one — see public/sw.js for the one-time cleanup worker
+// that recovers clients still stuck on the old registration.
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {});
-  });
-  // A new service worker taking over means a new deploy is available.
-  // Reload once so the page actually picks up the fresh assets instead of
-  // silently running whatever was in memory from the previous version.
-  let reloaded = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (reloaded) return;
-    reloaded = true;
-    window.location.reload();
+  navigator.serviceWorker.getRegistrations().then((regs) => {
+    regs.forEach((reg) => reg.unregister());
   });
 }

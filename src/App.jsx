@@ -270,7 +270,15 @@ function CropModal({ file, onCancel, onConfirm }) {
       const sy = -pos.y / scale;
       const swh = CROP_VIEWPORT / scale;
       ctx.drawImage(imgRef.current, sx, sy, swh, swh, 0, 0, CROP_OUTPUT, CROP_OUTPUT);
-      onConfirm(canvas.toDataURL("image/jpeg", 0.86));
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.86);
+      // A handful of browsers can produce a technically-valid but empty
+      // result without throwing; catch that here instead of silently
+      // handing back a blank photo.
+      if (!dataUrl || dataUrl.length < 1000) {
+        setError("That photo didn't come through — try again or pick a different one.");
+        return;
+      }
+      onConfirm(dataUrl);
     } catch {
       setError("Couldn't process that photo — try a different one.");
     }
@@ -717,10 +725,13 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesOptions, chas
         {filtered.map((pin) => {
           const owned = ownedIds.has(pin.id);
           return (
-            <button
+            <div
               key={pin.id}
+              role="button"
+              tabIndex={0}
               onClick={() => onOpenDetail(pin.id)}
-              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", alignSelf: "stretch", boxSizing: "border-box" }}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenDetail(pin.id); } }}
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
             >
               <PinPhoto pin={pin} height={180} radius={0} grayscale={!owned} />
               <div style={{ padding: 12, textAlign: "center" }}>
@@ -745,7 +756,7 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesOptions, chas
                   </span>
                 </div>
               </div>
-            </button>
+            </div>
           );
         })}
       </div>
@@ -792,10 +803,13 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
           const pin = catalog.find((p) => p.id === entry.catalogId);
           if (!pin) return null;
           return (
-            <button
+            <div
               key={entry.id}
+              role="button"
+              tabIndex={0}
               onClick={() => onOpenDetail(pin.id)}
-              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", alignSelf: "stretch", boxSizing: "border-box" }}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenDetail(pin.id); } }}
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
             >
               <PinPhoto pin={pin} height={180} radius={0} />
               <div style={{ padding: 12 }}>
@@ -807,7 +821,7 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
                   Qty {entry.quantity}{entry.notes ? ` · ${entry.notes}` : ""}
                 </div>
               </div>
-            </button>
+            </div>
           );
         })}
       </div>
