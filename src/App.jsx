@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload } from "lucide-react";
+import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 
 // ---------- Design tokens ----------
 const C = {
@@ -65,10 +65,25 @@ function genId() {
 }
 
 // ---------- Pin photo (uploaded image, or placeholder mark) ----------
-function PinPhoto({ pin, height = 160, width = "100%", radius = 10, grayscale = false }) {
-  const src = pin.images && pin.images[0];
+const navBtnStyle = {
+  position: "absolute", top: "50%", transform: "translateY(-50%)",
+  width: 28, height: 28, borderRadius: 9999, background: "rgba(21,23,26,0.65)",
+  border: "none", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+};
+
+function PinPhoto({ pin, height = 160, width = "100%", radius = 10, grayscale = false, index = 0, onPrev, onNext, onExpand }) {
+  const images = pin.images || [];
+  const src = images[index];
+  const showNav = images.length > 1 && (onPrev || onNext);
   return (
-    <div style={{ width, height, borderRadius: radius, overflow: "hidden", background: C.panelRaised, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        width, height, borderRadius: radius, overflow: "hidden", background: C.panelRaised, flexShrink: 0,
+        position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
+        cursor: onExpand && src ? "pointer" : undefined,
+      }}
+      onClick={onExpand && src ? onExpand : undefined}
+    >
       {src ? (
         <img
           src={src}
@@ -78,32 +93,68 @@ function PinPhoto({ pin, height = 160, width = "100%", radius = 10, grayscale = 
       ) : (
         <PinIcon size={Math.min(typeof height === "number" ? height * 0.32 : 40, 44)} color={C.line} strokeWidth={1.5} />
       )}
+      {showNav && (
+        <>
+          <button type="button" onClick={(e) => { e.stopPropagation(); onPrev(); }} style={{ ...navBtnStyle, left: 8 }} aria-label="Previous photo">
+            <ChevronLeft size={16} />
+          </button>
+          <button type="button" onClick={(e) => { e.stopPropagation(); onNext(); }} style={{ ...navBtnStyle, right: 8 }} aria-label="Next photo">
+            <ChevronRight size={16} />
+          </button>
+          <div style={{ position: "absolute", bottom: 8, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 4 }}>
+            {images.map((_, i) => (
+              <span key={i} style={{ width: 6, height: 6, borderRadius: 9999, background: i === index ? C.amber : "rgba(255,255,255,0.45)" }} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ---------- Lightbox: expanded photo viewer ----------
+function Lightbox({ images, index, grayscale, onIndexChange, onClose }) {
+  return (
+    <div
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 70, display: "flex", alignItems: "center", justifyContent: "center" }}
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        style={{ position: "absolute", top: 16, right: 16, width: 36, height: 36, borderRadius: 9999, background: "rgba(255,255,255,0.12)", border: "none", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}
+        aria-label="Close"
+      >
+        <X size={18} />
+      </button>
+      <img
+        src={images[index]}
+        alt=""
+        onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: "92vw", maxHeight: "80vh", objectFit: "contain", filter: grayscale ? "grayscale(1)" : "none", borderRadius: 8 }}
+      />
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={(e) => { e.stopPropagation(); onIndexChange((index - 1 + images.length) % images.length); }}
+            style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: 9999, background: "rgba(255,255,255,0.12)", border: "none", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}
+            aria-label="Previous photo"
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); onIndexChange((index + 1) % images.length); }}
+            style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: 9999, background: "rgba(255,255,255,0.12)", border: "none", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}
+            aria-label="Next photo"
+          >
+            <ChevronRight size={22} />
+          </button>
+        </>
+      )}
     </div>
   );
 }
 
 // ---------- Small UI atoms ----------
-function Chip({ active, children, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        ...mono,
-        fontSize: 12,
-        padding: "6px 12px",
-        borderRadius: 9999,
-        border: `1px solid ${active ? C.amber : C.line}`,
-        background: active ? "rgba(232,163,61,0.12)" : "transparent",
-        color: active ? C.amber : C.steel,
-        whiteSpace: "nowrap",
-        flexShrink: 0,
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
 function Field({ label, children }) {
   return (
     <label style={{ display: "block", marginBottom: 14 }}>
@@ -361,7 +412,7 @@ export default function App() {
   const [notice, setNotice] = useState("");
 
   const [search, setSearch] = useState("");
-  const [seriesFilter, setSeriesFilter] = useState("All");
+  const [catalogFilter, setCatalogFilter] = useState("all");
 
   const [showAddCatalog, setShowAddCatalog] = useState(false);
   const [addCollectionFor, setAddCollectionFor] = useState(null); // catalogId or "pick"
@@ -404,11 +455,21 @@ export default function App() {
     saveJSON(LS_PROFILE, next);
   }
 
-  const seriesList = useMemo(() => ["All", ...Array.from(new Set(catalog.map((p) => p.series).filter(Boolean)))], [catalog]);
+  const seriesOptions = useMemo(() => Array.from(new Set(catalog.map((p) => p.series).filter(Boolean))).sort(), [catalog]);
+  const chassisOptions = useMemo(() => Array.from(new Set(catalog.map((p) => p.chassisCode).filter(Boolean))).sort(), [catalog]);
+
+  const ownedIds = useMemo(() => new Set(collection.map((c) => c.catalogId)), [collection]);
 
   const filteredCatalog = useMemo(() => {
     return catalog.filter((p) => {
-      const matchesSeries = seriesFilter === "All" || p.series === seriesFilter;
+      let matchesFilter = true;
+      if (catalogFilter === "missing") {
+        matchesFilter = !ownedIds.has(p.id);
+      } else if (catalogFilter.startsWith("series:")) {
+        matchesFilter = p.series === catalogFilter.slice(7);
+      } else if (catalogFilter.startsWith("chassis:")) {
+        matchesFilter = p.chassisCode === catalogFilter.slice(8);
+      }
       const q = search.trim().toLowerCase();
       const tagList = (p.tags || "").split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
       const matchesSearch =
@@ -417,11 +478,9 @@ export default function App() {
         p.chassisCode.toLowerCase().includes(q) ||
         p.series.toLowerCase().includes(q) ||
         tagList.some((t) => t.includes(q));
-      return matchesSeries && matchesSearch;
+      return matchesFilter && matchesSearch;
     });
-  }, [catalog, seriesFilter, search]);
-
-  const ownedIds = useMemo(() => new Set(collection.map((c) => c.catalogId)), [collection]);
+  }, [catalog, catalogFilter, search, ownedIds]);
 
   const stats = useMemo(() => {
     const totalCatalog = catalog.length;
@@ -504,9 +563,10 @@ export default function App() {
               ownedIds={ownedIds}
               search={search}
               setSearch={setSearch}
-              seriesList={seriesList}
-              seriesFilter={seriesFilter}
-              setSeriesFilter={setSeriesFilter}
+              seriesOptions={seriesOptions}
+              chassisOptions={chassisOptions}
+              catalogFilter={catalogFilter}
+              setCatalogFilter={setCatalogFilter}
               onAdd={() => setShowAddCatalog(true)}
               onAddToCollection={(id) => setAddCollectionFor(id)}
               onOpenDetail={(id) => setDetailPinId(id)}
@@ -597,7 +657,7 @@ function NavButton({ icon: Icon, label, active, onClick }) {
 }
 
 // ---------- Catalog Tab ----------
-function CatalogTab({ filtered, ownedIds, search, setSearch, seriesList, seriesFilter, setSeriesFilter, onAdd, onAddToCollection, onOpenDetail }) {
+function CatalogTab({ filtered, ownedIds, search, setSearch, seriesOptions, chassisOptions, catalogFilter, setCatalogFilter, onAdd, onAddToCollection, onOpenDetail }) {
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ position: "relative", marginBottom: 12 }}>
@@ -605,16 +665,34 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesList, seriesF
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search the parts catalog…"
+          placeholder="Search the pin ledger…"
           style={{ ...inputStyle, paddingLeft: 36 }}
         />
       </div>
-      <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 6, marginBottom: 14 }}>
-        {seriesList.map((s) => (
-          <Chip key={s} active={seriesFilter === s} onClick={() => setSeriesFilter(s)}>
-            {s}
-          </Chip>
-        ))}
+      <div style={{ position: "relative", marginBottom: 14 }}>
+        <select
+          value={catalogFilter}
+          onChange={(e) => setCatalogFilter(e.target.value)}
+          style={{
+            ...body, width: "100%", background: C.ink, border: `1px solid ${C.line}`, borderRadius: 8,
+            padding: "10px 32px 10px 12px", color: C.chalk, fontSize: 14, outline: "none", boxSizing: "border-box",
+            appearance: "none", WebkitAppearance: "none",
+          }}
+        >
+          <option value="all">All Pins</option>
+          <option value="missing">Missing From My Garage</option>
+          <optgroup label="Series">
+            {seriesOptions.map((s) => (
+              <option key={`series:${s}`} value={`series:${s}`}>{s}</option>
+            ))}
+          </optgroup>
+          <optgroup label="Chassis / Model">
+            {chassisOptions.map((c) => (
+              <option key={`chassis:${c}`} value={`chassis:${c}`}>{c}</option>
+            ))}
+          </optgroup>
+        </select>
+        <ChevronDown size={16} color={C.steel} style={{ position: "absolute", right: 12, top: 12, pointerEvents: "none" }} />
       </div>
 
       {filtered.length === 0 && (
@@ -635,7 +713,7 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesList, seriesF
                 <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ height: 10 }} />
                 <div style={{ ...body, fontSize: 13, color: C.steel, marginTop: 4 }}>
-                  {pin.chassisCode} · {pin.series} · {pin.year} · {pin.variant}
+                  {pin.series} · {pin.year} · {pin.variant}
                 </div>
                 {pin.editionSize && (
                   <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
@@ -767,7 +845,7 @@ function ProfileTab({ profile, saveProfile, catalog, stats }) {
 
       <div style={{ background: C.panelRaised, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", display: "flex", justifyContent: "space-between" }}>
         <StatBlock label="PINS OWNED" value={stats.owned} />
-        <StatBlock label="CONTRIBUTED" value={contributions} />
+        <StatBlock label="CONTRIBUTED" value={contributions} align="right" />
       </div>
 
       <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 16, lineHeight: 1.5 }}>
@@ -797,13 +875,27 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
   const [qty, setQty] = useState(entry ? entry.quantity : 1);
   const [notes, setNotes] = useState(entry ? entry.notes || "" : "");
 
+  const images = pin.images || [];
+  const [activeImage, setActiveImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
   useEffect(() => {
     setF({ ...pin });
-  }, [pin]);
+    setActiveImage(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pin.id]);
 
   function saveEdit() {
     onSaveCatalogEdit({ ...f, year: Number(f.year) || f.year });
     setEditMode(false);
+  }
+
+  // Photos save immediately against the last-saved pin, independent of any
+  // other unsaved edits sitting in `f` — so a photo never gets lost just
+  // because the rest of the form hasn't been submitted yet.
+  function persistImages(imgs) {
+    setF((prev) => ({ ...prev, images: imgs }));
+    onSaveCatalogEdit({ ...pin, images: imgs });
   }
 
   const owned = !!entry;
@@ -812,18 +904,37 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
     <ModalShell title={editMode ? "Edit Pin" : "Pin Details"} onClose={onClose}>
       {!editMode && (
         <>
-          <PinPhoto pin={pin} height={200} radius={10} grayscale={!owned} />
-          {pin.images && pin.images.length > 1 && (
+          <PinPhoto
+            pin={pin}
+            height={200}
+            radius={10}
+            grayscale={!owned}
+            index={activeImage}
+            onPrev={images.length > 1 ? () => setActiveImage((i) => (i - 1 + images.length) % images.length) : undefined}
+            onNext={images.length > 1 ? () => setActiveImage((i) => (i + 1) % images.length) : undefined}
+            onExpand={images.length > 0 ? () => setLightboxOpen(true) : undefined}
+          />
+          {images.length > 1 && (
             <div style={{ display: "flex", gap: 8, overflowX: "auto", marginTop: 8 }}>
-              {pin.images.map((src, i) => (
+              {images.map((src, i) => (
                 <img
                   key={i}
                   src={src}
                   alt=""
-                  style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 6, border: `1px solid ${C.line}`, flexShrink: 0, filter: owned ? "none" : "grayscale(1)" }}
+                  onClick={() => setActiveImage(i)}
+                  style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 6, border: `2px solid ${i === activeImage ? C.amber : C.line}`, flexShrink: 0, filter: owned ? "none" : "grayscale(1)", cursor: "pointer" }}
                 />
               ))}
             </div>
+          )}
+          {lightboxOpen && (
+            <Lightbox
+              images={images}
+              index={activeImage}
+              grayscale={!owned}
+              onIndexChange={setActiveImage}
+              onClose={() => setLightboxOpen(false)}
+            />
           )}
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: 14, marginBottom: 4 }}>
@@ -889,7 +1000,7 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
             <div style={{ flex: 1 }}><Field label="Edition #"><input style={inputStyle} value={f.editionSize} onChange={set("editionSize")} /></Field></div>
           </div>
           <Field label="Colorway / variant"><input style={inputStyle} value={f.variant} onChange={set("variant")} /></Field>
-          <PhotosField images={f.images} onChange={(imgs) => setF({ ...f, images: imgs })} />
+          <PhotosField images={f.images} onChange={persistImages} />
           <Field label="Description / notes"><textarea style={{ ...inputStyle, minHeight: 70, resize: "vertical" }} value={f.notes} onChange={set("notes")} /></Field>
           <Field label="Tags (comma separated, not shown publicly)">
             <input style={inputStyle} value={f.tags || ""} onChange={set("tags")} placeholder="e.g. martini, le mans, rare" />
