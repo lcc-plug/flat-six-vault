@@ -215,8 +215,18 @@ function CropModal({ file, onCancel, onConfirm }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoom, ready, natural.w, natural.h]);
 
-  function handleImgLoad(e) {
-    setNatural({ w: e.target.naturalWidth, h: e.target.naturalHeight });
+  async function handleImgLoad(e) {
+    const img = e.target;
+    // Safari can fire `load` slightly before the image is fully decoded,
+    // which produces a blank canvas.drawImage() result with no error. Wait
+    // for an explicit decode so the crop always has real pixel data.
+    try {
+      if (img.decode) await img.decode();
+    } catch {
+      // decode() can reject even for images that render fine; fall through
+      // and use the image as-is rather than blocking the user.
+    }
+    setNatural({ w: img.naturalWidth, h: img.naturalHeight });
     setReady(true);
   }
 
@@ -234,7 +244,11 @@ function CropModal({ file, onCancel, onConfirm }) {
 
   function onPointerDown(e) {
     dragRef.current = { startX: e.clientX, startY: e.clientY, origin: pos };
-    e.currentTarget.setPointerCapture(e.pointerId);
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // Some browsers can reject capture; dragging still works without it.
+    }
   }
   function onPointerMove(e) {
     if (!dragRef.current) return;
@@ -706,7 +720,7 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesOptions, chas
             <button
               key={pin.id}
               onClick={() => onOpenDetail(pin.id)}
-              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column" }}
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", alignSelf: "stretch", boxSizing: "border-box" }}
             >
               <PinPhoto pin={pin} height={180} radius={0} grayscale={!owned} />
               <div style={{ padding: 12, textAlign: "center" }}>
@@ -781,7 +795,7 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
             <button
               key={entry.id}
               onClick={() => onOpenDetail(pin.id)}
-              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column" }}
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", alignSelf: "stretch", boxSizing: "border-box" }}
             >
               <PinPhoto pin={pin} height={180} radius={0} />
               <div style={{ padding: 12 }}>
