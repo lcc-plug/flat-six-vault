@@ -336,6 +336,7 @@ function CropModal({ file, onCancel, onConfirm }) {
 // ---------- Photos field: multiple uploaded photos per pin ----------
 function PhotosField({ images, onChange }) {
   const [pendingFile, setPendingFile] = useState(null);
+  const lastAddRef = useRef(0);
 
   function handlePick(e) {
     const file = e.target.files?.[0];
@@ -344,9 +345,19 @@ function PhotosField({ images, onChange }) {
   }
   function handleCropConfirm(dataUrl) {
     onChange([...(images || []), dataUrl]);
-    setPendingFile(null);
+    lastAddRef.current = Date.now();
+    // Deferred: on mobile Safari, a tap that closes this overlay can leave a
+    // residual touch event that "falls through" onto whatever appears at the
+    // same screen position underneath — in this case, the newly-added
+    // thumbnail's remove button — instantly undoing the add. A short delay
+    // lets that residual event settle on the (still-present) overlay instead.
+    setTimeout(() => setPendingFile(null), 300);
   }
   function removeAt(i) {
+    // Belt-and-suspenders: a stray tap landing on the remove button in the
+    // instant right after an add (see handleCropConfirm above) shouldn't be
+    // able to silently undo it.
+    if (Date.now() - lastAddRef.current < 500) return;
     onChange(images.filter((_, idx) => idx !== i));
   }
 
@@ -517,6 +528,11 @@ export default function App() {
     saveCatalog(next);
     flash("Catalog entry updated.");
   }
+  function deleteCatalogPin(pinId) {
+    saveCatalog(catalog.filter((p) => p.id !== pinId));
+    saveCollection(collection.filter((c) => c.catalogId !== pinId));
+    flash("Removed from the catalog.");
+  }
   function addCollectionEntry(entry) {
     const next = [...collection, { ...entry, id: genId() }];
     saveCollection(next);
@@ -654,6 +670,10 @@ export default function App() {
             onUpdateGarageEntry={(fields) => detailEntry && updateCollectionEntry(detailEntry.id, fields)}
             onRemoveFromGarage={() => {
               if (detailEntry) removeCollectionEntry(detailEntry.id);
+              setDetailPinId(null);
+            }}
+            onDeleteCatalogPin={() => {
+              deleteCatalogPin(detailPin.id);
               setDetailPinId(null);
             }}
           />
@@ -895,10 +915,12 @@ function EmptyState({ title, body: b }) {
 }
 
 // ---------- Pin Detail Modal (view / edit / garage controls) ----------
-function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage, onUpdateGarageEntry, onRemoveFromGarage }) {
+function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage, onUpdateGarageEntry, onRemoveFromGarage, onDeleteCatalogPin }) {
   const [editMode, setEditMode] = useState(false);
   const [f, setF] = useState({ ...pin });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const confirmDeleteAtRef = useRef(0);
 
   const [qty, setQty] = useState(entry ? entry.quantity : 1);
   const [notes, setNotes] = useState(entry ? entry.notes || "" : "");
@@ -910,6 +932,7 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
   useEffect(() => {
     setF({ ...pin });
     setActiveImage(0);
+    setConfirmDelete(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pin.id]);
 
@@ -1041,6 +1064,42 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
             <button onClick={saveEdit} style={{ ...mono, flex: 1, padding: "12px 0", borderRadius: 10, border: "none", color: C.ink, background: C.amber, fontSize: 12, letterSpacing: "0.05em", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
               <Check size={14} /> SAVE
             </button>
+          </div>
+
+          <div style={{ borderTop: `1px solid ${C.line}`, marginTop: 16, paddingTop: 16 }}>
+            {!confirmDelete ? (
+              <button
+                onClick={() => {
+                  confirmDeleteAtRef.current = Date.now();
+                  setConfirmDelete(true);
+                }}
+                style={{ ...mono, width: "100%", padding: "10px 0", borderRadius: 10, border: `1px solid ${C.redDeep}`, color: "#F0A0A3", background: "transparent", fontSize: 12, letterSpacing: "0.05em", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}
+              >
+                <Trash2 size={13} /> DELETE CATALOG ENTRY
+              </button>
+            ) : (
+              <>
+                <div style={{ ...body, fontSize: 13, color: "#F0A0A3", marginBottom: 10, textAlign: "center" }}>
+                  Delete this pin from the catalog? This can't be undone, and it'll also remove it from anyone's garage.
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button onClick={() => setConfirmDelete(false)} style={{ ...mono, flex: 1, padding: "12px 0", borderRadius: 10, border: `1px solid ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em" }}>
+                    KEEP IT
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Guard against a residual touch from the "DELETE CATALOG
+                      // ENTRY" tap landing on this button the instant it appears.
+                      if (Date.now() - confirmDeleteAtRef.current < 500) return;
+                      onDeleteCatalogPin();
+                    }}
+                    style={{ ...mono, flex: 1, padding: "12px 0", borderRadius: 10, border: "none", color: "#fff", background: C.red, fontSize: 12, letterSpacing: "0.05em", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}
+                  >
+                    <Trash2 size={13} /> DELETE
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </>
       )}
