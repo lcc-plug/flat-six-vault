@@ -1114,7 +1114,7 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
 function AddCatalogModal({ onClose, onSave }) {
   const [f, setF] = useState({ chassisCode: "", name: "", series: "", year: "", variant: "", editionSize: "", notes: "", images: [], tags: "" });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
-  const canSave = f.chassisCode && f.name && f.series && f.year;
+  const canSave = f.chassisCode && f.name;
 
   return (
     <ModalShell title="New Catalog Entry" onClose={onClose}>
