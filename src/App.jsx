@@ -5,6 +5,7 @@ import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Chec
 const C = {
   ink: "#15171A",
   panel: "#1F2226",
+  catalogCard: "#4C5053",
   panelRaised: "#282B30",
   line: "#34373C",
   steel: "#9AA0A8",
@@ -70,7 +71,7 @@ const navBtnStyle = {
   border: "none", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
 };
 
-function PinPhoto({ pin, height = 160, width = "100%", radius = 10, grayscale = false, index = 0, onPrev, onNext, onExpand }) {
+function PinPhoto({ pin, height = 160, width = "100%", radius = 10, index = 0, onPrev, onNext, onExpand }) {
   const images = pin.images || [];
   const src = images[index];
   const showNav = images.length > 1 && (onPrev || onNext);
@@ -87,7 +88,7 @@ function PinPhoto({ pin, height = 160, width = "100%", radius = 10, grayscale = 
         <img
           src={src}
           alt={pin.name}
-          style={{ width: "100%", height: "100%", objectFit: "cover", filter: grayscale ? "grayscale(1)" : "none", transition: "filter 0.25s ease" }}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       ) : (
         <PinIcon size={Math.min(typeof height === "number" ? height * 0.32 : 40, 44)} color={C.line} strokeWidth={1.5} />
@@ -112,7 +113,7 @@ function PinPhoto({ pin, height = 160, width = "100%", radius = 10, grayscale = 
 }
 
 // ---------- Lightbox: expanded photo viewer ----------
-function Lightbox({ images, index, grayscale, onIndexChange, onClose }) {
+function Lightbox({ images, index, onIndexChange, onClose }) {
   return (
     <div
       style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 70, display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -129,7 +130,7 @@ function Lightbox({ images, index, grayscale, onIndexChange, onClose }) {
         src={images[index]}
         alt=""
         onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: "92vw", maxHeight: "80vh", objectFit: "contain", filter: grayscale ? "grayscale(1)" : "none", borderRadius: 8 }}
+        style={{ maxWidth: "92vw", maxHeight: "80vh", objectFit: "contain", borderRadius: 8 }}
       />
       {images.length > 1 && (
         <>
@@ -597,7 +598,6 @@ export default function App() {
           {tab === "catalog" && (
             <CatalogTab
               filtered={filteredCatalog}
-              ownedIds={ownedIds}
               search={search}
               setSearch={setSearch}
               seriesOptions={seriesOptions}
@@ -698,7 +698,7 @@ function NavButton({ icon: Icon, label, active, onClick }) {
 }
 
 // ---------- Catalog Tab ----------
-function CatalogTab({ filtered, ownedIds, search, setSearch, seriesOptions, chassisOptions, catalogFilter, setCatalogFilter, onAdd, onAddToCollection, onOpenDetail }) {
+function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions, catalogFilter, setCatalogFilter, onAdd, onAddToCollection, onOpenDetail }) {
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ position: "relative", marginBottom: 12 }}>
@@ -746,7 +746,6 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesOptions, chas
 
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {filtered.map((pin) => {
-          const owned = ownedIds.has(pin.id);
           return (
             <div
               key={pin.id}
@@ -754,9 +753,9 @@ function CatalogTab({ filtered, ownedIds, search, setSearch, seriesOptions, chas
               tabIndex={0}
               onClick={() => onOpenDetail(pin.id)}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenDetail(pin.id); } }}
-              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
+              style={{ textAlign: "left", background: C.catalogCard, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
             >
-              <PinPhoto pin={pin} height={180} radius={0} grayscale={!owned} />
+              <PinPhoto pin={pin} height={180} radius={0} />
               <div style={{ padding: 12, textAlign: "center" }}>
                 <div style={{ ...display, fontSize: 18, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ height: 10 }} />
@@ -952,8 +951,6 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
     onSaveCatalogEdit({ ...pin, images: imgs });
   }
 
-  const owned = !!entry;
-
   return (
     <ModalShell title={editMode ? "Edit Pin" : "Pin Details"} onClose={onClose}>
       {!editMode && (
@@ -962,7 +959,6 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
             pin={pin}
             height={200}
             radius={10}
-            grayscale={!owned}
             index={activeImage}
             onPrev={images.length > 1 ? () => setActiveImage((i) => (i - 1 + images.length) % images.length) : undefined}
             onNext={images.length > 1 ? () => setActiveImage((i) => (i + 1) % images.length) : undefined}
@@ -976,7 +972,7 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
                   src={src}
                   alt=""
                   onClick={() => setActiveImage(i)}
-                  style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 6, border: `2px solid ${i === activeImage ? C.amber : C.line}`, flexShrink: 0, filter: owned ? "none" : "grayscale(1)", cursor: "pointer" }}
+                  style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 6, border: `2px solid ${i === activeImage ? C.amber : C.line}`, flexShrink: 0, cursor: "pointer" }}
                 />
               ))}
             </div>
@@ -985,7 +981,6 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
             <Lightbox
               images={images}
               index={activeImage}
-              grayscale={!owned}
               onIndexChange={setActiveImage}
               onClose={() => setLightboxOpen(false)}
             />
