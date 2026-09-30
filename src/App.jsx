@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download } from "lucide-react";
-import { SEED_CATALOG } from "./pinsData.js";
+import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download, LogOut } from "lucide-react";
+import { useQuery, useMutation } from "convex/react";
+import { useConvexAuth, useAuthActions } from "@convex-dev/auth/react";
+import { api } from "../convex/_generated/api";
 
 // ---------- Design tokens ----------
 const C = {
@@ -25,34 +27,6 @@ const GLOBAL_STYLE = `
 const display = { fontFamily: "'Barlow Condensed', sans-serif" };
 const body = { fontFamily: "'IBM Plex Sans', sans-serif" };
 const mono = { fontFamily: "'IBM Plex Mono', monospace" };
-
-// ---------- Local storage helpers (Stage 1: single device) ----------
-const LS_CATALOG = "fsv-catalog-v2";
-const LS_COLLECTION = "fsv-collection";
-const LS_PROFILE = "fsv-profile";
-const LS_WISHLIST = "fsv-wishlist";
-
-function loadJSON(key, fallback) {
-  try {
-    const v = localStorage.getItem(key);
-    return v ? JSON.parse(v) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-function saveJSON(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-}
 
 // Joins pin meta fields with " · ", skipping any that are blank (e.g. year
 // or series left empty) instead of leaving stray separators.
@@ -439,12 +413,28 @@ function ProgressBar({ percent }) {
 
 // ---------- Main App ----------
 export default function App() {
+  const { isLoading: authLoading, isAuthenticated } = useConvexAuth();
+
+  if (authLoading) {
+    return (
+      <div style={{ ...body, background: C.ink, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: C.steel }}>
+        <style>{GLOBAL_STYLE}</style>
+        <Loader2 size={22} style={{ marginRight: 8, animation: "fsv-spin 1s linear infinite" }} />
+        Loading vault…
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <SignInScreen />;
+  }
+
+  return <MainApp />;
+}
+
+function MainApp() {
+  const { signOut } = useAuthActions();
   const [tab, setTab] = useState("catalog");
-  const [catalog, setCatalog] = useState([]);
-  const [collection, setCollection] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const [profile, setProfile] = useState({ displayName: "" });
-  const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState("");
 
   const [search, setSearch] = useState("");
@@ -454,55 +444,69 @@ export default function App() {
   const [addCollectionFor, setAddCollectionFor] = useState(null); // catalogId or "pick"
   const [detailPinId, setDetailPinId] = useState(null);
 
-  useEffect(() => {
-    const cat = loadJSON(LS_CATALOG, null);
-    if (cat) {
-      // migrate legacy single imageUrl entries to the images array
-      const normalized = cat.map((p) => {
-        if (p.images) return p;
-        const { imageUrl, ...rest } = p;
-        return { ...rest, images: imageUrl ? [imageUrl] : [] };
-      });
-      setCatalog(normalized);
-    } else {
-      setCatalog(SEED_CATALOG);
-      saveJSON(LS_CATALOG, SEED_CATALOG);
-    }
-    setCollection(loadJSON(LS_COLLECTION, []));
-    setWishlist(loadJSON(LS_WISHLIST, []));
-    setProfile(loadJSON(LS_PROFILE, { displayName: "" }));
-    setLoading(false);
-  }, []);
+  const pinsRaw = useQuery(api.pins.list);
+  const garageRaw = useQuery(api.garage.list);
+  const wishlistRaw = useQuery(api.wishlist.list);
+  const profileRaw = useQuery(api.profiles.me);
+
+  const createPin = useMutation(api.pins.create);
+  const updatePin = useMutation(api.pins.update);
+  const removePin = useMutation(api.pins.remove);
+  const addGarage = useMutation(api.garage.add);
+  const updateGarage = useMutation(api.garage.update);
+  const removeGarage = useMutation(api.garage.remove);
+  const toggleWishlistMutation = useMutation(api.wishlist.toggle);
+  const setDisplayNameMutation = useMutation(api.profiles.setDisplayName);
+
+  const loading = pinsRaw === undefined || garageRaw === undefined || wishlistRaw === undefined || profileRaw === undefined;
+
+  const catalog = useMemo(
+    () =>
+      (pinsRaw || []).map((p) => ({
+        id: p._id,
+        chassisCode: p.chassisCode,
+        name: p.name,
+        series: p.series,
+        year: p.year,
+        variant: p.variant,
+        editionSize: p.editionSize,
+        notes: p.notes,
+        tags: p.tags || "",
+        images: p.images || [],
+        addedBy: p.addedBy || "",
+      })),
+    [pinsRaw]
+  );
+
+  const collection = useMemo(
+    () =>
+      (garageRaw || []).map((c) => ({
+        id: c._id,
+        catalogId: c.pinId,
+        quantity: c.quantity,
+        notes: c.notes || "",
+      })),
+    [garageRaw]
+  );
+
+  const wishlist = useMemo(() => (wishlistRaw || []).map((w) => w.pinId), [wishlistRaw]);
+  const profile = profileRaw || { displayName: "", email: "" };
 
   function flash(msg) {
     setNotice(msg);
     setTimeout(() => setNotice(""), 2500);
   }
 
-  function saveCatalog(next) {
-    setCatalog(next);
-    if (!saveJSON(LS_CATALOG, next)) flash("Couldn't save — your browser storage may be full.");
-  }
-  function saveCollection(next) {
-    setCollection(next);
-    if (!saveJSON(LS_COLLECTION, next)) flash("Couldn't save — your browser storage may be full.");
-  }
   function saveProfile(next) {
-    setProfile(next);
-    saveJSON(LS_PROFILE, next);
+    setDisplayNameMutation({ displayName: next.displayName || "" }).catch(() =>
+      flash("Couldn't save — try again.")
+    );
   }
-  function saveWishlist(next) {
-    setWishlist(next);
-    if (!saveJSON(LS_WISHLIST, next)) flash("Couldn't save — your browser storage may be full.");
-  }
+
   function toggleWishlist(pinId) {
-    if (wishlist.includes(pinId)) {
-      saveWishlist(wishlist.filter((id) => id !== pinId));
-      flash("Removed from wishlist.");
-    } else {
-      saveWishlist([...wishlist, pinId]);
-      flash("Added to wishlist.");
-    }
+    toggleWishlistMutation({ pinId })
+      .then((added) => flash(added ? "Added to wishlist." : "Removed from wishlist."))
+      .catch(() => flash("Couldn't update your wishlist."));
   }
 
   const wishlistIds = useMemo(() => new Set(wishlist), [wishlist]);
@@ -544,27 +548,39 @@ export default function App() {
   }, [catalog, ownedIds]);
 
   function upsertCatalogPin(updatedPin) {
-    const next = catalog.map((p) => (p.id === updatedPin.id ? updatedPin : p));
-    saveCatalog(next);
-    flash("Catalog entry updated.");
+    const { id, addedBy, ...fields } = updatedPin;
+    updatePin({
+      id,
+      chassisCode: fields.chassisCode || "",
+      name: fields.name || "",
+      series: fields.series || "",
+      year: String(fields.year ?? ""),
+      variant: fields.variant || "",
+      editionSize: fields.editionSize || "",
+      notes: fields.notes || "",
+      tags: fields.tags || "",
+      images: fields.images || [],
+    })
+      .then(() => flash("Catalog entry updated."))
+      .catch(() => flash("Couldn't save — try again."));
   }
   function deleteCatalogPin(pinId) {
-    saveCatalog(catalog.filter((p) => p.id !== pinId));
-    saveCollection(collection.filter((c) => c.catalogId !== pinId));
-    flash("Removed from the catalog.");
+    removePin({ id: pinId })
+      .then(() => flash("Removed from the catalog."))
+      .catch(() => flash("Couldn't remove — try again."));
   }
   function addCollectionEntry(entry) {
-    const next = [...collection, { ...entry, id: genId() }];
-    saveCollection(next);
-    flash("Added to your garage.");
+    addGarage({ pinId: entry.catalogId, quantity: Number(entry.quantity) || 1, notes: entry.notes || "" })
+      .then(() => flash("Added to your garage."))
+      .catch((e) => flash(String(e.message || "").includes("Already") ? "Already in your garage." : "Couldn't add — try again."));
   }
   function updateCollectionEntry(entryId, fields) {
-    const next = collection.map((c) => (c.id === entryId ? { ...c, ...fields } : c));
-    saveCollection(next);
+    updateGarage({ id: entryId, ...fields }).catch(() => flash("Couldn't save — try again."));
   }
   function removeCollectionEntry(entryId) {
-    saveCollection(collection.filter((c) => c.id !== entryId));
-    flash("Removed from your garage.");
+    removeGarage({ id: entryId })
+      .then(() => flash("Removed from your garage."))
+      .catch(() => flash("Couldn't remove — try again."));
   }
 
   if (loading) {
@@ -648,7 +664,7 @@ export default function App() {
             />
           )}
           {tab === "profile" && (
-            <ProfileTab profile={profile} saveProfile={saveProfile} catalog={catalog} stats={stats} />
+            <ProfileTab profile={profile} saveProfile={saveProfile} catalog={catalog} stats={stats} onSignOut={signOut} />
           )}
         </div>
 
@@ -671,10 +687,21 @@ export default function App() {
           <AddCatalogModal
             onClose={() => setShowAddCatalog(false)}
             onSave={(pin) => {
-              const next = [...catalog, { ...pin, id: genId(), addedBy: profile.displayName || "Collector", addedAt: new Date().toISOString() }];
-              saveCatalog(next);
+              createPin({
+                chassisCode: pin.chassisCode || "",
+                name: pin.name || "",
+                series: pin.series || "",
+                year: String(pin.year ?? ""),
+                variant: pin.variant || "",
+                editionSize: pin.editionSize || "",
+                notes: pin.notes || "",
+                tags: pin.tags || "",
+                images: pin.images || [],
+                addedBy: profile.displayName || "Collector",
+              })
+                .then(() => flash("Added to the catalog."))
+                .catch(() => flash("Couldn't add — try again."));
               setShowAddCatalog(false);
-              flash("Added to the catalog.");
             }}
           />
         )}
@@ -706,6 +733,112 @@ export default function App() {
             }}
           />
         )}
+      </div>
+    </div>
+  );
+}
+
+// ---------- Sign In / Sign Up ----------
+function SignInScreen() {
+  const { signIn } = useAuthActions();
+  const [flow, setFlow] = useState("signIn"); // "signIn" | "signUp"
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  function submit(e) {
+    e.preventDefault();
+    setError("");
+    setSubmitting(true);
+    signIn("password", { email: email.trim(), password, flow })
+      .catch((err) => {
+        const msg = String(err?.message || "");
+        if (msg.includes("InvalidAccountId") || msg.includes("InvalidSecret")) {
+          setError("Wrong email or password.");
+        } else if (msg.includes("already")) {
+          setError("An account with that email already exists — try signing in.");
+        } else {
+          setError("Something went wrong. Try again.");
+        }
+      })
+      .finally(() => setSubmitting(false));
+  }
+
+  return (
+    <div style={{ ...body, background: C.ink, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: C.chalk, padding: 20 }}>
+      <style>{GLOBAL_STYLE}</style>
+      <div style={{ width: "100%", maxWidth: 360 }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <div style={{ ...display, fontSize: 28, fontWeight: 800, letterSpacing: "0.01em" }}>FLAT SIX VAULT</div>
+          <div style={{ ...mono, fontSize: 10, color: C.amber, letterSpacing: "0.18em", marginTop: 4 }}>
+            ENAMEL PIN LEDGER
+          </div>
+        </div>
+
+        <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: 20 }}>
+          <div style={{ display: "flex", marginBottom: 18, borderRadius: 8, overflow: "hidden", border: `1px solid ${C.line}` }}>
+            <button
+              type="button"
+              onClick={() => { setFlow("signIn"); setError(""); }}
+              style={{
+                ...mono, flex: 1, padding: "9px 0", fontSize: 12, letterSpacing: "0.05em", border: "none",
+                background: flow === "signIn" ? C.amber : "transparent", color: flow === "signIn" ? C.ink : C.steel,
+              }}
+            >
+              SIGN IN
+            </button>
+            <button
+              type="button"
+              onClick={() => { setFlow("signUp"); setError(""); }}
+              style={{
+                ...mono, flex: 1, padding: "9px 0", fontSize: 12, letterSpacing: "0.05em", border: "none",
+                background: flow === "signUp" ? C.amber : "transparent", color: flow === "signUp" ? C.ink : C.steel,
+              }}
+            >
+              CREATE ACCOUNT
+            </button>
+          </div>
+
+          <form onSubmit={submit}>
+            <Field label="Email">
+              <input
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Password">
+              <input
+                type="password"
+                autoComplete={flow === "signIn" ? "current-password" : "new-password"}
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={inputStyle}
+              />
+            </Field>
+
+            {error && (
+              <div style={{ ...body, fontSize: 12, color: "#F0A0A3", marginBottom: 12 }}>{error}</div>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              style={{
+                ...mono, width: "100%", marginTop: 6, padding: "12px 0", borderRadius: 10, border: "none",
+                background: submitting ? C.line : C.amber, color: submitting ? C.steel : C.ink, fontSize: 13, letterSpacing: "0.05em",
+              }}
+            >
+              {flow === "signIn" ? "SIGN IN" : "CREATE ACCOUNT"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -1045,13 +1178,16 @@ function StatBlock({ label, value, align = "left" }) {
 }
 
 // ---------- Profile Tab ----------
-function ProfileTab({ profile, saveProfile, catalog, stats }) {
+function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
   const [name, setName] = useState(profile.displayName || "");
   const contributions = catalog.filter((p) => p.addedBy === (profile.displayName || "__none__") && profile.displayName).length;
 
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: 16, marginBottom: 16 }}>
+        {profile.email && (
+          <div style={{ ...mono, fontSize: 11, color: C.steel, marginBottom: 12 }}>{profile.email}</div>
+        )}
         <Field label="Display name">
           <input
             value={name}
@@ -1071,10 +1207,16 @@ function ProfileTab({ profile, saveProfile, catalog, stats }) {
         <StatBlock label="CONTRIBUTED" value={contributions} align="right" />
       </div>
 
-      <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 16, lineHeight: 1.5 }}>
-        Stage 1 build: everything is stored on this device's browser only. Sharing the catalog and your
-        garage across devices comes with Stage 2 (real accounts).
-      </div>
+      <button
+        onClick={onSignOut}
+        style={{
+          ...mono, marginTop: 16, width: "100%", padding: "12px 0", borderRadius: 10,
+          border: `1px solid ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+        }}
+      >
+        <LogOut size={14} /> SIGN OUT
+      </button>
     </div>
   );
 }

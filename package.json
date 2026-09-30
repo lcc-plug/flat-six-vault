@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@auth/core": "^0.41.3",
+    "@convex-dev/auth": "^0.0.96",
+    "convex": "^1.46.0",
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.383.0",
     "react": "^18.3.1",
