@@ -9,8 +9,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black",
     "editionSize": "LE 250",
-    "notes": "Came with playing card (@chicanethegame) \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with playing card (@chicanethegame) — Soft enamel",
+    "images": [
+      "/pins/p285.jpg"
+    ]
   },
   {
     "id": "p213",
@@ -20,8 +22,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Loe Show \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show — Soft enamel",
+    "images": [
+      "/pins/p213.jpg"
+    ]
   },
   {
     "id": "p256",
@@ -76,7 +80,9 @@ export const SEED_CATALOG = [
     "variant": "Light Blue",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p252.jpg"
+    ]
   },
   {
     "id": "p130",
@@ -96,9 +102,11 @@ export const SEED_CATALOG = [
     "series": "Toyo Tires, Sema, S-Klub LA",
     "year": "",
     "variant": "Brown",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p351.jpg"
+    ]
   },
   {
     "id": "p330",
@@ -120,7 +128,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p129.jpg"
+    ]
   },
   {
     "id": "p27",
@@ -130,8 +140,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Light Green, White, Black",
     "editionSize": "LE 250",
-    "notes": "Driven by Emelia Hartford \u2014 Soft enamel",
-    "images": []
+    "notes": "Driven by Emelia Hartford — Soft enamel",
+    "images": [
+      "/pins/p27.jpg"
+    ]
   },
   {
     "id": "p304",
@@ -142,7 +154,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p304.jpg"
+    ]
   },
   {
     "id": "p315",
@@ -153,7 +167,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p315.jpg"
+    ]
   },
   {
     "id": "p303",
@@ -164,7 +180,9 @@ export const SEED_CATALOG = [
     "variant": "Silver",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p303.jpg"
+    ]
   },
   {
     "id": "p127",
@@ -175,7 +193,9 @@ export const SEED_CATALOG = [
     "variant": "Champagne Yellow",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p127.jpg"
+    ]
   },
   {
     "id": "p261",
@@ -186,7 +206,9 @@ export const SEED_CATALOG = [
     "variant": "Light Orange",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p261.jpg"
+    ]
   },
   {
     "id": "p314",
@@ -197,7 +219,9 @@ export const SEED_CATALOG = [
     "variant": "Orange",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p314.jpg"
+    ]
   },
   {
     "id": "p262",
@@ -208,7 +232,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p262.jpg"
+    ]
   },
   {
     "id": "p370",
@@ -217,7 +243,7 @@ export const SEED_CATALOG = [
     "series": "Air/Water, Ball Marker",
     "year": "",
     "variant": "Red",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
@@ -228,7 +254,7 @@ export const SEED_CATALOG = [
     "series": "Ball Marker",
     "year": "",
     "variant": "Yellow",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE UNNUMBERED",
     "notes": "Soft enamel",
     "images": []
   },
@@ -240,8 +266,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black, Yellow",
     "editionSize": "LE 150",
-    "notes": "Luft Tokyo 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Luft Tokyo 2026 — Soft enamel",
+    "images": [
+      "/pins/p266.jpg"
+    ]
   },
   {
     "id": "p120",
@@ -252,7 +280,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p120.jpg"
+    ]
   },
   {
     "id": "p267",
@@ -262,8 +292,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White",
     "editionSize": "LE 150",
-    "notes": "Luft Tokyo 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Luft Tokyo 2026 — Soft enamel",
+    "images": [
+      "/pins/p267.jpg"
+    ]
   },
   {
     "id": "p34",
@@ -273,8 +305,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 500",
-    "notes": "Part of the Urban Outlaw Box set \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of the Urban Outlaw Box set — Soft enamel",
+    "images": [
+      "/pins/p34.jpg"
+    ]
   },
   {
     "id": "p68",
@@ -284,8 +318,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Silver",
     "editionSize": "LE 250",
-    "notes": "Part of Oilstainlab set \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of Oilstainlab set — Soft enamel",
+    "images": [
+      "/pins/p68.jpg"
+    ]
   },
   {
     "id": "p69",
@@ -295,8 +331,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Silver",
     "editionSize": "LE 250",
-    "notes": "Part of Oilstainlab set \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of Oilstainlab set — Soft enamel",
+    "images": [
+      "/pins/p69.jpg"
+    ]
   },
   {
     "id": "p70",
@@ -306,8 +344,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Silver",
     "editionSize": "LE 250",
-    "notes": "Part of Oilstainlab set \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of Oilstainlab set — Soft enamel",
+    "images": [
+      "/pins/p70.jpg"
+    ]
   },
   {
     "id": "p37",
@@ -318,7 +358,9 @@ export const SEED_CATALOG = [
     "variant": "Pink",
     "editionSize": "LE 650",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p37.jpg"
+    ]
   },
   {
     "id": "p38",
@@ -329,7 +371,9 @@ export const SEED_CATALOG = [
     "variant": "Pink",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p38.jpg"
+    ]
   },
   {
     "id": "p39",
@@ -339,8 +383,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Pink",
     "editionSize": "LE 430",
-    "notes": "Part of the Peoples Champ Collection set #2 \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of the Peoples Champ Collection set #2 — Soft enamel",
+    "images": [
+      "/pins/p39.jpg"
+    ]
   },
   {
     "id": "p117",
@@ -351,7 +397,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p117.jpg"
+    ]
   },
   {
     "id": "p35",
@@ -361,8 +409,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Light Grey",
     "editionSize": "LE 500",
-    "notes": "Part of the Urban Outlaw Box set \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of the Urban Outlaw Box set — Soft enamel",
+    "images": [
+      "/pins/p35.jpg"
+    ]
   },
   {
     "id": "p279",
@@ -372,8 +422,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 500",
-    "notes": "European Car Show 2022 \u2014 Soft enamel",
-    "images": []
+    "notes": "European Car Show 2022 — Soft enamel",
+    "images": [
+      "/pins/p279.jpg"
+    ]
   },
   {
     "id": "p11",
@@ -384,7 +436,9 @@ export const SEED_CATALOG = [
     "variant": "Pink",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p11.jpg"
+    ]
   },
   {
     "id": "p280",
@@ -395,7 +449,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p280.jpg"
+    ]
   },
   {
     "id": "p231",
@@ -406,7 +462,9 @@ export const SEED_CATALOG = [
     "variant": "White, Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p231.jpg"
+    ]
   },
   {
     "id": "p139",
@@ -417,7 +475,9 @@ export const SEED_CATALOG = [
     "variant": "Light Blue, Orange",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p139.jpg"
+    ]
   },
   {
     "id": "p22",
@@ -428,18 +488,9 @@ export const SEED_CATALOG = [
     "variant": "Blue, Green",
     "editionSize": "LE 350",
     "notes": "Soft enamel",
-    "images": []
-  },
-  {
-    "id": "p350",
-    "chassisCode": "928",
-    "name": "928 - Blue",
-    "series": "",
-    "year": "",
-    "variant": "Blue",
-    "editionSize": "LE Unknown",
-    "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p22.jpg"
+    ]
   },
   {
     "id": "p88",
@@ -450,7 +501,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 333",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p88.jpg"
+    ]
   },
   {
     "id": "p105",
@@ -461,7 +514,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p105.jpg"
+    ]
   },
   {
     "id": "p103",
@@ -472,7 +527,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p103.jpg"
+    ]
   },
   {
     "id": "p104",
@@ -482,8 +539,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green",
     "editionSize": "LE 500",
-    "notes": "Chase \u2014 Soft enamel",
-    "images": []
+    "notes": "Chase — Soft enamel",
+    "images": [
+      "/pins/p104.jpg"
+    ]
   },
   {
     "id": "p153",
@@ -493,8 +552,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black",
     "editionSize": "LE 1000",
-    "notes": "Came with matching diecast & numbered print (LE 50) \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with matching diecast & numbered print (LE 50) — Soft enamel",
+    "images": [
+      "/pins/p153.jpg"
+    ]
   },
   {
     "id": "p154",
@@ -505,7 +566,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p154.jpg"
+    ]
   },
   {
     "id": "p20",
@@ -515,8 +578,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 500",
-    "notes": "Platica 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Platica 2025 — Soft enamel",
+    "images": [
+      "/pins/p20.jpg"
+    ]
   },
   {
     "id": "p300",
@@ -527,7 +592,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p300.jpg"
+    ]
   },
   {
     "id": "p264",
@@ -538,7 +605,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p264.jpg"
+    ]
   },
   {
     "id": "p265",
@@ -549,7 +618,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p265.jpg"
+    ]
   },
   {
     "id": "p299",
@@ -560,7 +631,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p299.jpg"
+    ]
   },
   {
     "id": "p326",
@@ -571,7 +644,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p326.jpg"
+    ]
   },
   {
     "id": "p301",
@@ -581,8 +656,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 250",
-    "notes": "Radwood LA \u2014 Soft enamel",
-    "images": []
+    "notes": "Radwood LA — Soft enamel",
+    "images": [
+      "/pins/p301.jpg"
+    ]
   },
   {
     "id": "p318",
@@ -592,8 +669,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Buick Medium Green Metallic",
     "editionSize": "LE 250",
-    "notes": "Porsche Restoration Challenge 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Porsche Restoration Challenge 2026 — Soft enamel",
+    "images": [
+      "/pins/p318.jpg"
+    ]
   },
   {
     "id": "p372",
@@ -602,7 +681,7 @@ export const SEED_CATALOG = [
     "series": "Platica, Harper Porsche, Ball Marker",
     "year": "",
     "variant": "White",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE UNNUMBERED",
     "notes": "Soft enamel",
     "images": []
   },
@@ -615,7 +694,9 @@ export const SEED_CATALOG = [
     "variant": "Pink",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p12.jpg"
+    ]
   },
   {
     "id": "p80",
@@ -626,7 +707,9 @@ export const SEED_CATALOG = [
     "variant": "Silver",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p80.jpg"
+    ]
   },
   {
     "id": "p174",
@@ -637,7 +720,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p174.jpg"
+    ]
   },
   {
     "id": "p175",
@@ -647,8 +732,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE OE",
-    "notes": "Glow in the dark \u2014 Soft enamel",
-    "images": []
+    "notes": "Glow in the dark — Soft enamel",
+    "images": [
+      "/pins/p175.jpg"
+    ]
   },
   {
     "id": "p176",
@@ -658,8 +745,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE OE",
-    "notes": "Matte finish \u2014 Soft enamel",
-    "images": []
+    "notes": "Matte finish — Soft enamel",
+    "images": [
+      "/pins/p176.jpg"
+    ]
   },
   {
     "id": "p172",
@@ -669,8 +758,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 250",
-    "notes": "European Car Show 2023 \u2014 Soft enamel",
-    "images": []
+    "notes": "European Car Show 2023 — Soft enamel",
+    "images": [
+      "/pins/p172.jpg"
+    ]
   },
   {
     "id": "p67",
@@ -681,7 +772,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p67.jpg"
+    ]
   },
   {
     "id": "p361",
@@ -692,7 +785,9 @@ export const SEED_CATALOG = [
     "variant": "Red, White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p361.jpg"
+    ]
   },
   {
     "id": "p206",
@@ -702,8 +797,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Exotics on Broadway \u2014 Soft enamel",
-    "images": []
+    "notes": "Exotics on Broadway — Soft enamel",
+    "images": [
+      "/pins/p206.jpg"
+    ]
   },
   {
     "id": "p171",
@@ -714,7 +811,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p171.jpg"
+    ]
   },
   {
     "id": "p161",
@@ -725,7 +824,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p161.jpg"
+    ]
   },
   {
     "id": "p166",
@@ -736,7 +837,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p166.jpg"
+    ]
   },
   {
     "id": "p167",
@@ -747,7 +850,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p167.jpg"
+    ]
   },
   {
     "id": "p163",
@@ -757,8 +862,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White",
     "editionSize": "LE 150",
-    "notes": "Air/Water 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Air/Water 2026 — Soft enamel",
+    "images": [
+      "/pins/p163.jpg"
+    ]
   },
   {
     "id": "p165",
@@ -769,7 +876,9 @@ export const SEED_CATALOG = [
     "variant": "Navy, White",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p165.jpg"
+    ]
   },
   {
     "id": "p162",
@@ -780,7 +889,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p162.jpg"
+    ]
   },
   {
     "id": "p160",
@@ -791,7 +902,9 @@ export const SEED_CATALOG = [
     "variant": "Slate Grey, Pink",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p160.jpg"
+    ]
   },
   {
     "id": "p159",
@@ -801,8 +914,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue, Yellow",
     "editionSize": "LE 1000",
-    "notes": "Toyo Tires Treadpass 2020 \u2014 Soft enamel",
-    "images": []
+    "notes": "Toyo Tires Treadpass 2020 — Soft enamel",
+    "images": [
+      "/pins/p159.jpg"
+    ]
   },
   {
     "id": "p164",
@@ -813,7 +928,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p164.jpg"
+    ]
   },
   {
     "id": "p373",
@@ -822,7 +939,7 @@ export const SEED_CATALOG = [
     "series": "Toyo Tires, Bisimoto, Ball Marker",
     "year": "",
     "variant": "White",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE UNNUMBERED",
     "notes": "Soft enamel",
     "images": []
   },
@@ -835,7 +952,9 @@ export const SEED_CATALOG = [
     "variant": "Grey",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p119.jpg"
+    ]
   },
   {
     "id": "p274",
@@ -846,7 +965,9 @@ export const SEED_CATALOG = [
     "variant": "Guards Red",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p274.jpg"
+    ]
   },
   {
     "id": "p18",
@@ -857,7 +978,9 @@ export const SEED_CATALOG = [
     "variant": "Pasadena Yellow",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p18.jpg"
+    ]
   },
   {
     "id": "p276",
@@ -868,7 +991,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p276.jpg"
+    ]
   },
   {
     "id": "p275",
@@ -890,7 +1015,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p17.jpg"
+    ]
   },
   {
     "id": "p169",
@@ -901,7 +1028,9 @@ export const SEED_CATALOG = [
     "variant": "Red, Yellow",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p169.jpg"
+    ]
   },
   {
     "id": "p366",
@@ -923,7 +1052,9 @@ export const SEED_CATALOG = [
     "variant": "Irish Green",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p30.jpg"
+    ]
   },
   {
     "id": "p32",
@@ -934,7 +1065,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p32.jpg"
+    ]
   },
   {
     "id": "p31",
@@ -945,7 +1078,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p31.jpg"
+    ]
   },
   {
     "id": "p33",
@@ -956,6 +1091,19 @@ export const SEED_CATALOG = [
     "variant": "Graphite Grey",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
+    "images": [
+      "/pins/p33.jpg"
+    ]
+  },
+  {
+    "id": "p379",
+    "chassisCode": "95B",
+    "name": "Macan - FCP Euro Drift",
+    "series": "FCP Euro, Liquimoly",
+    "year": "",
+    "variant": "White, Green",
+    "editionSize": "LE 500",
+    "notes": "Loe Show 2026 — Soft enamel",
     "images": []
   },
   {
@@ -967,7 +1115,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p168.jpg"
+    ]
   },
   {
     "id": "p140",
@@ -978,7 +1128,9 @@ export const SEED_CATALOG = [
     "variant": "Blue, White",
     "editionSize": "LE 200",
     "notes": "Hard enamel",
-    "images": []
+    "images": [
+      "/pins/p140.jpg"
+    ]
   },
   {
     "id": "p369",
@@ -1000,7 +1152,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p157.jpg"
+    ]
   },
   {
     "id": "p158",
@@ -1022,7 +1176,9 @@ export const SEED_CATALOG = [
     "variant": "Orange",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p251.jpg"
+    ]
   },
   {
     "id": "p170",
@@ -1033,7 +1189,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p170.jpg"
+    ]
   },
   {
     "id": "p6",
@@ -1043,8 +1201,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Pink",
     "editionSize": "LE 100",
-    "notes": "Loe Show 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show 2025 — Soft enamel",
+    "images": [
+      "/pins/p6.jpg"
+    ]
   },
   {
     "id": "p272",
@@ -1054,8 +1214,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 200",
-    "notes": "Luft 6 \u2014 Soft enamel",
-    "images": []
+    "notes": "Luft 6 — Soft enamel",
+    "images": [
+      "/pins/p272.jpg"
+    ]
   },
   {
     "id": "p273",
@@ -1066,7 +1228,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p273.jpg"
+    ]
   },
   {
     "id": "p249",
@@ -1077,7 +1241,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow, Red",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p249.jpg"
+    ]
   },
   {
     "id": "p287",
@@ -1088,7 +1254,9 @@ export const SEED_CATALOG = [
     "variant": "Aqua Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p287.jpg"
+    ]
   },
   {
     "id": "p73",
@@ -1099,7 +1267,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p73.jpg"
+    ]
   },
   {
     "id": "p360",
@@ -1110,7 +1280,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p360.jpg"
+    ]
   },
   {
     "id": "p313",
@@ -1121,7 +1293,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p313.jpg"
+    ]
   },
   {
     "id": "p355",
@@ -1132,7 +1306,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 222",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p355.jpg"
+    ]
   },
   {
     "id": "p296",
@@ -1143,7 +1319,9 @@ export const SEED_CATALOG = [
     "variant": "Pink",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p296.jpg"
+    ]
   },
   {
     "id": "p113",
@@ -1153,8 +1331,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black, White, Red",
     "editionSize": "LE 500",
-    "notes": "Anime Expo 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Anime Expo 2026 — Soft enamel",
+    "images": [
+      "/pins/p113.jpg"
+    ]
   },
   {
     "id": "p291",
@@ -1164,8 +1344,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green",
     "editionSize": "LE 250",
-    "notes": "Wekfest Los Angeles 2021 \u2014 Soft enamel",
-    "images": []
+    "notes": "Wekfest Los Angeles 2021 — Soft enamel",
+    "images": [
+      "/pins/p291.jpg"
+    ]
   },
   {
     "id": "p331",
@@ -1175,8 +1357,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Grey",
     "editionSize": "LE 964",
-    "notes": "Hansels personal 964 C4 \u2014 Soft enamel",
-    "images": []
+    "notes": "Hansels personal 964 C4 — Soft enamel",
+    "images": [
+      "/pins/p331.jpg"
+    ]
   },
   {
     "id": "p263",
@@ -1187,7 +1371,9 @@ export const SEED_CATALOG = [
     "variant": "Grey",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p263.jpg"
+    ]
   },
   {
     "id": "p338",
@@ -1197,8 +1383,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Grey",
     "editionSize": "LE 100",
-    "notes": "Came with matching rug \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with matching rug — Soft enamel",
+    "images": [
+      "/pins/p338.jpg"
+    ]
   },
   {
     "id": "p72",
@@ -1209,7 +1397,9 @@ export const SEED_CATALOG = [
     "variant": "Guards Red",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p72.jpg"
+    ]
   },
   {
     "id": "p40",
@@ -1219,8 +1409,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Harlequin",
     "editionSize": "LE 150",
-    "notes": "Loe Show 2024 \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show 2024 — Soft enamel",
+    "images": [
+      "/pins/p40.jpg"
+    ]
   },
   {
     "id": "p356",
@@ -1231,7 +1423,9 @@ export const SEED_CATALOG = [
     "variant": "Black, Orange, Red",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p356.jpg"
+    ]
   },
   {
     "id": "p74",
@@ -1242,7 +1436,9 @@ export const SEED_CATALOG = [
     "variant": "Linen Grey Metallic",
     "editionSize": "LE 50",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p74.jpg"
+    ]
   },
   {
     "id": "p286",
@@ -1252,8 +1448,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Mint Green",
     "editionSize": "LE 250",
-    "notes": "Loe Show 2023 \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show 2023 — Soft enamel",
+    "images": [
+      "/pins/p286.jpg"
+    ]
   },
   {
     "id": "p111",
@@ -1263,8 +1461,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Forest Green Metallic",
     "editionSize": "LE 150",
-    "notes": "Luft Tokyo 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Luft Tokyo 2026 — Soft enamel",
+    "images": [
+      "/pins/p111.jpg"
+    ]
   },
   {
     "id": "p310",
@@ -1275,7 +1475,9 @@ export const SEED_CATALOG = [
     "variant": "Oak Green",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p310.jpg"
+    ]
   },
   {
     "id": "p367",
@@ -1307,8 +1509,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Multicolored",
     "editionSize": "LE 10",
-    "notes": "Came with matching rug \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with matching rug — Soft enamel",
+    "images": [
+      "/pins/p136.jpg"
+    ]
   },
   {
     "id": "p332",
@@ -1318,8 +1522,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Raw",
     "editionSize": "LE 100",
-    "notes": "Hansels personal 964 C4 \u2014 Soft enamel",
-    "images": []
+    "notes": "Hansels personal 964 C4 — Soft enamel",
+    "images": [
+      "/pins/p332.jpg"
+    ]
   },
   {
     "id": "p309",
@@ -1330,7 +1536,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p309.jpg"
+    ]
   },
   {
     "id": "p78",
@@ -1341,7 +1549,9 @@ export const SEED_CATALOG = [
     "variant": "Rubystone",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p78.jpg"
+    ]
   },
   {
     "id": "p124",
@@ -1352,7 +1562,9 @@ export const SEED_CATALOG = [
     "variant": "Sage",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p124.jpg"
+    ]
   },
   {
     "id": "p289",
@@ -1363,7 +1575,9 @@ export const SEED_CATALOG = [
     "variant": "Silver, Orange",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p289.jpg"
+    ]
   },
   {
     "id": "p325",
@@ -1374,7 +1588,9 @@ export const SEED_CATALOG = [
     "variant": "Silver",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p325.jpg"
+    ]
   },
   {
     "id": "p363",
@@ -1384,8 +1600,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green",
     "editionSize": "LE 1000",
-    "notes": "Sema 2019 \u2014 Soft enamel",
-    "images": []
+    "notes": "Sema 2019 — Soft enamel",
+    "images": [
+      "/pins/p363.jpg"
+    ]
   },
   {
     "id": "p245",
@@ -1396,7 +1614,9 @@ export const SEED_CATALOG = [
     "variant": "Black, White, Blue",
     "editionSize": "LE 2000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p245.jpg"
+    ]
   },
   {
     "id": "p292",
@@ -1407,7 +1627,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p292.jpg"
+    ]
   },
   {
     "id": "p368",
@@ -1428,8 +1650,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Loe Show \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show — Soft enamel",
+    "images": [
+      "/pins/p211.jpg"
+    ]
   },
   {
     "id": "p118",
@@ -1440,7 +1664,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p118.jpg"
+    ]
   },
   {
     "id": "p277",
@@ -1451,7 +1677,9 @@ export const SEED_CATALOG = [
     "variant": "Light Purple",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p277.jpg"
+    ]
   },
   {
     "id": "p126",
@@ -1462,7 +1690,9 @@ export const SEED_CATALOG = [
     "variant": "Purple",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p126.jpg"
+    ]
   },
   {
     "id": "p79",
@@ -1473,7 +1703,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p79.jpg"
+    ]
   },
   {
     "id": "p222",
@@ -1484,7 +1716,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 200",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p222.jpg"
+    ]
   },
   {
     "id": "p101",
@@ -1495,7 +1729,9 @@ export const SEED_CATALOG = [
     "variant": "Brown",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p101.jpg"
+    ]
   },
   {
     "id": "p102",
@@ -1506,7 +1742,9 @@ export const SEED_CATALOG = [
     "variant": "Copper, Brown",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p102.jpg"
+    ]
   },
   {
     "id": "p85",
@@ -1516,8 +1754,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White, Blue",
     "editionSize": "LE 93",
-    "notes": "Part of Freedom RSMurica pin set, Left facing \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of Freedom RSMurica pin set, Left facing — Soft enamel",
+    "images": [
+      "/pins/p85.jpg"
+    ]
   },
   {
     "id": "p84",
@@ -1527,8 +1767,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White, Blue",
     "editionSize": "LE 93",
-    "notes": "Part of Freedom RSMurica pin set \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of Freedom RSMurica pin set — Soft enamel",
+    "images": [
+      "/pins/p84.jpg"
+    ]
   },
   {
     "id": "p207",
@@ -1539,7 +1781,9 @@ export const SEED_CATALOG = [
     "variant": "Gold",
     "editionSize": "LE 25",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p207.jpg"
+    ]
   },
   {
     "id": "p82",
@@ -1550,7 +1794,9 @@ export const SEED_CATALOG = [
     "variant": "Maritime Blue",
     "editionSize": "LE 50",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p82.jpg"
+    ]
   },
   {
     "id": "p237",
@@ -1561,18 +1807,22 @@ export const SEED_CATALOG = [
     "variant": "Maritime Blue",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p237.jpg"
+    ]
   },
   {
     "id": "p10",
     "chassisCode": "964",
     "name": "964 RS - Pink Pig",
-    "series": "Pink Pig, Loe Show VIP",
+    "series": "Pink Pig, Loe Show",
     "year": "",
     "variant": "Silver, Pink",
     "editionSize": "LE 100",
-    "notes": "Loe Show 2025 \u2014 Hard enamel",
-    "images": []
+    "notes": "Loe Show VIP 2025 — Hard enamel",
+    "images": [
+      "/pins/p10.jpg"
+    ]
   },
   {
     "id": "p308",
@@ -1583,7 +1833,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p308.jpg"
+    ]
   },
   {
     "id": "p81",
@@ -1594,7 +1846,9 @@ export const SEED_CATALOG = [
     "variant": "Rubystone",
     "editionSize": "LE 50",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p81.jpg"
+    ]
   },
   {
     "id": "p238",
@@ -1605,7 +1859,9 @@ export const SEED_CATALOG = [
     "variant": "Rubystone",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p238.jpg"
+    ]
   },
   {
     "id": "p288",
@@ -1616,7 +1872,9 @@ export const SEED_CATALOG = [
     "variant": "Teal",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p288.jpg"
+    ]
   },
   {
     "id": "p83",
@@ -1627,7 +1885,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 50",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p83.jpg"
+    ]
   },
   {
     "id": "p247",
@@ -1637,8 +1897,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Chromoflare",
     "editionSize": "LE 250",
-    "notes": "Porsche Restoration Challenge 2025 Peoples Choice Winner \u2014 Soft enamel",
-    "images": []
+    "notes": "Porsche Restoration Challenge 2025 Peoples Choice Winner — Soft enamel",
+    "images": [
+      "/pins/p247.jpg"
+    ]
   },
   {
     "id": "p336",
@@ -1649,7 +1911,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p336.jpg"
+    ]
   },
   {
     "id": "p152",
@@ -1659,8 +1923,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 1000",
-    "notes": "Came with matching diecast \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with matching diecast — Soft enamel",
+    "images": [
+      "/pins/p152.jpg"
+    ]
   },
   {
     "id": "p115",
@@ -1671,7 +1937,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p115.jpg"
+    ]
   },
   {
     "id": "p148",
@@ -1682,7 +1950,9 @@ export const SEED_CATALOG = [
     "variant": "Black, White, Red",
     "editionSize": "LE 1000",
     "notes": "Hard enamel",
-    "images": []
+    "images": [
+      "/pins/p148.jpg"
+    ]
   },
   {
     "id": "p146",
@@ -1693,7 +1963,9 @@ export const SEED_CATALOG = [
     "variant": "Black, White",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p146.jpg"
+    ]
   },
   {
     "id": "p173",
@@ -1703,8 +1975,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 250",
-    "notes": "European Car Show 2023 \u2014 Soft enamel",
-    "images": []
+    "notes": "European Car Show 2023 — Soft enamel",
+    "images": [
+      "/pins/p173.jpg"
+    ]
   },
   {
     "id": "p177",
@@ -1715,7 +1989,9 @@ export const SEED_CATALOG = [
     "variant": "Silver",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p177.jpg"
+    ]
   },
   {
     "id": "p307",
@@ -1726,7 +2002,9 @@ export const SEED_CATALOG = [
     "variant": "Red, Black, White",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p307.jpg"
+    ]
   },
   {
     "id": "p202",
@@ -1737,7 +2015,9 @@ export const SEED_CATALOG = [
     "variant": "Gold",
     "editionSize": "LE 25",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p202.jpg"
+    ]
   },
   {
     "id": "p204",
@@ -1747,8 +2027,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 100",
-    "notes": "Loe Show VIP \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show VIP — Soft enamel",
+    "images": [
+      "/pins/p204.jpg"
+    ]
   },
   {
     "id": "p138",
@@ -1758,8 +2040,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green",
     "editionSize": "LE 100",
-    "notes": "First Leen Porsche pin \u2014 Soft enamel",
-    "images": []
+    "notes": "First Leen Porsche pin — Soft enamel",
+    "images": [
+      "/pins/p138.jpg"
+    ]
   },
   {
     "id": "p143",
@@ -1769,8 +2053,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green",
     "editionSize": "LE 250",
-    "notes": "Part of the Heritage Collection \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of the Heritage Collection — Soft enamel",
+    "images": [
+      "/pins/p143.jpg"
+    ]
   },
   {
     "id": "p150",
@@ -1780,8 +2066,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Grey",
     "editionSize": "LE 300",
-    "notes": "Came with matching diecast \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with matching diecast — Soft enamel",
+    "images": [
+      "/pins/p150.jpg"
+    ]
   },
   {
     "id": "p362",
@@ -1791,8 +2079,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 500",
-    "notes": "Brian Scotto's RWB \u2014 Soft enamel",
-    "images": []
+    "notes": "Brian Scotto's RWB — Soft enamel",
+    "images": [
+      "/pins/p362.jpg"
+    ]
   },
   {
     "id": "p155",
@@ -1803,7 +2093,9 @@ export const SEED_CATALOG = [
     "variant": "Mint Green",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p155.jpg"
+    ]
   },
   {
     "id": "p344",
@@ -1814,7 +2106,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p344.jpg"
+    ]
   },
   {
     "id": "p144",
@@ -1825,7 +2119,9 @@ export const SEED_CATALOG = [
     "variant": "White, Yellow",
     "editionSize": "LE 500",
     "notes": "Hard enamel",
-    "images": []
+    "images": [
+      "/pins/p144.jpg"
+    ]
   },
   {
     "id": "p343",
@@ -1836,7 +2132,9 @@ export const SEED_CATALOG = [
     "variant": "Purple, Yellow",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p343.jpg"
+    ]
   },
   {
     "id": "p156",
@@ -1847,7 +2145,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p156.jpg"
+    ]
   },
   {
     "id": "p224",
@@ -1857,8 +2157,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black, Clean",
     "editionSize": "LE 250",
-    "notes": "Mark Arcenal's personal RWB \u2014 Soft enamel",
-    "images": []
+    "notes": "Mark Arcenal's personal RWB — Soft enamel",
+    "images": [
+      "/pins/p224.jpg"
+    ]
   },
   {
     "id": "p225",
@@ -1868,8 +2170,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black, Dirty",
     "editionSize": "LE 100",
-    "notes": "Mark Arcenal's personal RWB \u2014 Soft enamel",
-    "images": []
+    "notes": "Mark Arcenal's personal RWB — Soft enamel",
+    "images": [
+      "/pins/p225.jpg"
+    ]
   },
   {
     "id": "p147",
@@ -1880,7 +2184,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p147.jpg"
+    ]
   },
   {
     "id": "p230",
@@ -1891,7 +2197,9 @@ export const SEED_CATALOG = [
     "variant": "White, Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p230.jpg"
+    ]
   },
   {
     "id": "p312",
@@ -1902,7 +2210,9 @@ export const SEED_CATALOG = [
     "variant": "Dark Grey",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p312.jpg"
+    ]
   },
   {
     "id": "p290",
@@ -1913,7 +2223,9 @@ export const SEED_CATALOG = [
     "variant": "Light Blue, Orange",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p290.jpg"
+    ]
   },
   {
     "id": "p281",
@@ -1924,7 +2236,9 @@ export const SEED_CATALOG = [
     "variant": "Black, White",
     "editionSize": "LE 350",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p281.jpg"
+    ]
   },
   {
     "id": "p311",
@@ -1935,7 +2249,9 @@ export const SEED_CATALOG = [
     "variant": "Nardo Grey",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p311.jpg"
+    ]
   },
   {
     "id": "p322",
@@ -1945,8 +2261,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black, White",
     "editionSize": "LE 150",
-    "notes": "Travis Scott x Nike Air Jordan 1 Retro High OG \"Olive\" \u2014 Soft enamel",
-    "images": []
+    "notes": "Travis Scott x Nike Air Jordan 1 Retro High OG \"Olive\" — Soft enamel",
+    "images": [
+      "/pins/p322.jpg"
+    ]
   },
   {
     "id": "p323",
@@ -1956,8 +2274,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black, White",
     "editionSize": "LE 500",
-    "notes": "Travis Scott x Nike Air Jordan 1 Retro High OG \"Mocha\" \u2014 Soft enamel",
-    "images": []
+    "notes": "Travis Scott x Nike Air Jordan 1 Retro High OG \"Mocha\" — Soft enamel",
+    "images": [
+      "/pins/p323.jpg"
+    ]
   },
   {
     "id": "p324",
@@ -1967,8 +2287,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue, White",
     "editionSize": "LE 250",
-    "notes": "Fragment Design x Travis Scott x Air Jordan 1 \u2014 Soft enamel",
-    "images": []
+    "notes": "Fragment Design x Travis Scott x Air Jordan 1 — Soft enamel",
+    "images": [
+      "/pins/p324.jpg"
+    ]
   },
   {
     "id": "p212",
@@ -1978,8 +2300,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Loe Show, Russell Built Fabrication \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show, Russell Built Fabrication — Soft enamel",
+    "images": [
+      "/pins/p212.jpg"
+    ]
   },
   {
     "id": "p235",
@@ -1989,8 +2313,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White",
     "editionSize": "LE 333",
-    "notes": "Russell Built Fabrication \u2014 Soft enamel",
-    "images": []
+    "notes": "Russell Built Fabrication — Soft enamel",
+    "images": [
+      "/pins/p235.jpg"
+    ]
   },
   {
     "id": "p236",
@@ -2000,8 +2326,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 1000",
-    "notes": "Russell Built Fabrication \u2014 Soft enamel",
-    "images": []
+    "notes": "Russell Built Fabrication — Soft enamel",
+    "images": [
+      "/pins/p236.jpg"
+    ]
   },
   {
     "id": "p297",
@@ -2011,8 +2339,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue",
     "editionSize": "LE UNNUMBERED",
-    "notes": "Limited Edition (NOT NUMBERED) \u2014 Hard enamel",
-    "images": []
+    "notes": "Limited Edition (NOT NUMBERED) — Hard enamel",
+    "images": [
+      "/pins/p297.jpg"
+    ]
   },
   {
     "id": "p298",
@@ -2022,7 +2352,42 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Pink",
     "editionSize": "LE UNNUMBERED",
-    "notes": "Limited Edition (NOT NUMBERED) \u2014 Hard enamel",
+    "notes": "Limited Edition (NOT NUMBERED) — Hard enamel",
+    "images": [
+      "/pins/p298.jpg"
+    ]
+  },
+  {
+    "id": "p380",
+    "chassisCode": "964",
+    "name": "964 - Black Chrome",
+    "series": "Loe Show",
+    "year": "",
+    "variant": "Black Chrome",
+    "editionSize": "LE 150",
+    "notes": "Loe Show VIP 2026 — Soft enamel",
+    "images": []
+  },
+  {
+    "id": "p381",
+    "chassisCode": "964",
+    "name": "964 - 14k Gold Pendant",
+    "series": "Gold, MISC",
+    "year": "",
+    "variant": "14K Gold",
+    "editionSize": "LE 47",
+    "notes": "Pendant - 6.0 Grams 14K Solid Gold with .12 CT VS2 Diamond Loop — Soft enamel",
+    "images": []
+  },
+  {
+    "id": "p382",
+    "chassisCode": "964",
+    "name": "964 RWB - 14k Gold Pendant",
+    "series": "Gold, RWB, MISC",
+    "year": "",
+    "variant": "14K Gold",
+    "editionSize": "",
+    "notes": "Soft enamel",
     "images": []
   },
   {
@@ -2032,7 +2397,7 @@ export const SEED_CATALOG = [
     "series": "",
     "year": "",
     "variant": "Blue",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE 250",
     "notes": "Soft enamel",
     "images": []
   },
@@ -2055,8 +2420,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Sema \u2014 Soft enamel",
-    "images": []
+    "notes": "Sema — Soft enamel",
+    "images": [
+      "/pins/p205.jpg"
+    ]
   },
   {
     "id": "p226",
@@ -2067,7 +2434,9 @@ export const SEED_CATALOG = [
     "variant": "Azzuro Thetys Metallic",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p226.jpg"
+    ]
   },
   {
     "id": "p278",
@@ -2077,8 +2446,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Grey",
     "editionSize": "LE 150",
-    "notes": "Pandem Rocket Bunny kit \u2014 Soft enamel",
-    "images": []
+    "notes": "Pandem Rocket Bunny kit — Soft enamel",
+    "images": [
+      "/pins/p278.jpg"
+    ]
   },
   {
     "id": "p364",
@@ -2100,7 +2471,9 @@ export const SEED_CATALOG = [
     "variant": "Black, White, Red",
     "editionSize": "LE 250",
     "notes": "Hard enamel",
-    "images": []
+    "images": [
+      "/pins/p232.jpg"
+    ]
   },
   {
     "id": "p233",
@@ -2111,28 +2484,32 @@ export const SEED_CATALOG = [
     "variant": "Blue, Red",
     "editionSize": "LE 250",
     "notes": "Hard enamel",
-    "images": []
+    "images": [
+      "/pins/p233.jpg"
+    ]
   },
   {
     "id": "p19",
     "chassisCode": "987.1",
     "name": "Rallye Cayman S - @FCPEuro",
-    "series": "",
+    "series": "FCP Euro",
     "year": "",
     "variant": "Multicolored",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p19.jpg"
+    ]
   },
   {
     "id": "p194",
     "chassisCode": "991",
-    "name": "911 R (991) -  Platica (White)",
+    "name": "911 R (991) - Platica (White)",
     "series": "Platica, Harper Porsche",
     "year": "",
     "variant": "White",
-    "editionSize": "LE Unknown",
-    "notes": "Platica 2026 \u2014 Soft enamel",
+    "editionSize": "",
+    "notes": "Platica 2026 — Soft enamel",
     "images": []
   },
   {
@@ -2143,8 +2520,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Sema 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Sema 2025 — Soft enamel",
+    "images": [
+      "/pins/p208.jpg"
+    ]
   },
   {
     "id": "p201",
@@ -2154,8 +2533,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green Lobster Metallic",
     "editionSize": "LE 1000",
-    "notes": "Sema 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Sema 2025 — Soft enamel",
+    "images": [
+      "/pins/p201.jpg"
+    ]
   },
   {
     "id": "p199",
@@ -2164,7 +2545,7 @@ export const SEED_CATALOG = [
     "series": "Indecent Vehicles",
     "year": "",
     "variant": "Green Lobster Metallic",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
@@ -2177,18 +2558,22 @@ export const SEED_CATALOG = [
     "variant": "Black, White",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p339.jpg"
+    ]
   },
   {
     "id": "p349",
     "chassisCode": "991",
-    "name": "991 GT3 - Adidas (SNKRWHIP)",
+    "name": "991 GT3 - Adidas - Green (SNKRWHIP)",
     "series": "SNKRWHIPS",
     "year": "",
     "variant": "Green, White",
-    "editionSize": "LE Unknown",
-    "notes": "Soft enamel",
-    "images": []
+    "editionSize": "LE 500",
+    "notes": "Based on A Bathing Ape x NMD_R1 \"Olive Camo\" — Soft enamel",
+    "images": [
+      "/pins/p349.jpg"
+    ]
   },
   {
     "id": "p41",
@@ -2198,8 +2583,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Harlequin",
     "editionSize": "LE 150",
-    "notes": "Loe Show 2024 \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show 2024 — Soft enamel",
+    "images": [
+      "/pins/p41.jpg"
+    ]
   },
   {
     "id": "p282",
@@ -2221,7 +2608,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p181.jpg"
+    ]
   },
   {
     "id": "p180",
@@ -2232,7 +2621,9 @@ export const SEED_CATALOG = [
     "variant": "Riviera Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p180.jpg"
+    ]
   },
   {
     "id": "p348",
@@ -2241,9 +2632,11 @@ export const SEED_CATALOG = [
     "series": "Toyo Tires",
     "year": "",
     "variant": "Black, White, Blue",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE 2000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p348.jpg"
+    ]
   },
   {
     "id": "p182",
@@ -2254,7 +2647,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p182.jpg"
+    ]
   },
   {
     "id": "p97",
@@ -2264,8 +2659,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White, Peach",
     "editionSize": "LE 359",
-    "notes": "Driven by Loni Unser \u2014 Soft enamel",
-    "images": []
+    "notes": "Driven by Loni Unser — Soft enamel",
+    "images": [
+      "/pins/p97.jpg"
+    ]
   },
   {
     "id": "p321",
@@ -2276,7 +2673,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p321.jpg"
+    ]
   },
   {
     "id": "p108",
@@ -2286,8 +2685,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 250",
-    "notes": "Tokyo Auto Salon 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Tokyo Auto Salon 2025 — Soft enamel",
+    "images": [
+      "/pins/p108.jpg"
+    ]
   },
   {
     "id": "p196",
@@ -2296,7 +2697,7 @@ export const SEED_CATALOG = [
     "series": "",
     "year": "",
     "variant": "White",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
@@ -2308,8 +2709,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue",
     "editionSize": "LE 333",
-    "notes": "Driven by Rhys Millen, Partnered with E-Motion Engineering \u2014 Soft enamel",
-    "images": []
+    "notes": "Driven by Rhys Millen, Partnered with E-Motion Engineering — Soft enamel",
+    "images": [
+      "/pins/p98.jpg"
+    ]
   },
   {
     "id": "p345",
@@ -2320,7 +2723,9 @@ export const SEED_CATALOG = [
     "variant": "Red, Black, Silver",
     "editionSize": "LE 500",
     "notes": "Hard enamel",
-    "images": []
+    "images": [
+      "/pins/p345.jpg"
+    ]
   },
   {
     "id": "p95",
@@ -2331,7 +2736,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p95.jpg"
+    ]
   },
   {
     "id": "p96",
@@ -2342,7 +2749,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p96.jpg"
+    ]
   },
   {
     "id": "p100",
@@ -2353,7 +2762,9 @@ export const SEED_CATALOG = [
     "variant": "Black, Green",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p100.jpg"
+    ]
   },
   {
     "id": "p13",
@@ -2364,7 +2775,9 @@ export const SEED_CATALOG = [
     "variant": "Pink",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p13.jpg"
+    ]
   },
   {
     "id": "p229",
@@ -2375,7 +2788,9 @@ export const SEED_CATALOG = [
     "variant": "White, Blue",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p229.jpg"
+    ]
   },
   {
     "id": "p99",
@@ -2385,8 +2800,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 500",
-    "notes": "Driven by David Donohue \u2014 Soft enamel",
-    "images": []
+    "notes": "Driven by David Donohue — Soft enamel",
+    "images": [
+      "/pins/p99.jpg"
+    ]
   },
   {
     "id": "p29",
@@ -2396,8 +2813,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Magenta, White, Black",
     "editionSize": "LE 250",
-    "notes": "Driven by Loni Unser \u2014 Soft enamel",
-    "images": []
+    "notes": "Driven by Loni Unser — Soft enamel",
+    "images": [
+      "/pins/p29.jpg"
+    ]
   },
   {
     "id": "p28",
@@ -2407,8 +2826,23 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Orange, White, Black",
     "editionSize": "LE 250",
-    "notes": "Driven by David Donohue \u2014 Soft enamel",
-    "images": []
+    "notes": "Driven by David Donohue — Soft enamel",
+    "images": [
+      "/pins/p28.jpg"
+    ]
+  },
+  {
+    "id": "p350",
+    "chassisCode": "991",
+    "name": "991 GT3 - Adidas - Black (SNKRWHIP)",
+    "series": "SNKRWHIPS",
+    "year": "",
+    "variant": "Black, White",
+    "editionSize": "LE 150",
+    "notes": "Based on A Bathing Ape x NMD_R1 \"Black Camo\" — Soft enamel",
+    "images": [
+      "/pins/p350.jpg"
+    ]
   },
   {
     "id": "p21",
@@ -2419,7 +2853,9 @@ export const SEED_CATALOG = [
     "variant": "White, Multicolored",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p21.jpg"
+    ]
   },
   {
     "id": "p5",
@@ -2430,7 +2866,9 @@ export const SEED_CATALOG = [
     "variant": "Light Blue, Red",
     "editionSize": "LE 999",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p5.jpg"
+    ]
   },
   {
     "id": "p186",
@@ -2441,7 +2879,9 @@ export const SEED_CATALOG = [
     "variant": "Grey",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p186.jpg"
+    ]
   },
   {
     "id": "p188",
@@ -2450,7 +2890,7 @@ export const SEED_CATALOG = [
     "series": "Pikes Peak International Hill Climb, Hella",
     "year": "",
     "variant": "Blue, White",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE 250",
     "notes": "Soft enamel",
     "images": []
   },
@@ -2463,7 +2903,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p187.jpg"
+    ]
   },
   {
     "id": "p346",
@@ -2472,9 +2914,11 @@ export const SEED_CATALOG = [
     "series": "Pfaff Motorsports, Motul",
     "year": "",
     "variant": "Black, Red",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p346.jpg"
+    ]
   },
   {
     "id": "p347",
@@ -2485,7 +2929,9 @@ export const SEED_CATALOG = [
     "variant": "Black, Red",
     "editionSize": "LE 350",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p347.jpg"
+    ]
   },
   {
     "id": "p183",
@@ -2496,7 +2942,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p183.jpg"
+    ]
   },
   {
     "id": "p189",
@@ -2505,7 +2953,7 @@ export const SEED_CATALOG = [
     "series": "",
     "year": "",
     "variant": "White, Green",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
@@ -2518,7 +2966,9 @@ export const SEED_CATALOG = [
     "variant": "Light Grey",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p193.jpg"
+    ]
   },
   {
     "id": "p110",
@@ -2528,8 +2978,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 150",
-    "notes": "Tokyo Auto Salon 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Tokyo Auto Salon 2026 — Soft enamel",
+    "images": [
+      "/pins/p110.jpg"
+    ]
   },
   {
     "id": "p192",
@@ -2540,7 +2992,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p192.jpg"
+    ]
   },
   {
     "id": "p190",
@@ -2551,7 +3005,9 @@ export const SEED_CATALOG = [
     "variant": "Magic Magenta Chromaflair",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p190.jpg"
+    ]
   },
   {
     "id": "p191",
@@ -2562,7 +3018,9 @@ export const SEED_CATALOG = [
     "variant": "Magic Magenta Chromaflair",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p191.jpg"
+    ]
   },
   {
     "id": "p185",
@@ -2573,7 +3031,9 @@ export const SEED_CATALOG = [
     "variant": "Black, White, Blue",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p185.jpg"
+    ]
   },
   {
     "id": "p184",
@@ -2584,7 +3044,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p184.jpg"
+    ]
   },
   {
     "id": "p109",
@@ -2594,8 +3056,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Silver",
     "editionSize": "LE 150",
-    "notes": "Tokyo Auto Salon 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Tokyo Auto Salon 2026 — Soft enamel",
+    "images": [
+      "/pins/p109.jpg"
+    ]
   },
   {
     "id": "p44",
@@ -2606,7 +3070,9 @@ export const SEED_CATALOG = [
     "variant": "Shade Green",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p44.jpg"
+    ]
   },
   {
     "id": "p45",
@@ -2617,7 +3083,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p45.jpg"
+    ]
   },
   {
     "id": "p43",
@@ -2628,7 +3096,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p43.jpg"
+    ]
   },
   {
     "id": "p86",
@@ -2638,7 +3108,20 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, Black, White, Grey",
     "editionSize": "LE 350",
-    "notes": "Collab with @hypedrive & @jeffstaples \u2014 Soft enamel",
+    "notes": "Collab with @hypedrive & @jeffstaples — Soft enamel",
+    "images": [
+      "/pins/p86.jpg"
+    ]
+  },
+  {
+    "id": "p378",
+    "chassisCode": "992",
+    "name": "992 GT3 Cup - Advan Livery",
+    "series": "BBI, Advan",
+    "year": "",
+    "variant": "Black, Red",
+    "editionSize": "",
+    "notes": "Yokohama Rubber Company — Soft enamel",
     "images": []
   },
   {
@@ -2649,8 +3132,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black",
     "editionSize": "LE 150",
-    "notes": "Exotics on Broadway 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Exotics on Broadway 2025 — Soft enamel",
+    "images": [
+      "/pins/p137.jpg"
+    ]
   },
   {
     "id": "p209",
@@ -2660,8 +3145,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Exotics on Broadway 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Exotics on Broadway 2025 — Soft enamel",
+    "images": [
+      "/pins/p209.jpg"
+    ]
   },
   {
     "id": "p7",
@@ -2671,8 +3158,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Pink",
     "editionSize": "LE 100",
-    "notes": "Loe Show 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show 2025 — Soft enamel",
+    "images": [
+      "/pins/p7.jpg"
+    ]
   },
   {
     "id": "p116",
@@ -2683,7 +3172,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p116.jpg"
+    ]
   },
   {
     "id": "p89",
@@ -2694,7 +3185,9 @@ export const SEED_CATALOG = [
     "variant": "Red, White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p89.jpg"
+    ]
   },
   {
     "id": "p1",
@@ -2704,8 +3197,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Ferrari Fly Yellow",
     "editionSize": "LE 250",
-    "notes": "Carrera 4S - Porsche restoration challenge \u2014 Soft enamel",
-    "images": []
+    "notes": "Carrera 4S - Porsche restoration challenge — Soft enamel",
+    "images": [
+      "/pins/p1.jpg"
+    ]
   },
   {
     "id": "p319",
@@ -2714,7 +3209,7 @@ export const SEED_CATALOG = [
     "series": "SMG Werks",
     "year": "",
     "variant": "Black",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE 250",
     "notes": "Soft enamel",
     "images": []
   },
@@ -2726,8 +3221,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Gold",
     "editionSize": "LE 25",
-    "notes": "Loe Show \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show — Soft enamel",
+    "images": [
+      "/pins/p210.jpg"
+    ]
   },
   {
     "id": "p76",
@@ -2738,7 +3235,9 @@ export const SEED_CATALOG = [
     "variant": "Gold",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p76.jpg"
+    ]
   },
   {
     "id": "p133",
@@ -2749,7 +3248,9 @@ export const SEED_CATALOG = [
     "variant": "Maroon",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p133.jpg"
+    ]
   },
   {
     "id": "p333",
@@ -2760,7 +3261,9 @@ export const SEED_CATALOG = [
     "variant": "Midnight Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p333.jpg"
+    ]
   },
   {
     "id": "p141",
@@ -2770,8 +3273,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White",
     "editionSize": "LE 150",
-    "notes": "Came with oil can case and matching diecast \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with oil can case and matching diecast — Soft enamel",
+    "images": [
+      "/pins/p141.jpg"
+    ]
   },
   {
     "id": "p375",
@@ -2781,7 +3286,7 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White, Multicolored",
     "editionSize": "LE 350",
-    "notes": "Loe Show 2026 \u2014 Soft enamel",
+    "notes": "Loe Show 2026 — Soft enamel",
     "images": []
   },
   {
@@ -2793,7 +3298,9 @@ export const SEED_CATALOG = [
     "variant": "Purple",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p77.jpg"
+    ]
   },
   {
     "id": "p75",
@@ -2804,7 +3311,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p75.jpg"
+    ]
   },
   {
     "id": "p142",
@@ -2814,8 +3323,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Purple",
     "editionSize": "LE 1000",
-    "notes": "Came with matching diecast \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with matching diecast — Soft enamel",
+    "images": [
+      "/pins/p142.jpg"
+    ]
   },
   {
     "id": "p4",
@@ -2826,7 +3337,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 150",
     "notes": "Hard enamel",
-    "images": []
+    "images": [
+      "/pins/p4.jpg"
+    ]
   },
   {
     "id": "p36",
@@ -2836,8 +3349,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Light Blue",
     "editionSize": "LE 500",
-    "notes": "Part of the Urban Outlaw Box set \u2014 Soft enamel",
-    "images": []
+    "notes": "Part of the Urban Outlaw Box set — Soft enamel",
+    "images": [
+      "/pins/p36.jpg"
+    ]
   },
   {
     "id": "p24",
@@ -2848,7 +3363,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 200",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p24.jpg"
+    ]
   },
   {
     "id": "p25",
@@ -2859,7 +3376,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 200",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p25.jpg"
+    ]
   },
   {
     "id": "p26",
@@ -2869,8 +3388,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue, White, Black",
     "editionSize": "LE 250",
-    "notes": "Driven by Jeff Zwart \u2014 Soft enamel",
-    "images": []
+    "notes": "Driven by Jeff Zwart — Soft enamel",
+    "images": [
+      "/pins/p26.jpg"
+    ]
   },
   {
     "id": "p248",
@@ -2881,7 +3402,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow, Red",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p248.jpg"
+    ]
   },
   {
     "id": "p227",
@@ -2892,7 +3415,9 @@ export const SEED_CATALOG = [
     "variant": "White, Multicolored, Clean",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p227.jpg"
+    ]
   },
   {
     "id": "p228",
@@ -2903,7 +3428,9 @@ export const SEED_CATALOG = [
     "variant": "White, Multicolored, Dirty",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p228.jpg"
+    ]
   },
   {
     "id": "p353",
@@ -2914,7 +3441,9 @@ export const SEED_CATALOG = [
     "variant": "Orange",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p353.jpg"
+    ]
   },
   {
     "id": "p354",
@@ -2924,8 +3453,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Yellow",
     "editionSize": "LE 100",
-    "notes": "JDM vs EURO Car Show \u2014 Soft enamel",
-    "images": []
+    "notes": "JDM vs EURO Car Show — Soft enamel",
+    "images": [
+      "/pins/p354.jpg"
+    ]
   },
   {
     "id": "p221",
@@ -2936,7 +3467,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p221.jpg"
+    ]
   },
   {
     "id": "p145",
@@ -2947,7 +3480,9 @@ export const SEED_CATALOG = [
     "variant": "Black, White",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p145.jpg"
+    ]
   },
   {
     "id": "p106",
@@ -2958,7 +3493,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p106.jpg"
+    ]
   },
   {
     "id": "p203",
@@ -2969,7 +3506,9 @@ export const SEED_CATALOG = [
     "variant": "Gold",
     "editionSize": "LE 25",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p203.jpg"
+    ]
   },
   {
     "id": "p219",
@@ -2980,7 +3519,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p219.jpg"
+    ]
   },
   {
     "id": "p305",
@@ -2991,7 +3532,9 @@ export const SEED_CATALOG = [
     "variant": "White, Red",
     "editionSize": "LE 200",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p305.jpg"
+    ]
   },
   {
     "id": "p151",
@@ -3001,8 +3544,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White",
     "editionSize": "LE 1000",
-    "notes": "Came with oil can case and matching diecast \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with oil can case and matching diecast — Soft enamel",
+    "images": [
+      "/pins/p151.jpg"
+    ]
   },
   {
     "id": "p149",
@@ -3012,8 +3557,11 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Black, White, Yellow",
     "editionSize": "LE 1000",
-    "notes": "Came with oil can case and matching diecast \u2014 Soft enamel",
-    "images": []
+    "notes": "Came with oil can case and matching diecast — Soft enamel",
+    "images": [
+      "/pins/p149-1.jpg",
+      "/pins/p149-2.jpg"
+    ]
   },
   {
     "id": "p178",
@@ -3024,7 +3572,9 @@ export const SEED_CATALOG = [
     "variant": "Ultraviolet Purple",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p178.jpg"
+    ]
   },
   {
     "id": "p179",
@@ -3035,7 +3585,9 @@ export const SEED_CATALOG = [
     "variant": "Ultraviolet Purple",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p179.jpg"
+    ]
   },
   {
     "id": "p107",
@@ -3045,8 +3597,11 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue",
     "editionSize": "LE 500",
-    "notes": "Detachable turbo fan \u2014 Soft enamel",
-    "images": []
+    "notes": "Detachable turbo fan — Soft enamel",
+    "images": [
+      "/pins/p107-1.jpg",
+      "/pins/p107-2.jpg"
+    ]
   },
   {
     "id": "p306",
@@ -3056,8 +3611,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue",
     "editionSize": "LE 250",
-    "notes": "Wekfest Los Angeles 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Wekfest Los Angeles 2026 — Soft enamel",
+    "images": [
+      "/pins/p306.jpg"
+    ]
   },
   {
     "id": "p218",
@@ -3068,7 +3625,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p218.jpg"
+    ]
   },
   {
     "id": "p2",
@@ -3079,7 +3638,9 @@ export const SEED_CATALOG = [
     "variant": "Pink",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p2.jpg"
+    ]
   },
   {
     "id": "p9",
@@ -3089,7 +3650,18 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Silver, Pink",
     "editionSize": "LE 35",
-    "notes": "Chase, Loe Show 2025 \u2014 Hard enamel",
+    "notes": "Chase, Loe Show 2025 — Hard enamel",
+    "images": []
+  },
+  {
+    "id": "p377",
+    "chassisCode": "993",
+    "name": "993 GT2 - Advan Livery",
+    "series": "BBI, Advan",
+    "year": "",
+    "variant": "Black, Red",
+    "editionSize": "",
+    "notes": "Yokohama Rubber Company — Soft enamel",
     "images": []
   },
   {
@@ -3101,7 +3673,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p217.jpg"
+    ]
   },
   {
     "id": "p214",
@@ -3112,7 +3686,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 200",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p214.jpg"
+    ]
   },
   {
     "id": "p215",
@@ -3123,7 +3699,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p215.jpg"
+    ]
   },
   {
     "id": "p216",
@@ -3134,7 +3712,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 996",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p216.jpg"
+    ]
   },
   {
     "id": "p123",
@@ -3145,7 +3725,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p123.jpg"
+    ]
   },
   {
     "id": "p197",
@@ -3154,7 +3736,7 @@ export const SEED_CATALOG = [
     "series": "Indecent Vehicles",
     "year": "",
     "variant": "Ruby Star",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
@@ -3165,18 +3747,18 @@ export const SEED_CATALOG = [
     "series": "Indecent Vehicles",
     "year": "",
     "variant": "Starlet Orange",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
   {
     "id": "p200",
     "chassisCode": "997",
-    "name": "997 - 018 Pink (@indecentvehicles x @totalenergies_us)",
+    "name": "997 - 018 Purple (@indecentvehicles x @totalenergies_us)",
     "series": "Indecent Vehicles",
     "year": "",
     "variant": "Black Cherry Metallic",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
@@ -3189,7 +3771,9 @@ export const SEED_CATALOG = [
     "variant": "Orange",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p223.jpg"
+    ]
   },
   {
     "id": "p114",
@@ -3200,7 +3784,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p114.jpg"
+    ]
   },
   {
     "id": "p244",
@@ -3211,7 +3797,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p244.jpg"
+    ]
   },
   {
     "id": "p112",
@@ -3222,7 +3810,9 @@ export const SEED_CATALOG = [
     "variant": "Multicolored",
     "editionSize": "LE 777",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p112.jpg"
+    ]
   },
   {
     "id": "p243",
@@ -3233,7 +3823,9 @@ export const SEED_CATALOG = [
     "variant": "Lizard Green",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p243.jpg"
+    ]
   },
   {
     "id": "p242",
@@ -3244,7 +3836,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p242.jpg"
+    ]
   },
   {
     "id": "p241",
@@ -3255,7 +3849,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p241.jpg"
+    ]
   },
   {
     "id": "p121",
@@ -3266,7 +3862,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p121.jpg"
+    ]
   },
   {
     "id": "p71",
@@ -3276,8 +3874,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 150",
-    "notes": "Collab with @djerok & @donutsnwheels \u2014 Soft enamel",
-    "images": []
+    "notes": "Collab with @djerok & @donutsnwheels — Soft enamel",
+    "images": [
+      "/pins/p71.jpg"
+    ]
   },
   {
     "id": "p42",
@@ -3288,7 +3888,9 @@ export const SEED_CATALOG = [
     "variant": "Neochrome",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p42.jpg"
+    ]
   },
   {
     "id": "p246",
@@ -3299,7 +3901,9 @@ export const SEED_CATALOG = [
     "variant": "Neochrome",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p246.jpg"
+    ]
   },
   {
     "id": "p376",
@@ -3309,7 +3913,7 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue",
     "editionSize": "LE 350",
-    "notes": "Loe Show 2026 \u2014 Soft enamel",
+    "notes": "Loe Show 2026 — Soft enamel",
     "images": []
   },
   {
@@ -3321,7 +3925,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p352.jpg"
+    ]
   },
   {
     "id": "p87",
@@ -3331,8 +3937,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, Black, White, Grey",
     "editionSize": "LE 150",
-    "notes": "Collab with @inozetek & @jeffstaples \u2014 Soft enamel",
-    "images": []
+    "notes": "Collab with @inozetek & @jeffstaples — Soft enamel",
+    "images": [
+      "/pins/p87.jpg"
+    ]
   },
   {
     "id": "p220",
@@ -3342,8 +3950,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Grey",
     "editionSize": "LE 150",
-    "notes": "Based on New Balance 997 \u2014 Soft enamel",
-    "images": []
+    "notes": "Based on New Balance 997 — Soft enamel",
+    "images": [
+      "/pins/p220.jpg"
+    ]
   },
   {
     "id": "p16",
@@ -3353,8 +3963,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Irish Green",
     "editionSize": "LE 500",
-    "notes": "Carrera GT - Porsche restoration challenge 2026 \u2014 Soft enamel",
-    "images": []
+    "notes": "Carrera GT - Porsche restoration challenge 2026 — Soft enamel",
+    "images": [
+      "/pins/p16.jpg"
+    ]
   },
   {
     "id": "p15",
@@ -3365,7 +3977,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p15.jpg"
+    ]
   },
   {
     "id": "p3",
@@ -3375,8 +3989,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Zanzibar Orange",
     "editionSize": "LE 100",
-    "notes": "Platica 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Platica 2025 — Soft enamel",
+    "images": [
+      "/pins/p3.jpg"
+    ]
   },
   {
     "id": "p14",
@@ -3387,7 +4003,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p14.jpg"
+    ]
   },
   {
     "id": "p295",
@@ -3398,7 +4016,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p295.jpg"
+    ]
   },
   {
     "id": "p23",
@@ -3409,17 +4029,19 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 350",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p23.jpg"
+    ]
   },
   {
     "id": "p195",
     "chassisCode": "Early 911",
-    "name": "911 R -  Platica (Orange)",
+    "name": "911 R - Platica (Orange)",
     "series": "Platica, Harper Porsche",
     "year": "",
     "variant": "Orange",
-    "editionSize": "LE Unknown",
-    "notes": "Platica 2026 \u2014 Soft enamel",
+    "editionSize": "",
+    "notes": "Platica 2026 — Soft enamel",
     "images": []
   },
   {
@@ -3431,7 +4053,9 @@ export const SEED_CATALOG = [
     "variant": "Light Grey",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p320.jpg"
+    ]
   },
   {
     "id": "p316",
@@ -3442,7 +4066,9 @@ export const SEED_CATALOG = [
     "variant": "Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p316.jpg"
+    ]
   },
   {
     "id": "p268",
@@ -3453,7 +4079,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 350",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p268.jpg"
+    ]
   },
   {
     "id": "p358",
@@ -3464,7 +4092,9 @@ export const SEED_CATALOG = [
     "variant": "Red, White",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p358.jpg"
+    ]
   },
   {
     "id": "p317",
@@ -3474,8 +4104,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Aubergine (Purple)",
     "editionSize": "LE 250",
-    "notes": "Porsche Restoration Challenge 2024 \u2014 Soft enamel",
-    "images": []
+    "notes": "Porsche Restoration Challenge 2024 — Soft enamel",
+    "images": [
+      "/pins/p317.jpg"
+    ]
   },
   {
     "id": "p337",
@@ -3486,7 +4118,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p337.jpg"
+    ]
   },
   {
     "id": "p340",
@@ -3497,7 +4131,9 @@ export const SEED_CATALOG = [
     "variant": "Yellow",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p340.jpg"
+    ]
   },
   {
     "id": "p90",
@@ -3508,7 +4144,9 @@ export const SEED_CATALOG = [
     "variant": "Signal Orange",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p90.jpg"
+    ]
   },
   {
     "id": "p93",
@@ -3519,7 +4157,9 @@ export const SEED_CATALOG = [
     "variant": "Light Yellow",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p93.jpg"
+    ]
   },
   {
     "id": "p92",
@@ -3530,7 +4170,9 @@ export const SEED_CATALOG = [
     "variant": "Aubergine (Purple)",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p92.jpg"
+    ]
   },
   {
     "id": "p91",
@@ -3541,7 +4183,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p91.jpg"
+    ]
   },
   {
     "id": "p94",
@@ -3552,7 +4196,9 @@ export const SEED_CATALOG = [
     "variant": "Mexico Blue",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p94.jpg"
+    ]
   },
   {
     "id": "p250",
@@ -3563,7 +4209,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p250.jpg"
+    ]
   },
   {
     "id": "p341",
@@ -3574,7 +4222,9 @@ export const SEED_CATALOG = [
     "variant": "Jade Green",
     "editionSize": "LE 100",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p341.jpg"
+    ]
   },
   {
     "id": "p234",
@@ -3584,8 +4234,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Silver",
     "editionSize": "LE 650",
-    "notes": "#CSF911 Backdate build \u2014 Soft enamel",
-    "images": []
+    "notes": "#CSF911 Backdate build — Soft enamel",
+    "images": [
+      "/pins/p234.jpg"
+    ]
   },
   {
     "id": "p122",
@@ -3594,7 +4246,7 @@ export const SEED_CATALOG = [
     "series": "",
     "year": "",
     "variant": "Bronze",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE 250",
     "notes": "Soft enamel",
     "images": []
   },
@@ -3607,7 +4259,9 @@ export const SEED_CATALOG = [
     "variant": "Olive Green",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p334.jpg"
+    ]
   },
   {
     "id": "p335",
@@ -3617,8 +4271,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Olive Green",
     "editionSize": "LE OE",
-    "notes": "Nickel Finish \u2014 Soft enamel",
-    "images": []
+    "notes": "Nickel Finish — Soft enamel",
+    "images": [
+      "/pins/p335.jpg"
+    ]
   },
   {
     "id": "p269",
@@ -3626,7 +4282,7 @@ export const SEED_CATALOG = [
     "name": "911 SC - Grey",
     "series": "Air/Water",
     "year": "",
-    "variant": "Bronze",
+    "variant": "Grey",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
     "images": []
@@ -3639,8 +4295,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Blue/Green",
     "editionSize": "LE 250",
-    "notes": "Loe Show 2023 \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show 2023 — Soft enamel",
+    "images": [
+      "/pins/p271.jpg"
+    ]
   },
   {
     "id": "p270",
@@ -3651,7 +4309,9 @@ export const SEED_CATALOG = [
     "variant": "Orange",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p270.jpg"
+    ]
   },
   {
     "id": "p259",
@@ -3662,7 +4322,9 @@ export const SEED_CATALOG = [
     "variant": "White, Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p259.jpg"
+    ]
   },
   {
     "id": "p260",
@@ -3684,7 +4346,9 @@ export const SEED_CATALOG = [
     "variant": "Beige",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p132.jpg"
+    ]
   },
   {
     "id": "p125",
@@ -3695,7 +4359,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p125.jpg"
+    ]
   },
   {
     "id": "p135",
@@ -3704,7 +4370,7 @@ export const SEED_CATALOG = [
     "series": "",
     "year": "",
     "variant": "Military Green",
-    "editionSize": "LE Unknown",
+    "editionSize": "",
     "notes": "Soft enamel",
     "images": []
   },
@@ -3717,7 +4383,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p134.jpg"
+    ]
   },
   {
     "id": "p327",
@@ -3728,7 +4396,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p327.jpg"
+    ]
   },
   {
     "id": "p328",
@@ -3739,7 +4409,9 @@ export const SEED_CATALOG = [
     "variant": "Silver",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p328.jpg"
+    ]
   },
   {
     "id": "p329",
@@ -3750,7 +4422,9 @@ export const SEED_CATALOG = [
     "variant": "Gold",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p329.jpg"
+    ]
   },
   {
     "id": "p253",
@@ -3761,7 +4435,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p253.jpg"
+    ]
   },
   {
     "id": "p359",
@@ -3772,7 +4448,9 @@ export const SEED_CATALOG = [
     "variant": "Blue, White",
     "editionSize": "LE 1000",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p359.jpg"
+    ]
   },
   {
     "id": "p302",
@@ -3783,7 +4461,9 @@ export const SEED_CATALOG = [
     "variant": "Light Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p302.jpg"
+    ]
   },
   {
     "id": "p374",
@@ -3792,7 +4472,7 @@ export const SEED_CATALOG = [
     "series": "IROC, Ball Marker",
     "year": "",
     "variant": "Light Yellow",
-    "editionSize": "LE Unknown",
+    "editionSize": "LE UNNUMBERED",
     "notes": "Soft enamel",
     "images": []
   },
@@ -3805,7 +4485,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 300",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p293.jpg"
+    ]
   },
   {
     "id": "p65",
@@ -3816,7 +4498,9 @@ export const SEED_CATALOG = [
     "variant": "Black",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p65.jpg"
+    ]
   },
   {
     "id": "p59",
@@ -3826,8 +4510,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Cassis Red",
     "editionSize": "LE 200",
-    "notes": "Build #14 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #14 — Soft enamel",
+    "images": [
+      "/pins/p59.jpg"
+    ]
   },
   {
     "id": "p60",
@@ -3837,8 +4523,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Chalk",
     "editionSize": "LE 250",
-    "notes": "Build #17 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #17 — Soft enamel",
+    "images": [
+      "/pins/p60.jpg"
+    ]
   },
   {
     "id": "p62",
@@ -3848,8 +4536,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Grey",
     "editionSize": "LE 500",
-    "notes": "Build #19\nPart of Arsham Box set \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #19\nPart of Arsham Box set — Soft enamel",
+    "images": [
+      "/pins/p62.jpg"
+    ]
   },
   {
     "id": "p66",
@@ -3860,7 +4550,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p66.jpg"
+    ]
   },
   {
     "id": "p64",
@@ -3871,7 +4563,9 @@ export const SEED_CATALOG = [
     "variant": "Green",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p64.jpg"
+    ]
   },
   {
     "id": "p46",
@@ -3881,8 +4575,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Guards Red",
     "editionSize": "LE 50",
-    "notes": "Build #1 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #1 — Soft enamel",
+    "images": [
+      "/pins/p46.jpg"
+    ]
   },
   {
     "id": "p57",
@@ -3893,7 +4589,9 @@ export const SEED_CATALOG = [
     "variant": "Light Blue",
     "editionSize": "LE 250",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p57.jpg"
+    ]
   },
   {
     "id": "p58",
@@ -3904,7 +4602,9 @@ export const SEED_CATALOG = [
     "variant": "Light Blue",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p58.jpg"
+    ]
   },
   {
     "id": "p61",
@@ -3914,8 +4614,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Oak Green",
     "editionSize": "LE 500",
-    "notes": "Build #19\nPart of Arsham Box set \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #19\nPart of Arsham Box set — Soft enamel",
+    "images": [
+      "/pins/p61.jpg"
+    ]
   },
   {
     "id": "p49",
@@ -3925,8 +4627,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Lilac (Purple)",
     "editionSize": "LE 50",
-    "notes": "Build #6 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #6 — Soft enamel",
+    "images": [
+      "/pins/p49.jpg"
+    ]
   },
   {
     "id": "p50",
@@ -3936,8 +4640,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Cadmium Yellow",
     "editionSize": "LE 150",
-    "notes": "Build #20 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #20 — Soft enamel",
+    "images": [
+      "/pins/p50.jpg"
+    ]
   },
   {
     "id": "p52",
@@ -3947,8 +4653,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Riviera Blue",
     "editionSize": "LE 100",
-    "notes": "Build #4 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #4 — Soft enamel",
+    "images": [
+      "/pins/p52.jpg"
+    ]
   },
   {
     "id": "p53",
@@ -3958,8 +4666,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Riviera Blue",
     "editionSize": "LE OE",
-    "notes": "Nickel Finish \u2014 Soft enamel",
-    "images": []
+    "notes": "Nickel Finish — Soft enamel",
+    "images": [
+      "/pins/p53.jpg"
+    ]
   },
   {
     "id": "p54",
@@ -3969,8 +4679,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Riviera Blue",
     "editionSize": "LE OE",
-    "notes": "Nickel Finish \u2014 Soft enamel",
-    "images": []
+    "notes": "Nickel Finish — Soft enamel",
+    "images": [
+      "/pins/p54.jpg"
+    ]
   },
   {
     "id": "p47",
@@ -3980,8 +4692,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Signal Green",
     "editionSize": "LE 50",
-    "notes": "Build #5 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #5 — Soft enamel",
+    "images": [
+      "/pins/p47.jpg"
+    ]
   },
   {
     "id": "p51",
@@ -3991,8 +4705,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE 50",
-    "notes": "Build #2 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #2 — Soft enamel",
+    "images": [
+      "/pins/p51.jpg"
+    ]
   },
   {
     "id": "p55",
@@ -4002,8 +4718,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White",
     "editionSize": "LE OE",
-    "notes": "Build #12 \u2014 Hard enamel",
-    "images": []
+    "notes": "Build #12 — Hard enamel",
+    "images": [
+      "/pins/p55.jpg"
+    ]
   },
   {
     "id": "p56",
@@ -4013,8 +4731,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "White, Muddy",
     "editionSize": "LE 250",
-    "notes": "Build #12 \u2014 Hard enamel",
-    "images": []
+    "notes": "Build #12 — Hard enamel",
+    "images": [
+      "/pins/p56.jpg"
+    ]
   },
   {
     "id": "p48",
@@ -4024,8 +4744,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Hellgelb (Light Yellow)",
     "editionSize": "LE 50",
-    "notes": "Build #8 \u2014 Soft enamel",
-    "images": []
+    "notes": "Build #8 — Soft enamel",
+    "images": [
+      "/pins/p48.jpg"
+    ]
   },
   {
     "id": "p254",
@@ -4035,7 +4757,7 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green",
     "editionSize": "LE 150",
-    "notes": "Open top \u2014 Soft enamel",
+    "notes": "Open top — Soft enamel",
     "images": []
   },
   {
@@ -4046,8 +4768,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Green",
     "editionSize": "LE 500",
-    "notes": "Closed top \u2014 Soft enamel",
-    "images": []
+    "notes": "Closed top — Soft enamel",
+    "images": [
+      "/pins/p255.jpg"
+    ]
   },
   {
     "id": "p131",
@@ -4058,7 +4782,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE OE",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p131.jpg"
+    ]
   },
   {
     "id": "p294",
@@ -4069,7 +4795,9 @@ export const SEED_CATALOG = [
     "variant": "White",
     "editionSize": "LE 500",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p294.jpg"
+    ]
   },
   {
     "id": "p8",
@@ -4079,8 +4807,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Pink",
     "editionSize": "LE 100",
-    "notes": "Loe Show 2025 \u2014 Soft enamel",
-    "images": []
+    "notes": "Loe Show 2025 — Soft enamel",
+    "images": [
+      "/pins/p8.jpg"
+    ]
   },
   {
     "id": "p357",
@@ -4090,8 +4820,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red, White",
     "editionSize": "LE 700",
-    "notes": "Powered by Hans Mezger designed TAG Porsche 1.5L V6 turbo engine \u2014 Soft enamel",
-    "images": []
+    "notes": "Powered by Hans Mezger designed TAG Porsche 1.5L V6 turbo engine — Soft enamel",
+    "images": [
+      "/pins/p357.jpg"
+    ]
   },
   {
     "id": "p240",
@@ -4101,8 +4833,10 @@ export const SEED_CATALOG = [
     "year": "",
     "variant": "Red",
     "editionSize": "LE 250",
-    "notes": "Matte finish \u2014 Soft enamel",
-    "images": []
+    "notes": "Matte finish — Soft enamel",
+    "images": [
+      "/pins/p240.jpg"
+    ]
   },
   {
     "id": "p239",
@@ -4113,7 +4847,9 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p239.jpg"
+    ]
   },
   {
     "id": "p342",
@@ -4124,6 +4860,8 @@ export const SEED_CATALOG = [
     "variant": "Red",
     "editionSize": "LE 150",
     "notes": "Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p342.jpg"
+    ]
   }
 ];
