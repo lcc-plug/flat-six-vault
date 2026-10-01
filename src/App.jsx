@@ -685,6 +685,7 @@ function MainApp() {
               wishlistIds={wishlistIds}
               onToggleWishlist={toggleWishlist}
               ownedIds={ownedIds}
+              isAdmin={profile.isAdmin}
             />
           )}
           {tab === "wishlist" && (
@@ -766,6 +767,7 @@ function MainApp() {
           <PinDetailModal
             pin={detailPin}
             entry={detailEntry}
+            isAdmin={profile.isAdmin}
             onClose={() => setDetailPinId(null)}
             onSaveCatalogEdit={upsertCatalogPin}
             onAddToGarage={(fields) => addCollectionEntry({ catalogId: detailPin.id, ...fields })}
@@ -920,7 +922,7 @@ function NavButton({ icon: Icon, label, active, onClick }) {
 }
 
 // ---------- Catalog Tab ----------
-function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions, catalogFilter, setCatalogFilter, onAdd, onAddToCollection, onOpenDetail, wishlistIds, onToggleWishlist, ownedIds }) {
+function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions, catalogFilter, setCatalogFilter, onAdd, onAddToCollection, onOpenDetail, wishlistIds, onToggleWishlist, ownedIds, isAdmin }) {
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ position: "relative", marginBottom: 12 }}>
@@ -1042,16 +1044,18 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
         })}
       </div>
 
-      <button
-        onClick={onAdd}
-        style={{
-          ...mono, marginTop: 16, width: "100%", padding: "12px 0", borderRadius: 10,
-          border: `1px dashed ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em",
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-        }}
-      >
-        <Plus size={14} /> NEW CATALOG ENTRY
-      </button>
+      {isAdmin && (
+        <button
+          onClick={onAdd}
+          style={{
+            ...mono, marginTop: 16, width: "100%", padding: "12px 0", borderRadius: 10,
+            border: `1px dashed ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+          }}
+        >
+          <Plus size={14} /> NEW CATALOG ENTRY
+        </button>
+      )}
     </div>
   );
 }
@@ -1335,7 +1339,7 @@ function EmptyState({ title, body: b }) {
 }
 
 // ---------- Pin Detail Modal (view / edit / garage controls) ----------
-function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage, onUpdateGarageEntry, onRemoveFromGarage, onDeleteCatalogPin }) {
+function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAddToGarage, onUpdateGarageEntry, onRemoveFromGarage, onDeleteCatalogPin }) {
   const [editMode, setEditMode] = useState(false);
   const [f, setF] = useState({ ...pin });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
@@ -1406,9 +1410,11 @@ function PinDetailModal({ pin, entry, onClose, onSaveCatalogEdit, onAddToGarage,
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: 14, marginBottom: 4 }}>
             <div style={{ ...display, fontSize: 22, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
-            <button onClick={() => setEditMode(true)} style={{ background: C.panelRaised, border: `1px solid ${C.line}`, borderRadius: 8, padding: 6, color: C.steel, flexShrink: 0, marginLeft: 8 }}>
-              <Pencil size={14} />
-            </button>
+            {isAdmin && (
+              <button onClick={() => setEditMode(true)} style={{ background: C.panelRaised, border: `1px solid ${C.line}`, borderRadius: 8, padding: 6, color: C.steel, flexShrink: 0, marginLeft: 8 }}>
+                <Pencil size={14} />
+              </button>
+            )}
           </div>
           <div style={{ height: 12, marginBottom: 8 }} />
           <div style={{ ...body, fontSize: 14, color: C.chalk, marginBottom: 8 }}>

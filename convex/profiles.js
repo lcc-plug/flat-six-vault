@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { isAdmin } from "./adminAuth";
 
 export const me = query({
   args: {},
@@ -12,7 +13,11 @@ export const me = query({
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .unique();
     const user = await ctx.db.get(userId);
-    return { displayName: profile?.displayName ?? "", email: user?.email ?? "" };
+    return {
+      displayName: profile?.displayName ?? "",
+      email: user?.email ?? "",
+      isAdmin: await isAdmin(ctx, userId),
+    };
   },
 });
 

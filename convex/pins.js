@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { requireAdmin } from "./adminAuth";
 
 export const list = query({
   args: {},
@@ -24,8 +24,7 @@ const pinFields = {
 export const create = mutation({
   args: { ...pinFields, addedBy: v.optional(v.string()) },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Must be signed in.");
+    await requireAdmin(ctx);
     return await ctx.db.insert("pins", args);
   },
 });
@@ -33,8 +32,7 @@ export const create = mutation({
 export const update = mutation({
   args: { id: v.id("pins"), ...pinFields },
   handler: async (ctx, { id, ...fields }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Must be signed in.");
+    await requireAdmin(ctx);
     await ctx.db.patch(id, fields);
   },
 });
@@ -42,8 +40,7 @@ export const update = mutation({
 export const remove = mutation({
   args: { id: v.id("pins") },
   handler: async (ctx, { id }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Must be signed in.");
+    await requireAdmin(ctx);
 
     const garage = await ctx.db
       .query("garageEntries")
