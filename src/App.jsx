@@ -634,7 +634,7 @@ function MainApp() {
       <style>{GLOBAL_STYLE}</style>
       <div className="fsv-shell" style={{ margin: "0 auto", minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
         {/* Header */}
-        <div style={{ position: "sticky", top: 0, zIndex: 20, background: C.ink, borderBottom: `1px solid ${C.line}`, padding: "16px 16px 12px" }}>
+        <div style={{ position: "sticky", top: 0, zIndex: 20, background: C.ink, borderBottom: `1px solid ${C.line}`, padding: "calc(16px + env(safe-area-inset-top, 0px)) 16px 12px" }}>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
             <div>
               <div style={{ ...display, fontSize: 25, fontWeight: 800, letterSpacing: "0.01em", lineHeight: 1 }}>FLAT SIX VAULT</div>
