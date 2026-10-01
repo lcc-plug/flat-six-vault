@@ -457,6 +457,29 @@ function MainApp() {
   const toggleWishlistMutation = useMutation(api.wishlist.toggle);
   const setDisplayNameMutation = useMutation(api.profiles.setDisplayName);
 
+  // Right after sign-up, the Convex client's auth token can take a moment to
+  // propagate — an immediate setDisplayName call can race and get rejected as
+  // unauthenticated. Defer it to this effect (keyed on isAuthenticated) and
+  // retry briefly so the name still lands once the client catches up.
+  const [pendingDisplayName, setPendingDisplayName] = useState(null);
+  useEffect(() => {
+    if (!isAuthenticated || !pendingDisplayName) return;
+    let cancelled = false;
+    async function save() {
+      for (let attempt = 0; attempt < 4; attempt++) {
+        try {
+          await setDisplayNameMutation({ displayName: pendingDisplayName });
+          if (!cancelled) setPendingDisplayName(null);
+          return;
+        } catch {
+          await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+        }
+      }
+    }
+    save();
+    return () => { cancelled = true; };
+  }, [isAuthenticated, pendingDisplayName, setDisplayNameMutation]);
+
   const loading = pinsRaw === undefined || garageRaw === undefined || wishlistRaw === undefined || profileRaw === undefined;
 
   const catalog = useMemo(
@@ -676,7 +699,7 @@ function MainApp() {
           {tab === "profile" && (
             isAuthenticated
               ? <ProfileTab profile={profile} saveProfile={saveProfile} catalog={catalog} stats={stats} onSignOut={signOut} />
-              : <SignInScreen />
+              : <SignInScreen onSignedUp={setPendingDisplayName} />
           )}
         </div>
 
@@ -752,9 +775,10 @@ function MainApp() {
 }
 
 // ---------- Sign In / Sign Up ----------
-function SignInScreen() {
+function SignInScreen({ onSignedUp }) {
   const { signIn } = useAuthActions();
   const [flow, setFlow] = useState("signIn"); // "signIn" | "signUp"
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -764,7 +788,11 @@ function SignInScreen() {
     e.preventDefault();
     setError("");
     setSubmitting(true);
+    const signUpName = displayName.trim();
     signIn("password", { email: email.trim(), password, flow })
+      .then(() => {
+        if (flow === "signUp") onSignedUp(signUpName);
+      })
       .catch((err) => {
         const msg = String(err?.message || "");
         if (msg.includes("InvalidAccountId") || msg.includes("InvalidSecret")) {
@@ -810,6 +838,19 @@ function SignInScreen() {
           </div>
 
           <form onSubmit={submit}>
+            {flow === "signUp" && (
+              <Field label="Display name">
+                <input
+                  type="text"
+                  autoComplete="nickname"
+                  required
+                  maxLength={40}
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  style={inputStyle}
+                />
+              </Field>
+            )}
             <Field label="Email">
               <input
                 type="email"
@@ -1195,6 +1236,7 @@ function StatBlock({ label, value, align = "left" }) {
 // ---------- Profile Tab ----------
 function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
   const [name, setName] = useState(profile.displayName || "");
+  useEffect(() => { setName(profile.displayName || ""); }, [profile.displayName]);
   const contributions = catalog.filter((p) => p.addedBy === (profile.displayName || "__none__") && profile.displayName).length;
 
   return (
