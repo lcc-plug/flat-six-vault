@@ -1004,16 +1004,16 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
                 >
                   <Heart size={14} fill={wished ? C.ink : "none"} />
                 </span>
+                {owned && (
+                  <div style={{
+                    ...mono, position: "absolute", bottom: 0, left: 0, right: 0, fontSize: 10, fontWeight: 700,
+                    letterSpacing: "0.08em", textAlign: "center", color: "#4ADE80", background: "rgba(16,24,19,0.78)",
+                    padding: "3px 0",
+                  }}>
+                    OWNED
+                  </div>
+                )}
               </div>
-              {owned && (
-                <div style={{
-                  ...mono, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textAlign: "center",
-                  color: "#4ADE80", background: "rgba(74,222,128,0.12)", borderBottom: "1px solid rgba(74,222,128,0.3)",
-                  padding: "3px 0",
-                }}>
-                  OWNED
-                </div>
-              )}
               <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
                 <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -1123,16 +1123,18 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds }
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenDetail(pin.id); } }}
             style={{ textAlign: "left", background: C.catalogCard, border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
           >
-            <PinPhoto pin={pin} height={130} radius={0} />
-            {owned && (
-              <div style={{
-                ...mono, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textAlign: "center",
-                color: "#4ADE80", background: "rgba(74,222,128,0.12)", borderBottom: "1px solid rgba(74,222,128,0.3)",
-                padding: "3px 0",
-              }}>
-                OWNED
-              </div>
-            )}
+            <div style={{ position: "relative" }}>
+              <PinPhoto pin={pin} height={130} radius={0} />
+              {owned && (
+                <div style={{
+                  ...mono, position: "absolute", bottom: 0, left: 0, right: 0, fontSize: 10, fontWeight: 700,
+                  letterSpacing: "0.08em", textAlign: "center", color: "#4ADE80", background: "rgba(16,24,19,0.78)",
+                  padding: "3px 0",
+                }}>
+                  OWNED
+                </div>
+              )}
+            </div>
             <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
               <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
