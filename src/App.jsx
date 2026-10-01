@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download, LogOut } from "lucide-react";
+import { flushSync } from "react-dom";
+import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download, LogOut, Share } from "lucide-react";
 import { useQuery, useMutation } from "convex/react";
 import { useConvexAuth, useAuthActions } from "@convex-dev/auth/react";
 import { api } from "../convex/_generated/api";
@@ -695,6 +696,7 @@ function MainApp() {
               onOpenDetail={(id) => setDetailPinId(id)}
               isAuthenticated={isAuthenticated}
               ownedIds={ownedIds}
+              displayName={profile.displayName}
             />
           )}
           {tab === "collection" && (
@@ -1061,35 +1063,165 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
 }
 
 // ---------- Wishlist Tab ----------
-const POSTER_TEAL = "#1BAFA0";
+const EXPORT_PAGE_SIZE = 20;
+const EXPORT_CARD_WIDTH = 320;
+const EXPORT_GAP = 14;
+const EXPORT_PHOTO_ASPECT = 1.7;
 
-function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds }) {
-  const [exporting, setExporting] = useState(false);
-  const posterRef = useRef(null);
+// Pin photos have the pin centered in a lot of empty background. Crop each
+// to the pin's bounding box (plus a small margin) at a fixed aspect ratio so
+// pins render larger on the exported want list.
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
 
-  const groups = useMemo(() => {
-    const map = new Map();
-    for (const p of pins) {
-      const key = p.chassisCode || "Other";
-      if (!map.has(key)) map.set(key, []);
-      map.get(key).push(p);
+async function cropPinPhoto(src) {
+  const img = await loadImage(src);
+  const w = img.naturalWidth;
+  const h = img.naturalHeight;
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+  const data = ctx.getImageData(0, 0, w, h).data;
+  const [bgR, bgG, bgB] = [data[0], data[1], data[2]];
+
+  let minX = w, minY = h, maxX = -1, maxY = -1;
+  for (let y = 0; y < h; y += 2) {
+    for (let x = 0; x < w; x += 2) {
+      const i = (y * w + x) * 4;
+      if (Math.abs(data[i] - bgR) + Math.abs(data[i + 1] - bgG) + Math.abs(data[i + 2] - bgB) > 60) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
     }
-    return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  }
+  if (maxX < 0) return src;
+
+  const pad = (maxX - minX) * 0.06;
+  let cw = maxX - minX + pad * 2;
+  let ch = maxY - minY + pad * 2;
+  if (cw / ch < EXPORT_PHOTO_ASPECT) cw = ch * EXPORT_PHOTO_ASPECT;
+  else ch = cw / EXPORT_PHOTO_ASPECT;
+  cw = Math.min(cw, w);
+  ch = Math.min(ch, h);
+  const sx = Math.min(Math.max((minX + maxX) / 2 - cw / 2, 0), w - cw);
+  const sy = Math.min(Math.max((minY + maxY) / 2 - ch / 2, 0), h - ch);
+
+  const out = document.createElement("canvas");
+  out.width = 640;
+  out.height = Math.round(640 / EXPORT_PHOTO_ASPECT);
+  const octx = out.getContext("2d");
+  octx.fillStyle = `rgb(${bgR},${bgG},${bgB})`;
+  octx.fillRect(0, 0, out.width, out.height);
+  // If the crop hit the photo's edge it may not match the target aspect;
+  // fit it inside (letterbox on matching background) rather than stretch.
+  const fit = Math.min(out.width / cw, out.height / ch);
+  const dw = cw * fit;
+  const dh = ch * fit;
+  octx.drawImage(img, sx, sy, cw, ch, (out.width - dw) / 2, (out.height - dh) / 2, dw, dh);
+  return out.toDataURL("image/jpeg", 0.92);
+}
+
+function groupByChassis(pins) {
+  const map = new Map();
+  for (const p of pins) {
+    const key = p.chassisCode || "Other";
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(p);
+  }
+  return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+}
+
+function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds, displayName }) {
+  const [exporting, setExporting] = useState(false);
+  const [exportPages, setExportPages] = useState(null); // [{ url, file }]
+  const [croppedPhotos, setCroppedPhotos] = useState({}); // original src -> cropped data URL
+  const posterRefs = useRef([]);
+
+  useEffect(() => () => { exportPages?.forEach((p) => URL.revokeObjectURL(p.url)); }, [exportPages]);
+
+  // Columns scale with list size so each image stays roughly square; every
+  // page of a multi-page export shares the same column count. Pins are packed
+  // into one grid (chassis shown per card) rather than per-chassis sections,
+  // which would leave half-empty rows and make page heights unpredictable.
+  const poster = useMemo(() => {
+    const ordered = groupByChassis(pins).flatMap(([, group]) => group);
+    const cols = Math.max(1, Math.min(5, Math.ceil(Math.sqrt(Math.min(ordered.length, EXPORT_PAGE_SIZE)))));
+    // Spread pins evenly so the last page isn't a lone short strip
+    // (e.g. 105 pins -> 6 pages of ~18 rather than 5×20 + 5).
+    const pageCount = Math.ceil(ordered.length / EXPORT_PAGE_SIZE);
+    const perPage = Math.ceil(ordered.length / Math.max(1, pageCount));
+    const pages = [];
+    for (let i = 0; i < ordered.length; i += perPage) {
+      pages.push(ordered.slice(i, i + perPage));
+    }
+    return { cols, pages, width: cols * EXPORT_CARD_WIDTH + (cols - 1) * EXPORT_GAP };
   }, [pins]);
 
   async function handleExport() {
-    if (pins.length === 0 || !posterRef.current) return;
+    if (pins.length === 0) return;
     setExporting(true);
     try {
+      const sources = [...new Set(pins.map((p) => p.images?.[0]).filter(Boolean))];
+      const missing = sources.filter((src) => !croppedPhotos[src]);
+      if (missing.length > 0) {
+        const cropped = await Promise.all(missing.map((src) => cropPinPhoto(src).catch(() => src)));
+        const next = { ...croppedPhotos };
+        missing.forEach((src, i) => { next[src] = cropped[i]; });
+        // Render the posters with the cropped photos before capturing them.
+        flushSync(() => setCroppedPhotos(next));
+      }
+
       const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(posterRef.current, { backgroundColor: C.ink, scale: 2 });
-      const url = canvas.toDataURL("image/png");
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "want-list.png";
-      a.click();
+      const multi = poster.pages.length > 1;
+      const results = [];
+      for (let i = 0; i < poster.pages.length; i++) {
+        const el = posterRefs.current[i];
+        await Promise.all(
+          Array.from(el.querySelectorAll("img")).map((img) =>
+            img.complete ? null : new Promise((resolve) => { img.onload = img.onerror = resolve; })
+          )
+        );
+        // iOS Safari silently produces a blank canvas past ~16.7M pixels.
+        const scale = Math.min(2, Math.sqrt(16_000_000 / (el.offsetWidth * el.offsetHeight)));
+        const canvas = await html2canvas(el, { backgroundColor: C.ink, scale });
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
+        const name = multi ? `want-list-${i + 1}-of-${poster.pages.length}.jpg` : "want-list.jpg";
+        results.push({ url: URL.createObjectURL(blob), file: new File([blob], name, { type: "image/jpeg" }) });
+      }
+      setExportPages(results);
     } finally {
       setExporting(false);
+    }
+  }
+
+  const exportFiles = exportPages?.map((p) => p.file) ?? [];
+  const canShareFiles = typeof navigator !== "undefined" && exportFiles.length > 0 && navigator.canShare?.({ files: exportFiles });
+
+  async function saveExport() {
+    if (!exportPages) return;
+    if (canShareFiles) {
+      try {
+        await navigator.share({ files: exportFiles, title: "Want List" });
+      } catch (e) {
+        if (e?.name !== "AbortError") throw e;
+      }
+      return;
+    }
+    for (const { url, file } of exportPages) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      a.click();
     }
   }
 
@@ -1167,36 +1299,86 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds }
         })}
       </div>
 
-      {/* Offscreen poster used for export — rendered but not visible */}
+      {/* Offscreen posters used for export (one per page) — rendered but not visible */}
       <div style={{ position: "fixed", top: 0, left: -99999, pointerEvents: "none" }}>
-        <div ref={posterRef} style={{ width: 1080, background: C.ink, padding: 48, ...body }}>
-          <div style={{ ...display, fontSize: 56, fontWeight: 800, color: "#FFFFFF", letterSpacing: "0.01em", marginBottom: 32 }}>
-            WANT LIST
+        {poster.pages.map((pagePins, pageIndex) => (
+        <div
+          key={pageIndex}
+          ref={(el) => { posterRefs.current[pageIndex] = el; }}
+          style={{ width: poster.width, background: C.ink, padding: 48, marginBottom: 20, ...body }}
+        >
+          <div style={{ marginBottom: 32 }}>
+            <div style={{ ...display, fontSize: 56, fontWeight: 800, color: "#FFFFFF", letterSpacing: "0.01em", lineHeight: 1 }}>
+              WANT LIST{displayName?.trim() ? ` - ${displayName.trim().toUpperCase()}` : ""}
+            </div>
+            {poster.pages.length > 1 && (
+              <div style={{ ...mono, fontSize: 16, color: C.steel, letterSpacing: "0.12em", marginTop: 10 }}>
+                PAGE {pageIndex + 1} OF {poster.pages.length}
+              </div>
+            )}
           </div>
-          {groups.map(([chassisCode, groupPins]) => (
-            <div key={chassisCode} style={{ marginBottom: 28 }}>
-              <div style={{ ...mono, fontSize: 16, color: POSTER_TEAL, letterSpacing: "0.12em", marginBottom: 10, textTransform: "uppercase" }}>
-                {chassisCode}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
-                {groupPins.map((pin) => (
-                  <div key={pin.id} style={{ background: POSTER_TEAL, borderRadius: 8, padding: 16, minHeight: 96, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                    <div>
-                      <div style={{ ...display, fontSize: 20, fontWeight: 700, color: "#0B1210", lineHeight: 1.15 }}>{pin.name}</div>
-                      {pin.variant && (
-                        <div style={{ ...body, fontSize: 13, color: "#0B1210", marginTop: 4, opacity: 0.8 }}>{pin.variant}</div>
-                      )}
-                    </div>
-                    <div style={{ ...mono, fontSize: 12, color: "#0B1210", textAlign: "right", marginTop: 8, opacity: 0.85 }}>
-                      {pin.editionSize || ""}
-                    </div>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${poster.cols}, ${EXPORT_CARD_WIDTH}px)`, gap: EXPORT_GAP }}>
+            {pagePins.map((pin) => (
+              <div key={pin.id} style={{ background: C.catalogCard, border: "2px solid #FFFFFF", borderRadius: 8, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                {pin.images?.[0] && (
+                  <img
+                    src={croppedPhotos[pin.images[0]] || pin.images[0]}
+                    alt=""
+                    style={{ display: "block", width: "100%", height: "auto" }}
+                  />
+                )}
+                <div style={{ padding: "10px 14px 14px", flex: 1, display: "flex", flexDirection: "column" }}>
+                  <div style={{ ...mono, fontSize: 14, color: C.steel, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>
+                    {pin.chassisCode || "Other"}
                   </div>
-                ))}
+                  <div style={{ ...display, fontSize: 25, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.12 }}>{pin.name}</div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, marginTop: "auto", paddingTop: 6 }}>
+                    <div style={{ ...body, fontSize: 16, color: "#FFFFFF", opacity: 0.8 }}>{pin.variant || ""}</div>
+                    <div style={{ ...mono, fontSize: 15, color: "#FFFFFF", opacity: 0.85, whiteSpace: "nowrap" }}>{pin.editionSize || ""}</div>
+                  </div>
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+        ))}
+      </div>
+
+      {exportPages && (
+        <ModalShell title="Want List" onClose={() => setExportPages(null)}>
+          {exportPages.map((page, i) => (
+            <div key={page.url} style={{ marginBottom: 14 }}>
+              {exportPages.length > 1 && (
+                <div style={{ ...mono, fontSize: 11, color: C.steel, letterSpacing: "0.06em", marginBottom: 6 }}>
+                  PAGE {i + 1} OF {exportPages.length}
+                </div>
+              )}
+              <img
+                src={page.url}
+                alt={`Want list page ${i + 1}`}
+                style={{ display: "block", width: "100%", borderRadius: 8, border: `1px solid ${C.line}` }}
+              />
             </div>
           ))}
-        </div>
-      </div>
+          <button
+            onClick={saveExport}
+            style={{
+              ...mono, width: "100%", padding: "12px 0", borderRadius: 10, border: "none",
+              background: C.amber, color: C.ink, fontSize: 13, letterSpacing: "0.05em",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+            }}
+          >
+            {canShareFiles
+              ? <><Share size={14} /> SAVE TO PHOTOS</>
+              : <><Download size={14} /> {exportPages.length > 1 ? `DOWNLOAD ${exportPages.length} IMAGES` : "DOWNLOAD IMAGE"}</>}
+          </button>
+          {canShareFiles && (
+            <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 10, textAlign: "center", lineHeight: 1.5 }}>
+              Choose <b>{exportPages.length > 1 ? `Save ${exportPages.length} Images` : "Save Image"}</b> in the share sheet to add {exportPages.length > 1 ? "them" : "it"} to Photos.
+            </div>
+          )}
+        </ModalShell>
+      )}
     </div>
   );
 }
