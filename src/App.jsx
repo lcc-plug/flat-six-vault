@@ -22,6 +22,8 @@ const C = {
 const GLOBAL_STYLE = `
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 @keyframes fsv-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.fsv-shell { max-width: 480px; }
+@media (min-width: 768px) { .fsv-shell { max-width: 1200px; } }
 `;
 
 const display = { fontFamily: "'Barlow Condensed', sans-serif" };
@@ -605,7 +607,7 @@ function MainApp() {
   return (
     <div style={{ ...body, background: C.ink, minHeight: "100vh", color: C.chalk }}>
       <style>{GLOBAL_STYLE}</style>
-      <div style={{ maxWidth: 480, margin: "0 auto", minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
+      <div className="fsv-shell" style={{ margin: "0 auto", minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
         {/* Header */}
         <div style={{ position: "sticky", top: 0, zIndex: 20, background: C.ink, borderBottom: `1px solid ${C.line}`, padding: "16px 16px 12px" }}>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
@@ -680,9 +682,10 @@ function MainApp() {
 
         {/* Bottom nav */}
         <div
+          className="fsv-shell"
           style={{
             position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
-            width: "100%", maxWidth: 480, background: C.panel, borderTop: `1px solid ${C.line}`,
+            width: "100%", background: C.panel, borderTop: `1px solid ${C.line}`,
             display: "flex", paddingBottom: "env(safe-area-inset-bottom, 0px)", zIndex: 30,
           }}
         >
@@ -912,7 +915,7 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
         <EmptyState title="No pins match." body="Try a different search, or add the pin you're looking for." />
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
         {filtered.map((pin) => {
           const wished = wishlistIds.has(pin.id);
           return (
@@ -1035,7 +1038,7 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated }) {
         />
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
         {pins.map((pin) => (
           <div
             key={pin.id}
@@ -1133,7 +1136,7 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail, isAuth
         />
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
         {collection.map((entry) => {
           const pin = catalog.find((p) => p.id === entry.catalogId);
           if (!pin) return null;
