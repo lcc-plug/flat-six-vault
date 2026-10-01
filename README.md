@@ -1,4 +1,4 @@
-# Flat Six Vault — Stage 1 (installable, single device)
+# Flat 6 Vault — Stage 1 (installable, single device)
 
 This folder is a complete, ready-to-deploy version of your pin tracker. Storage is
 local to whatever device/browser you use it on — that upgrades in Stage 2.
@@ -23,7 +23,7 @@ local to whatever device/browser you use it on — that upgrades in Stage 2.
    - **iPhone (Safari):** tap the Share icon → "Add to Home Screen"
    - **Android (Chrome):** tap the ⋮ menu → "Install app" (or it may prompt you automatically)
 
-That's it — Flat Six Vault now has a real icon on your home screen and opens full-screen
+That's it — Flat 6 Vault now has a real icon on your home screen and opens full-screen
 like a normal app.
 
 ## Option B — Using Claude Code

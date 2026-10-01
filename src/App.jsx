@@ -637,7 +637,7 @@ function MainApp() {
         <div style={{ position: "sticky", top: 0, zIndex: 20, background: C.ink, borderBottom: `1px solid ${C.line}`, padding: "calc(16px + env(safe-area-inset-top, 0px)) 16px 12px" }}>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
             <div>
-              <div style={{ ...display, fontSize: 25, fontWeight: 800, letterSpacing: "0.01em", lineHeight: 1 }}>FLAT SIX VAULT</div>
+              <div style={{ ...display, fontSize: 25, fontWeight: 800, letterSpacing: "0.01em", lineHeight: 1 }}>FLAT 6 VAULT</div>
               <div style={{ ...mono, fontSize: 10, color: C.amber, letterSpacing: "0.18em", marginTop: 4 }}>
                 ENAMEL PIN LEDGER
               </div>
