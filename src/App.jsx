@@ -24,6 +24,8 @@ const GLOBAL_STYLE = `
 @keyframes fsv-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .fsv-shell { max-width: 480px; }
 @media (min-width: 768px) { .fsv-shell { max-width: 1200px; } }
+.fsv-pin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+@media (min-width: 768px) { .fsv-pin-grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 10px; } }
 `;
 
 const display = { fontFamily: "'Barlow Condensed', sans-serif" };
@@ -655,7 +657,13 @@ function MainApp() {
         </div>
 
         {notice && (
-          <div style={{ ...mono, fontSize: 11, background: "rgba(193,39,45,0.15)", color: "#F0A0A3", padding: "8px 16px", borderBottom: `1px solid ${C.line}` }}>
+          <div
+            style={{
+              ...mono, fontSize: 11, background: "#2A1518", color: "#F0A0A3", border: `1px solid ${C.redDeep}`,
+              padding: "10px 16px", borderRadius: 10, position: "fixed", top: 12, left: "50%", transform: "translateX(-50%)",
+              width: "calc(100% - 32px)", maxWidth: 440, zIndex: 80, textAlign: "center", boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+            }}
+          >
             {notice}
           </div>
         )}
@@ -676,6 +684,7 @@ function MainApp() {
               onOpenDetail={(id) => setDetailPinId(id)}
               wishlistIds={wishlistIds}
               onToggleWishlist={toggleWishlist}
+              ownedIds={ownedIds}
             />
           )}
           {tab === "wishlist" && (
@@ -684,6 +693,7 @@ function MainApp() {
               onRemove={toggleWishlist}
               onOpenDetail={(id) => setDetailPinId(id)}
               isAuthenticated={isAuthenticated}
+              ownedIds={ownedIds}
             />
           )}
           {tab === "collection" && (
@@ -910,7 +920,7 @@ function NavButton({ icon: Icon, label, active, onClick }) {
 }
 
 // ---------- Catalog Tab ----------
-function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions, catalogFilter, setCatalogFilter, onAdd, onAddToCollection, onOpenDetail, wishlistIds, onToggleWishlist }) {
+function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions, catalogFilter, setCatalogFilter, onAdd, onAddToCollection, onOpenDetail, wishlistIds, onToggleWishlist, ownedIds }) {
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ position: "relative", marginBottom: 12 }}>
@@ -922,43 +932,56 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
           style={{ ...inputStyle, paddingLeft: 36 }}
         />
       </div>
-      <div style={{ position: "relative", marginBottom: 14 }}>
-        <select
-          value={catalogFilter}
-          onChange={(e) => setCatalogFilter(e.target.value)}
-          style={{
-            ...body, width: "100%", background: C.ink, border: `1px solid ${C.line}`, borderRadius: 8,
-            padding: "10px 32px 10px 12px", color: C.chalk, fontSize: 14, outline: "none", boxSizing: "border-box",
-            appearance: "none", WebkitAppearance: "none",
-          }}
-        >
-          <option value="all">All Pins</option>
-          <option value="missing">Missing From My Garage</option>
-          {seriesOptions.length > 0 && (
-            <optgroup label="Series">
-              {seriesOptions.map((s) => (
-                <option key={`series:${s}`} value={`series:${s}`}>{s}</option>
-              ))}
-            </optgroup>
-          )}
-          {chassisOptions.length > 0 && (
-            <optgroup label="Chassis / Model">
-              {chassisOptions.map((c) => (
-                <option key={`chassis:${c}`} value={`chassis:${c}`}>{c}</option>
-              ))}
-            </optgroup>
-          )}
-        </select>
-        <ChevronDown size={16} color={C.steel} style={{ position: "absolute", right: 12, top: 12, pointerEvents: "none" }} />
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        <div style={{ position: "relative", flex: 1 }}>
+          <select
+            value={catalogFilter.startsWith("series:") ? "all" : catalogFilter}
+            onChange={(e) => setCatalogFilter(e.target.value)}
+            style={{
+              ...body, width: "100%", background: C.ink, border: `1px solid ${C.line}`, borderRadius: 8,
+              padding: "10px 32px 10px 12px", color: C.chalk, fontSize: 14, outline: "none", boxSizing: "border-box",
+              appearance: "none", WebkitAppearance: "none",
+            }}
+          >
+            <option value="all">All Pins</option>
+            <option value="missing">Missing From My Garage</option>
+            {chassisOptions.length > 0 && (
+              <optgroup label="Chassis / Model">
+                {chassisOptions.map((c) => (
+                  <option key={`chassis:${c}`} value={`chassis:${c}`}>{c}</option>
+                ))}
+              </optgroup>
+            )}
+          </select>
+          <ChevronDown size={16} color={C.steel} style={{ position: "absolute", right: 12, top: 12, pointerEvents: "none" }} />
+        </div>
+        <div style={{ position: "relative", flex: 1 }}>
+          <select
+            value={catalogFilter.startsWith("series:") ? catalogFilter.slice(7) : ""}
+            onChange={(e) => setCatalogFilter(e.target.value ? `series:${e.target.value}` : "all")}
+            style={{
+              ...body, width: "100%", background: C.ink, border: `1px solid ${C.line}`, borderRadius: 8,
+              padding: "10px 32px 10px 12px", color: C.chalk, fontSize: 14, outline: "none", boxSizing: "border-box",
+              appearance: "none", WebkitAppearance: "none",
+            }}
+          >
+            <option value="">All Series</option>
+            {seriesOptions.map((s) => (
+              <option key={`series:${s}`} value={s}>{s}</option>
+            ))}
+          </select>
+          <ChevronDown size={16} color={C.steel} style={{ position: "absolute", right: 12, top: 12, pointerEvents: "none" }} />
+        </div>
       </div>
 
       {filtered.length === 0 && (
         <EmptyState title="No pins match." body="Try a different search, or add the pin you're looking for." />
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
+      <div className="fsv-pin-grid">
         {filtered.map((pin) => {
           const wished = wishlistIds.has(pin.id);
+          const owned = ownedIds.has(pin.id);
           return (
             <div
               key={pin.id}
@@ -969,39 +992,48 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
               style={{ textAlign: "left", background: C.catalogCard, border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
             >
               <div style={{ position: "relative" }}>
-                <PinPhoto pin={pin} height={100} radius={0} />
+                <PinPhoto pin={pin} height={130} radius={0} />
                 <span
                   role="button"
                   onClick={(e) => { e.stopPropagation(); onToggleWishlist(pin.id); }}
                   style={{
-                    position: "absolute", top: 6, right: 6, width: 24, height: 24, borderRadius: 9999,
+                    position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: 9999,
                     color: wished ? C.ink : "#fff", background: wished ? "#F0A0A3" : "rgba(0,0,0,0.45)",
                     border: "none", display: "flex", alignItems: "center", justifyContent: "center",
                   }}
                 >
-                  <Heart size={13} fill={wished ? C.ink : "none"} />
+                  <Heart size={14} fill={wished ? C.ink : "none"} />
                 </span>
               </div>
-              <div style={{ padding: 8, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ ...display, fontSize: 14, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+              {owned && (
+                <div style={{
+                  ...mono, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textAlign: "center",
+                  color: "#4ADE80", background: "rgba(74,222,128,0.12)", borderBottom: "1px solid rgba(74,222,128,0.3)",
+                  padding: "3px 0",
+                }}>
+                  OWNED
+                </div>
+              )}
+              <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
+                <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                  <div style={{ ...body, fontSize: 11, color: C.steel, marginTop: 3 }}>
+                  <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
                     {pin.variant}
                   </div>
                   {pin.editionSize && (
-                    <div style={{ ...mono, fontSize: 10, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
+                    <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
                   )}
                 </div>
-                <div style={{ display: "flex", justifyContent: "center", paddingTop: 6 }}>
+                <div style={{ display: "flex", justifyContent: "center", paddingTop: 7 }}>
                   <span
                     role="button"
                     onClick={(e) => { e.stopPropagation(); onAddToCollection(pin.id); }}
                     style={{
-                      ...mono, fontSize: 10, letterSpacing: "0.03em", color: C.ink, background: C.amber,
-                      border: "none", borderRadius: 6, padding: "6px 14px", display: "inline-flex", alignItems: "center", gap: 3,
+                      ...mono, fontSize: 11, letterSpacing: "0.03em", color: C.ink, background: C.amber,
+                      border: "none", borderRadius: 6, padding: "7px 16px", display: "inline-flex", alignItems: "center", gap: 4,
                     }}
                   >
-                    <Plus size={11} /> GARAGE
+                    <Plus size={12} /> GARAGE
                   </span>
                 </div>
               </div>
@@ -1027,7 +1059,7 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
 // ---------- Wishlist Tab ----------
 const POSTER_TEAL = "#1BAFA0";
 
-function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated }) {
+function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds }) {
   const [exporting, setExporting] = useState(false);
   const posterRef = useRef(null);
 
@@ -1079,8 +1111,10 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated }) {
         />
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
-        {pins.map((pin) => (
+      <div className="fsv-pin-grid">
+        {pins.map((pin) => {
+          const owned = ownedIds.has(pin.id);
+          return (
           <div
             key={pin.id}
             role="button"
@@ -1089,32 +1123,42 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated }) {
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenDetail(pin.id); } }}
             style={{ textAlign: "left", background: C.catalogCard, border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
           >
-            <PinPhoto pin={pin} height={100} radius={0} />
-            <div style={{ padding: 8, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-              <div style={{ ...display, fontSize: 14, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+            <PinPhoto pin={pin} height={130} radius={0} />
+            {owned && (
+              <div style={{
+                ...mono, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textAlign: "center",
+                color: "#4ADE80", background: "rgba(74,222,128,0.12)", borderBottom: "1px solid rgba(74,222,128,0.3)",
+                padding: "3px 0",
+              }}>
+                OWNED
+              </div>
+            )}
+            <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
+              <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <div style={{ ...body, fontSize: 11, color: C.steel, marginTop: 3 }}>
+                <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
                   {pin.variant}
                 </div>
                 {pin.editionSize && (
-                  <div style={{ ...mono, fontSize: 10, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
+                  <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
                 )}
               </div>
-              <div style={{ display: "flex", justifyContent: "center", paddingTop: 6 }}>
+              <div style={{ display: "flex", justifyContent: "center", paddingTop: 7 }}>
                 <span
                   role="button"
                   onClick={(e) => { e.stopPropagation(); onRemove(pin.id); }}
                   style={{
-                    ...mono, fontSize: 10, letterSpacing: "0.03em", color: "#F0A0A3", background: "transparent",
-                    border: `1px solid ${C.redDeep}`, borderRadius: 6, padding: "5px 7px", display: "inline-flex", alignItems: "center", gap: 3,
+                    ...mono, fontSize: 11, letterSpacing: "0.03em", color: "#F0A0A3", background: "transparent",
+                    border: `1px solid ${C.redDeep}`, borderRadius: 6, padding: "6px 9px", display: "inline-flex", alignItems: "center", gap: 4,
                   }}
                 >
-                  <X size={11} /> REMOVE
+                  <X size={12} /> REMOVE
                 </span>
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Offscreen poster used for export — rendered but not visible */}
@@ -1177,7 +1221,7 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail, isAuth
         />
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
+      <div className="fsv-pin-grid">
         {collection.map((entry) => {
           const pin = catalog.find((p) => p.id === entry.catalogId);
           if (!pin) return null;
@@ -1190,18 +1234,18 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail, isAuth
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenDetail(pin.id); } }}
               style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
             >
-              <PinPhoto pin={pin} height={100} radius={0} />
-              <div style={{ padding: 8, flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ ...display, fontSize: 14, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+              <PinPhoto pin={pin} height={130} radius={0} />
+              <div style={{ padding: 10, flex: 1, display: "flex", flexDirection: "column" }}>
+                <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                  <div style={{ ...body, fontSize: 11, color: C.steel, marginTop: 3 }}>
+                  <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
                     {pin.variant}
                   </div>
                   {pin.editionSize && (
-                    <div style={{ ...mono, fontSize: 10, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
+                    <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
                   )}
                 </div>
-                <div style={{ ...mono, fontSize: 10, color: C.amber, paddingTop: 3 }}>
+                <div style={{ ...mono, fontSize: 11, color: C.amber, paddingTop: 3 }}>
                   Qty {entry.quantity}{entry.notes ? ` · ${entry.notes}` : ""}
                 </div>
               </div>
