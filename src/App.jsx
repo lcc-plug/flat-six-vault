@@ -1289,6 +1289,8 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
   useEffect(() => { setName(profile.displayName || ""); }, [profile.displayName]);
   const contributions = catalog.filter((p) => p.addedBy === (profile.displayName || "__none__") && profile.displayName).length;
 
+  const users = useQuery(api.admin.listUsers, profile.isAdmin ? {} : "skip");
+
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: 16, marginBottom: 16 }}>
@@ -1324,6 +1326,43 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
       >
         <LogOut size={14} /> SIGN OUT
       </button>
+
+      {profile.isAdmin && (
+        <div style={{ marginTop: 20 }}>
+          <div style={{ ...mono, fontSize: 11, color: C.steel, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>
+            Registered Users{users ? ` (${users.length})` : ""}
+          </div>
+          <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, overflow: "hidden" }}>
+            {!users && (
+              <div style={{ ...body, fontSize: 13, color: C.steel, padding: 14 }}>Loading…</div>
+            )}
+            {users && users.length === 0 && (
+              <div style={{ ...body, fontSize: 13, color: C.steel, padding: 14 }}>No registered users yet.</div>
+            )}
+            {users && users.map((u, i) => (
+              <div
+                key={u.email + i}
+                style={{
+                  padding: "10px 14px", borderBottom: i < users.length - 1 ? `1px solid ${C.line}` : "none",
+                  display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10,
+                }}
+              >
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ ...body, fontSize: 13, color: C.chalk, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {u.email}
+                  </div>
+                  {u.displayName && (
+                    <div style={{ ...body, fontSize: 11, color: C.steel, marginTop: 1 }}>{u.displayName}</div>
+                  )}
+                </div>
+                <div style={{ ...mono, fontSize: 10, color: C.steel, flexShrink: 0 }}>
+                  {new Date(u.joinedAt).toLocaleDateString()}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
