@@ -681,7 +681,7 @@ function MainApp() {
               catalogFilter={catalogFilter}
               setCatalogFilter={setCatalogFilter}
               onAdd={() => setShowAddCatalog(true)}
-              onAddToCollection={(id) => setAddCollectionFor(id)}
+              onAddToCollection={(id) => addCollectionEntry({ catalogId: id, quantity: 1 })}
               onOpenDetail={(id) => setDetailPinId(id)}
               wishlistIds={wishlistIds}
               onToggleWishlist={toggleWishlist}
