@@ -413,7 +413,7 @@ function ProgressBar({ percent }) {
 
 // ---------- Main App ----------
 export default function App() {
-  const { isLoading: authLoading, isAuthenticated } = useConvexAuth();
+  const { isLoading: authLoading } = useConvexAuth();
 
   if (authLoading) {
     return (
@@ -425,14 +425,11 @@ export default function App() {
     );
   }
 
-  if (!isAuthenticated) {
-    return <SignInScreen />;
-  }
-
   return <MainApp />;
 }
 
 function MainApp() {
+  const { isAuthenticated } = useConvexAuth();
   const { signOut } = useAuthActions();
   const [tab, setTab] = useState("catalog");
   const [notice, setNotice] = useState("");
@@ -497,16 +494,21 @@ function MainApp() {
     setTimeout(() => setNotice(""), 2500);
   }
 
+  const SIGN_IN_NUDGE = "Sign in (Profile tab) to save that — browsing is free, saving needs an account.";
+  function flashWriteError(err, fallback) {
+    flash(String(err?.message || "").includes("Must be signed in") ? SIGN_IN_NUDGE : fallback);
+  }
+
   function saveProfile(next) {
-    setDisplayNameMutation({ displayName: next.displayName || "" }).catch(() =>
-      flash("Couldn't save — try again.")
+    setDisplayNameMutation({ displayName: next.displayName || "" }).catch((e) =>
+      flashWriteError(e, "Couldn't save — try again.")
     );
   }
 
   function toggleWishlist(pinId) {
     toggleWishlistMutation({ pinId })
       .then((added) => flash(added ? "Added to wishlist." : "Removed from wishlist."))
-      .catch(() => flash("Couldn't update your wishlist."));
+      .catch((e) => flashWriteError(e, "Couldn't update your wishlist."));
   }
 
   const wishlistIds = useMemo(() => new Set(wishlist), [wishlist]);
@@ -562,25 +564,29 @@ function MainApp() {
       images: fields.images || [],
     })
       .then(() => flash("Catalog entry updated."))
-      .catch(() => flash("Couldn't save — try again."));
+      .catch((e) => flashWriteError(e, "Couldn't save — try again."));
   }
   function deleteCatalogPin(pinId) {
     removePin({ id: pinId })
       .then(() => flash("Removed from the catalog."))
-      .catch(() => flash("Couldn't remove — try again."));
+      .catch((e) => flashWriteError(e, "Couldn't remove — try again."));
   }
   function addCollectionEntry(entry) {
     addGarage({ pinId: entry.catalogId, quantity: Number(entry.quantity) || 1, notes: entry.notes || "" })
       .then(() => flash("Added to your garage."))
-      .catch((e) => flash(String(e.message || "").includes("Already") ? "Already in your garage." : "Couldn't add — try again."));
+      .catch((e) => {
+        const msg = String(e?.message || "");
+        if (msg.includes("Already")) flash("Already in your garage.");
+        else flashWriteError(e, "Couldn't add — try again.");
+      });
   }
   function updateCollectionEntry(entryId, fields) {
-    updateGarage({ id: entryId, ...fields }).catch(() => flash("Couldn't save — try again."));
+    updateGarage({ id: entryId, ...fields }).catch((e) => flashWriteError(e, "Couldn't save — try again."));
   }
   function removeCollectionEntry(entryId) {
     removeGarage({ id: entryId })
       .then(() => flash("Removed from your garage."))
-      .catch(() => flash("Couldn't remove — try again."));
+      .catch((e) => flashWriteError(e, "Couldn't remove — try again."));
   }
 
   if (loading) {
@@ -652,6 +658,7 @@ function MainApp() {
               pins={wishlistPins}
               onRemove={toggleWishlist}
               onOpenDetail={(id) => setDetailPinId(id)}
+              isAuthenticated={isAuthenticated}
             />
           )}
           {tab === "collection" && (
@@ -660,11 +667,14 @@ function MainApp() {
               collection={collection}
               stats={stats}
               onAdd={() => setAddCollectionFor("pick")}
+              isAuthenticated={isAuthenticated}
               onOpenDetail={(catalogId) => setDetailPinId(catalogId)}
             />
           )}
           {tab === "profile" && (
-            <ProfileTab profile={profile} saveProfile={saveProfile} catalog={catalog} stats={stats} onSignOut={signOut} />
+            isAuthenticated
+              ? <ProfileTab profile={profile} saveProfile={saveProfile} catalog={catalog} stats={stats} onSignOut={signOut} />
+              : <SignInScreen />
           )}
         </div>
 
@@ -700,7 +710,7 @@ function MainApp() {
                 addedBy: profile.displayName || "Collector",
               })
                 .then(() => flash("Added to the catalog."))
-                .catch(() => flash("Couldn't add — try again."));
+                .catch((e) => flashWriteError(e, "Couldn't add — try again."));
               setShowAddCatalog(false);
             }}
           />
@@ -766,14 +776,10 @@ function SignInScreen() {
   }
 
   return (
-    <div style={{ ...body, background: C.ink, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: C.chalk, padding: 20 }}>
-      <style>{GLOBAL_STYLE}</style>
-      <div style={{ width: "100%", maxWidth: 360 }}>
-        <div style={{ textAlign: "center", marginBottom: 28 }}>
-          <div style={{ ...display, fontSize: 28, fontWeight: 800, letterSpacing: "0.01em" }}>FLAT SIX VAULT</div>
-          <div style={{ ...mono, fontSize: 10, color: C.amber, letterSpacing: "0.18em", marginTop: 4 }}>
-            ENAMEL PIN LEDGER
-          </div>
+    <div style={{ padding: "14px 16px" }}>
+      <div style={{ width: "100%", maxWidth: 360, margin: "0 auto" }}>
+        <div style={{ ...body, fontSize: 13, color: C.steel, textAlign: "center", marginBottom: 18, lineHeight: 1.5 }}>
+          Browsing the catalog is free. Sign in or create an account to save pins to your garage or wishlist.
         </div>
 
         <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: 20 }}>
@@ -977,7 +983,7 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
 // ---------- Wishlist Tab ----------
 const POSTER_TEAL = "#1BAFA0";
 
-function WishlistTab({ pins, onRemove, onOpenDetail }) {
+function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated }) {
   const [exporting, setExporting] = useState(false);
   const posterRef = useRef(null);
 
@@ -1023,7 +1029,10 @@ function WishlistTab({ pins, onRemove, onOpenDetail }) {
       </button>
 
       {pins.length === 0 && (
-        <EmptyState title="Your wishlist is empty." body="Tap the heart on any catalog pin to add it here." />
+        <EmptyState
+          title="Your wishlist is empty."
+          body={isAuthenticated ? "Tap the heart on any catalog pin to add it here." : "Sign in (Profile tab) to save pins to a wishlist."}
+        />
       )}
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
@@ -1099,7 +1108,7 @@ function WishlistTab({ pins, onRemove, onOpenDetail }) {
 }
 
 // ---------- Collection Tab ----------
-function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
+function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail, isAuthenticated }) {
   return (
     <div style={{ padding: "14px 16px" }}>
       <div style={{ background: C.panelRaised, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 16 }}>
@@ -1118,7 +1127,10 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail }) {
       </div>
 
       {collection.length === 0 && (
-        <EmptyState title="Your garage is empty." body="Add your first pin from the catalog to start tracking it." />
+        <EmptyState
+          title="Your garage is empty."
+          body={isAuthenticated ? "Add your first pin from the catalog to start tracking it." : "Sign in (Profile tab) to start tracking your collection."}
+        />
       )}
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
