@@ -1524,10 +1524,6 @@ function DropsTab({ pins, recentPins, wishlistIds, onToggleWishlist, ownedIds, o
 
   return (
     <div style={{ padding: "14px 16px" }}>
-      <div style={{ ...body, fontSize: 12, color: C.steel, marginBottom: 14, lineHeight: 1.5 }}>
-        Pins that haven't come out yet. Most don't have a firm date — tap the heart to get notified-ish (check back here).
-      </div>
-
       {sorted.length === 0 && (
         <EmptyState title="Nothing unreleased right now." body="Check back later — new drops will show up here first." />
       )}
@@ -1665,6 +1661,7 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
   const contributions = catalog.filter((p) => p.addedBy === (profile.displayName || "__none__") && profile.displayName).length;
 
   const users = useQuery(api.admin.listUsers, profile.isAdmin ? {} : "skip");
+  const [viewingUser, setViewingUser] = useState(null);
 
   return (
     <div style={{ padding: "14px 16px" }}>
@@ -1716,10 +1713,14 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
             )}
             {users && users.map((u, i) => (
               <div
-                key={u.email + i}
+                key={u.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => setViewingUser(u)}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setViewingUser(u); } }}
                 style={{
                   padding: "10px 14px", borderBottom: i < users.length - 1 ? `1px solid ${C.line}` : "none",
-                  display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10,
+                  display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, cursor: "pointer",
                 }}
               >
                 <div style={{ minWidth: 0 }}>
@@ -1730,15 +1731,67 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
                     <div style={{ ...body, fontSize: 11, color: C.steel, marginTop: 1 }}>{u.displayName}</div>
                   )}
                 </div>
-                <div style={{ ...mono, fontSize: 10, color: C.steel, flexShrink: 0 }}>
-                  {new Date(u.joinedAt).toLocaleDateString()}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ ...mono, fontSize: 10, color: C.steel }}>{new Date(u.joinedAt).toLocaleDateString()}</div>
+                    <div style={{ ...mono, fontSize: 10, color: C.steel, marginTop: 2 }}>
+                      {u.garageCount} owned · {u.wishlistCount} wanted
+                    </div>
+                  </div>
+                  <ChevronRight size={14} color={C.steel} />
                 </div>
               </div>
             ))}
           </div>
         </div>
       )}
+
+      {viewingUser && <AdminUserCollectionModal user={viewingUser} onClose={() => setViewingUser(null)} />}
     </div>
+  );
+}
+
+// ---------- Admin: read-only view of one user's garage + wishlist ----------
+function AdminUserCollectionModal({ user, onClose }) {
+  const data = useQuery(api.admin.userCollection, { userId: user.id });
+
+  const section = (label, pins, showQty) => (
+    <div style={{ marginBottom: 18 }}>
+      <div style={{ ...mono, fontSize: 11, color: C.steel, letterSpacing: "0.06em", marginBottom: 8 }}>
+        {label} ({pins.length})
+      </div>
+      {pins.length === 0 && (
+        <div style={{ ...body, fontSize: 13, color: C.steel, padding: "10px 0" }}>Nothing here yet.</div>
+      )}
+      {pins.map((p) => (
+        <div key={p.id} style={{ display: "flex", gap: 10, alignItems: "center", background: C.catalogCard, border: `1px solid ${C.line}`, borderRadius: 10, padding: 6, marginBottom: 6 }}>
+          <PinPhoto pin={{ name: p.name, images: p.image ? [p.image] : [] }} height={48} width={68} radius={6} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ ...display, fontSize: 15, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.15 }}>{p.name}</div>
+            <div style={{ ...body, fontSize: 11, color: C.steel, marginTop: 2 }}>
+              {metaLine(p.variant, p.editionSize)}
+            </div>
+            {showQty && p.notes && (
+              <div style={{ ...body, fontSize: 11, color: C.steel, marginTop: 2, fontStyle: "italic" }}>“{p.notes}”</div>
+            )}
+          </div>
+          {showQty && (
+            <div style={{ ...mono, fontSize: 12, color: C.chalk, flexShrink: 0, paddingRight: 6 }}>×{p.quantity}</div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <ModalShell title={user.displayName || user.email} onClose={onClose}>
+      {user.displayName && (
+        <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: -8, marginBottom: 14 }}>{user.email}</div>
+      )}
+      {!data && <div style={{ ...body, fontSize: 13, color: C.steel, padding: "10px 0" }}>Loading…</div>}
+      {data && section("GARAGE", data.garage, true)}
+      {data && section("WISHLIST", data.wishlist, false)}
+    </ModalShell>
   );
 }
 
