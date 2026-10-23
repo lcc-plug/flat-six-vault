@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { flushSync } from "react-dom";
-import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download, LogOut, Share } from "lucide-react";
+import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download, LogOut, Share, Calendar } from "lucide-react";
 import { useQuery, useMutation } from "convex/react";
 import { useConvexAuth, useAuthActions } from "@convex-dev/auth/react";
 import { api } from "../convex/_generated/api";
@@ -43,6 +43,30 @@ function metaLine(...parts) {
 // collab pin belonging to both "Santa Clarita" and "Wunderground").
 function splitSeries(series) {
   return (series || "").split(",").map((s) => s.trim()).filter(Boolean);
+}
+
+// releaseDate is stored as YYYY-MM-DD (from a <input type="date">). Render
+// it as "Nov 1" (or "Nov 1 '27" when it's not this year) instead of the raw
+// ISO string.
+function formatDropDate(isoDate) {
+  if (!isoDate) return "";
+  const d = new Date(isoDate + "T00:00:00");
+  if (Number.isNaN(d.getTime())) return isoDate;
+  const thisYear = new Date().getFullYear();
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: d.getFullYear() === thisYear ? undefined : "2-digit",
+  });
+}
+
+// releasedAt is an epoch-ms timestamp set automatically when a pin flips
+// from unreleased to released — rendered as "released 3 days ago".
+function formatReleasedAgo(releasedAt) {
+  const days = Math.floor((Date.now() - releasedAt) / (24 * 60 * 60 * 1000));
+  if (days <= 0) return "released today";
+  if (days === 1) return "released 1 day ago";
+  return `released ${days} days ago`;
 }
 
 // ---------- Pin photo (uploaded image, or placeholder mark) ----------
@@ -499,6 +523,9 @@ function MainApp() {
         tags: p.tags || "",
         images: p.images || [],
         addedBy: p.addedBy || "",
+        unreleased: p.unreleased || false,
+        releaseDate: p.releaseDate || "",
+        releasedAt: p.releasedAt || null,
       })),
     [pinsRaw]
   );
@@ -541,6 +568,15 @@ function MainApp() {
 
   const wishlistIds = useMemo(() => new Set(wishlist), [wishlist]);
   const wishlistPins = useMemo(() => catalog.filter((p) => wishlistIds.has(p.id)), [catalog, wishlistIds]);
+  const dropPins = useMemo(() => catalog.filter((p) => p.unreleased), [catalog]);
+  const RECENT_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+  const recentPins = useMemo(
+    () =>
+      catalog
+        .filter((p) => !p.unreleased && p.releasedAt && Date.now() - p.releasedAt < RECENT_WINDOW_MS)
+        .sort((a, b) => b.releasedAt - a.releasedAt),
+    [catalog]
+  );
 
   const seriesOptions = useMemo(() => Array.from(new Set(catalog.flatMap((p) => splitSeries(p.series)))).sort(), [catalog]);
   const chassisOptions = useMemo(() => Array.from(new Set(catalog.map((p) => p.chassisCode).filter(Boolean))).sort(), [catalog]);
@@ -590,6 +626,9 @@ function MainApp() {
       notes: fields.notes || "",
       tags: fields.tags || "",
       images: fields.images || [],
+      unreleased: !!fields.unreleased,
+      releaseDate: fields.releaseDate || "",
+      suppressRecentlyReleased: !!fields.suppressRecentlyReleased,
     })
       .then(() => flash("Catalog entry updated."))
       .catch((e) => flashWriteError(e, "Couldn't save — try again."));
@@ -699,6 +738,16 @@ function MainApp() {
               displayName={profile.displayName}
             />
           )}
+          {tab === "drops" && (
+            <DropsTab
+              pins={dropPins}
+              recentPins={recentPins}
+              wishlistIds={wishlistIds}
+              onToggleWishlist={toggleWishlist}
+              ownedIds={ownedIds}
+              onOpenDetail={(id) => setDetailPinId(id)}
+            />
+          )}
           {tab === "collection" && (
             <CollectionTab
               catalog={catalog}
@@ -726,6 +775,7 @@ function MainApp() {
           }}
         >
           <NavButton icon={Database} label="Catalog" active={tab === "catalog"} onClick={() => setTab("catalog")} />
+          <NavButton icon={Calendar} label="Drops" active={tab === "drops"} dot={dropPins.length > 0} onClick={() => setTab("drops")} />
           <NavButton icon={Heart} label="Wishlist" active={tab === "wishlist"} onClick={() => setTab("wishlist")} />
           <NavButton icon={PinIcon} label="Garage" active={tab === "collection"} onClick={() => setTab("collection")} />
           <NavButton icon={User} label="Profile" active={tab === "profile"} onClick={() => setTab("profile")} />
@@ -747,6 +797,8 @@ function MainApp() {
                 tags: pin.tags || "",
                 images: pin.images || [],
                 addedBy: profile.displayName || "Collector",
+                unreleased: false,
+                releaseDate: "",
               })
                 .then(() => flash("Added to the catalog."))
                 .catch((e) => flashWriteError(e, "Couldn't add — try again."));
@@ -908,7 +960,7 @@ function SignInScreen({ onSignedUp }) {
   );
 }
 
-function NavButton({ icon: Icon, label, active, onClick }) {
+function NavButton({ icon: Icon, label, active, dot, onClick }) {
   return (
     <button
       onClick={onClick}
@@ -917,7 +969,12 @@ function NavButton({ icon: Icon, label, active, onClick }) {
         padding: "10px 0 8px", color: active ? C.amber : C.steel, background: "transparent", border: "none",
       }}
     >
-      <Icon size={20} strokeWidth={active ? 2.4 : 1.8} />
+      <div style={{ position: "relative" }}>
+        <Icon size={20} strokeWidth={active ? 2.4 : 1.8} />
+        {dot && (
+          <span style={{ position: "absolute", top: -2, right: -2, width: 7, height: 7, borderRadius: 9999, background: C.red }} />
+        )}
+      </div>
       <span style={{ ...mono, fontSize: 10, letterSpacing: "0.06em" }}>{label}</span>
     </button>
   );
@@ -997,6 +1054,15 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
             >
               <div style={{ position: "relative" }}>
                 <PinPhoto pin={pin} height={130} radius={0} />
+                {pin.unreleased && (
+                  <div style={{
+                    ...mono, position: "absolute", top: 6, left: 6, fontSize: 10, fontWeight: 750,
+                    letterSpacing: "0.05em", color: "#F0A0A3", background: C.red,
+                    border: "1px solid rgba(255,255,255,0.3)", borderRadius: 9999, padding: "3px 9px",
+                  }}>
+                    UNRELEASED{pin.releaseDate && ` · ${formatDropDate(pin.releaseDate)}`}
+                  </div>
+                )}
                 <span
                   role="button"
                   onClick={(e) => { e.stopPropagation(); onToggleWishlist(pin.id); }}
@@ -1261,6 +1327,15 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds, 
           >
             <div style={{ position: "relative" }}>
               <PinPhoto pin={pin} height={130} radius={0} />
+              {pin.unreleased && (
+                <div style={{
+                  ...mono, position: "absolute", top: 6, left: 6, fontSize: 10, fontWeight: 750,
+                  letterSpacing: "0.05em", color: "#F0A0A3", background: C.red,
+                  border: "1px solid rgba(255,255,255,0.3)", borderRadius: 9999, padding: "3px 9px",
+                }}>
+                  UNRELEASED{pin.releaseDate && ` · ${formatDropDate(pin.releaseDate)}`}
+                </div>
+              )}
               {owned && (
                 <div style={{
                   ...mono, position: "absolute", bottom: 0, left: 0, right: 0, fontSize: 10, fontWeight: 700,
@@ -1378,6 +1453,124 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds, 
             </div>
           )}
         </ModalShell>
+      )}
+    </div>
+  );
+}
+
+// ---------- Drops Tab ----------
+function DropPinCard({ pin, wishlistIds, onToggleWishlist, ownedIds, onOpenDetail, badgeLabel, badgeColor, badgeBg, badgeBorder }) {
+  const wished = wishlistIds.has(pin.id);
+  const owned = ownedIds.has(pin.id);
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => onOpenDetail(pin.id)}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenDetail(pin.id); } }}
+      style={{ textAlign: "left", background: C.catalogCard, border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}
+    >
+      <div style={{ position: "relative" }}>
+        <PinPhoto pin={pin} height={130} radius={0} />
+        <div style={{
+          ...mono, position: "absolute", top: 6, left: 6, fontSize: 10, fontWeight: 750,
+          letterSpacing: "0.05em", color: badgeColor, background: badgeBg,
+          border: `1px solid ${badgeBorder}`, borderRadius: 9999, padding: "3px 9px",
+        }}>
+          {badgeLabel}
+        </div>
+        <span
+          role="button"
+          onClick={(e) => { e.stopPropagation(); onToggleWishlist(pin.id); }}
+          style={{
+            position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: 9999,
+            color: wished ? C.ink : "#fff", background: wished ? "#F0A0A3" : "rgba(0,0,0,0.45)",
+            border: "none", display: "flex", alignItems: "center", justifyContent: "center",
+          }}
+        >
+          <Heart size={14} fill={wished ? C.ink : "none"} />
+        </span>
+        {owned && (
+          <div style={{
+            ...mono, position: "absolute", bottom: 0, left: 0, right: 0, fontSize: 10, fontWeight: 700,
+            letterSpacing: "0.08em", textAlign: "center", color: "#4ADE80", background: "rgba(16,24,19,0.78)",
+            padding: "3px 0",
+          }}>
+            OWNED
+          </div>
+        )}
+      </div>
+      <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
+        <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
+            {pin.variant}
+          </div>
+          {pin.editionSize && (
+            <div style={{ ...mono, fontSize: 11, color: C.steel, marginTop: 2 }}>{pin.editionSize}</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DropsTab({ pins, recentPins, wishlistIds, onToggleWishlist, ownedIds, onOpenDetail }) {
+  const sorted = useMemo(() => {
+    const withDate = pins.filter((p) => p.releaseDate).sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
+    const withoutDate = pins.filter((p) => !p.releaseDate).sort((a, b) => a.chassisCode.localeCompare(b.chassisCode));
+    return [...withDate, ...withoutDate];
+  }, [pins]);
+
+  return (
+    <div style={{ padding: "14px 16px" }}>
+      <div style={{ ...body, fontSize: 12, color: C.steel, marginBottom: 14, lineHeight: 1.5 }}>
+        Pins that haven't come out yet. Most don't have a firm date — tap the heart to get notified-ish (check back here).
+      </div>
+
+      {sorted.length === 0 && (
+        <EmptyState title="Nothing unreleased right now." body="Check back later — new drops will show up here first." />
+      )}
+
+      <div className="fsv-pin-grid">
+        {sorted.map((pin) => (
+          <DropPinCard
+            key={pin.id}
+            pin={pin}
+            wishlistIds={wishlistIds}
+            onToggleWishlist={onToggleWishlist}
+            ownedIds={ownedIds}
+            onOpenDetail={onOpenDetail}
+            badgeLabel={`UNRELEASED${pin.releaseDate ? ` · ${formatDropDate(pin.releaseDate)}` : ""}`}
+            badgeColor="#F0A0A3"
+            badgeBg={C.red}
+            badgeBorder="rgba(255,255,255,0.3)"
+          />
+        ))}
+      </div>
+
+      {recentPins.length > 0 && (
+        <>
+          <div style={{ ...mono, fontSize: 11, color: C.steel, letterSpacing: "0.08em", marginTop: 24, marginBottom: 12 }}>
+            RECENTLY RELEASED
+          </div>
+          <div className="fsv-pin-grid">
+            {recentPins.map((pin) => (
+              <DropPinCard
+                key={pin.id}
+                pin={pin}
+                wishlistIds={wishlistIds}
+                onToggleWishlist={onToggleWishlist}
+                ownedIds={ownedIds}
+                onOpenDetail={onOpenDetail}
+                badgeLabel={formatReleasedAgo(pin.releasedAt).toUpperCase()}
+                badgeColor="#4ADE80"
+                badgeBg="rgba(10,40,16,0.9)"
+                badgeBorder="rgba(74,222,128,0.4)"
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
@@ -1566,6 +1759,7 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const [confirmDelete, setConfirmDelete] = useState(false);
   const confirmDeleteAtRef = useRef(0);
+  const [suppressRecentlyReleased, setSuppressRecentlyReleased] = useState(false);
 
   const [qty, setQty] = useState(entry ? entry.quantity : 1);
   const [notes, setNotes] = useState(entry ? entry.notes || "" : "");
@@ -1578,11 +1772,12 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
     setF({ ...pin });
     setActiveImage(0);
     setConfirmDelete(false);
+    setSuppressRecentlyReleased(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pin.id]);
 
   function saveEdit() {
-    onSaveCatalogEdit({ ...f, year: Number(f.year) || f.year });
+    onSaveCatalogEdit({ ...f, year: Number(f.year) || f.year, suppressRecentlyReleased });
     setEditMode(false);
   }
 
@@ -1629,6 +1824,11 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
             />
           )}
 
+          {pin.unreleased && (
+            <div style={{ ...mono, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: "#F0A0A3", marginTop: 12 }}>
+              UNRELEASED{pin.releaseDate && ` · DROPS ${formatDropDate(pin.releaseDate).toUpperCase()}`}
+            </div>
+          )}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: 14, marginBottom: 4 }}>
             <div style={{ ...display, fontSize: 22, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
             {isAdmin && (
@@ -1701,6 +1901,56 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
           <Field label="Tags (comma separated, not shown publicly)">
             <input style={inputStyle} value={f.tags || ""} onChange={set("tags")} placeholder="e.g. martini, le mans, rare" />
           </Field>
+
+          <div
+            role="button"
+            onClick={() => setF({ ...f, unreleased: !f.unreleased, releaseDate: f.unreleased ? "" : f.releaseDate })}
+            style={{
+              display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10,
+              border: `1px solid ${f.unreleased ? C.redDeep : C.line}`, background: f.unreleased ? "rgba(193,39,45,0.1)" : "transparent",
+              marginBottom: f.unreleased ? 10 : 16, cursor: "pointer",
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={!!f.unreleased}
+              onChange={() => {}}
+              style={{ width: 16, height: 16, accentColor: C.red, pointerEvents: "none" }}
+            />
+            <span style={{ ...body, fontSize: 13, color: f.unreleased ? "#F0A0A3" : C.chalk }}>
+              Not released yet — shows a red tag and lists it under Drops
+            </span>
+          </div>
+          {f.unreleased && (
+            <Field label="Release date (optional)">
+              <input
+                type="date"
+                style={{ ...inputStyle, colorScheme: "dark" }}
+                value={f.releaseDate || ""}
+                onChange={set("releaseDate")}
+              />
+            </Field>
+          )}
+          {!f.unreleased && (pin.releasedAt || pin.unreleased) && (
+            <div
+              role="button"
+              onClick={() => setSuppressRecentlyReleased(!suppressRecentlyReleased)}
+              style={{
+                display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10,
+                border: `1px solid ${C.line}`, background: "transparent", marginBottom: 16, cursor: "pointer",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={suppressRecentlyReleased}
+                onChange={() => {}}
+                style={{ width: 16, height: 16, accentColor: C.red, pointerEvents: "none" }}
+              />
+              <span style={{ ...body, fontSize: 13, color: C.chalk }}>
+                Don't show in "Recently Released" (e.g. "Not released yet" was checked by mistake)
+              </span>
+            </div>
+          )}
 
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={() => setEditMode(false)} style={{ ...mono, flex: 1, padding: "12px 0", borderRadius: 10, border: `1px solid ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em" }}>

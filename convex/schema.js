@@ -17,6 +17,9 @@ export default defineSchema({
     images: v.array(v.string()),
     legacyCode: v.optional(v.string()),
     addedBy: v.optional(v.string()),
+    unreleased: v.optional(v.boolean()),
+    releaseDate: v.optional(v.string()),
+    releasedAt: v.optional(v.number()),
   }).index("by_chassisCode", ["chassisCode"]),
 
   garageEntries: defineTable({
