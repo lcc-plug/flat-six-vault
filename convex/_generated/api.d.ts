@@ -13,6 +13,7 @@ import type * as adminAuth from "../adminAuth.js";
 import type * as auth from "../auth.js";
 import type * as garage from "../garage.js";
 import type * as http from "../http.js";
+import type * as passwords from "../passwords.js";
 import type * as pins from "../pins.js";
 import type * as profiles from "../profiles.js";
 import type * as seed from "../seed.js";
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   garage: typeof garage;
   http: typeof http;
+  passwords: typeof passwords;
   pins: typeof pins;
   profiles: typeof profiles;
   seed: typeof seed;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { flushSync } from "react-dom";
-import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download, LogOut, Share, Calendar } from "lucide-react";
-import { useQuery, useMutation } from "convex/react";
+import { Search, Plus, X, Database, PinIcon, User, Trash2, Loader2, Pencil, Check, Upload, ChevronLeft, ChevronRight, ChevronDown, Heart, Download, LogOut, Share, Calendar, KeyRound, Copy } from "lucide-react";
+import { useQuery, useMutation, useAction } from "convex/react";
 import { useConvexAuth, useAuthActions } from "@convex-dev/auth/react";
 import { api } from "../convex/_generated/api";
 
@@ -1662,6 +1662,7 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
 
   const users = useQuery(api.admin.listUsers, profile.isAdmin ? {} : "skip");
   const [viewingUser, setViewingUser] = useState(null);
+  const [resettingUser, setResettingUser] = useState(null);
 
   return (
     <div style={{ padding: "14px 16px" }}>
@@ -1687,6 +1688,8 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
         <StatBlock label="PINS OWNED" value={stats.owned} />
         <StatBlock label="CONTRIBUTED" value={contributions} align="right" />
       </div>
+
+      <ChangePasswordSection />
 
       <button
         onClick={onSignOut}
@@ -1738,6 +1741,20 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
                       {u.garageCount} owned · {u.wishlistCount} wanted
                     </div>
                   </div>
+                  {u.email !== profile.email && (
+                    <button
+                      type="button"
+                      aria-label={`Reset password for ${u.email}`}
+                      onClick={(e) => { e.stopPropagation(); setResettingUser(u); }}
+                      onKeyDown={(e) => e.stopPropagation()}
+                      style={{
+                        width: 30, height: 30, borderRadius: 8, border: `1px solid ${C.line}`, background: "transparent",
+                        color: C.steel, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                      }}
+                    >
+                      <KeyRound size={14} />
+                    </button>
+                  )}
                   <ChevronRight size={14} color={C.steel} />
                 </div>
               </div>
@@ -1747,7 +1764,175 @@ function ProfileTab({ profile, saveProfile, catalog, stats, onSignOut }) {
       )}
 
       {viewingUser && <AdminUserCollectionModal user={viewingUser} onClose={() => setViewingUser(null)} />}
+      {resettingUser && <AdminResetPasswordModal user={resettingUser} onClose={() => setResettingUser(null)} />}
     </div>
+  );
+}
+
+// ---------- Change password (any signed-in user) ----------
+function ChangePasswordSection() {
+  const changePassword = useAction(api.passwords.changePassword);
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [done, setDone] = useState(false);
+
+  function close() {
+    setOpen(false);
+    setCurrent(""); setNext(""); setConfirm(""); setError("");
+  }
+
+  async function submit(e) {
+    e.preventDefault();
+    setError("");
+    if (next.length < 8) return setError("New password must be at least 8 characters.");
+    if (next !== confirm) return setError("New passwords don't match.");
+    setSaving(true);
+    try {
+      await changePassword({ currentPassword: current, newPassword: next });
+      close();
+      setDone(true);
+    } catch (err) {
+      setError(typeof err?.data === "string" ? err.data : "Couldn't change your password. Try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const secondaryButton = {
+    ...mono, width: "100%", padding: "12px 0", borderRadius: 10,
+    border: `1px solid ${C.line}`, color: C.steel, background: "transparent", fontSize: 12, letterSpacing: "0.05em",
+    display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+  };
+
+  if (!open) {
+    return (
+      <div style={{ marginTop: 16 }}>
+        <button onClick={() => { setDone(false); setOpen(true); }} style={secondaryButton}>
+          <KeyRound size={14} /> CHANGE PASSWORD
+        </button>
+        {done && (
+          <div style={{ ...body, fontSize: 12, color: "#4ADE80", textAlign: "center", marginTop: 8 }}>
+            Password updated.
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} style={{ marginTop: 16, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: 16 }}>
+      <div style={{ ...mono, fontSize: 11, color: C.steel, letterSpacing: "0.06em", marginBottom: 12 }}>CHANGE PASSWORD</div>
+      <Field label="Current password">
+        <input type="password" autoComplete="current-password" required value={current} onChange={(e) => setCurrent(e.target.value)} style={inputStyle} />
+      </Field>
+      <Field label="New password">
+        <input type="password" autoComplete="new-password" required minLength={8} value={next} onChange={(e) => setNext(e.target.value)} style={inputStyle} />
+      </Field>
+      <Field label="Confirm new password">
+        <input type="password" autoComplete="new-password" required minLength={8} value={confirm} onChange={(e) => setConfirm(e.target.value)} style={inputStyle} />
+      </Field>
+      {error && <div style={{ ...body, fontSize: 12, color: "#F0A0A3", marginBottom: 12 }}>{error}</div>}
+      <div style={{ display: "flex", gap: 10 }}>
+        <button type="button" onClick={close} style={{ ...secondaryButton, flex: 1 }}>CANCEL</button>
+        <button
+          type="submit"
+          disabled={saving}
+          style={{ ...secondaryButton, flex: 1, border: "none", background: saving ? C.line : C.amber, color: saving ? C.steel : C.ink }}
+        >
+          {saving ? "SAVING…" : "SAVE"}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+// ---------- Admin: reset another user's password ----------
+function AdminResetPasswordModal({ user, onClose }) {
+  const resetPassword = useAction(api.passwords.adminResetPassword);
+  const [working, setWorking] = useState(false);
+  const [tempPassword, setTempPassword] = useState("");
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  async function confirmReset() {
+    setError("");
+    setWorking(true);
+    try {
+      setTempPassword(await resetPassword({ userId: user.id }));
+    } catch (err) {
+      setError(typeof err?.data === "string" ? err.data : "Couldn't reset the password. Try again.");
+    } finally {
+      setWorking(false);
+    }
+  }
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(tempPassword);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  const button = {
+    ...mono, flex: 1, padding: "12px 0", borderRadius: 10, fontSize: 12, letterSpacing: "0.05em",
+    display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+  };
+
+  return (
+    <ModalShell title="Reset Password" onClose={onClose}>
+      {!tempPassword ? (
+        <>
+          <div style={{ ...body, fontSize: 14, color: C.chalk, lineHeight: 1.5, marginBottom: 10 }}>
+            Reset the password for <b>{user.email}</b>?
+          </div>
+          <ul style={{ ...body, fontSize: 13, color: C.steel, lineHeight: 1.6, margin: "0 0 16px 18px", padding: 0 }}>
+            <li>Their current password will stop working.</li>
+            <li>They'll be signed out on every device.</li>
+            <li>You'll get a temporary password to send them.</li>
+          </ul>
+          {error && <div style={{ ...body, fontSize: 12, color: "#F0A0A3", marginBottom: 12 }}>{error}</div>}
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={onClose} style={{ ...button, border: `1px solid ${C.line}`, color: C.steel, background: "transparent" }}>CANCEL</button>
+            <button
+              onClick={confirmReset}
+              disabled={working}
+              style={{ ...button, border: "none", color: "#fff", background: working ? C.line : C.red }}
+            >
+              {working ? "RESETTING…" : "RESET PASSWORD"}
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div style={{ ...body, fontSize: 13, color: C.steel, marginBottom: 8 }}>
+            Temporary password for <b style={{ color: C.chalk }}>{user.email}</b>:
+          </div>
+          <div style={{
+            ...mono, fontSize: 22, letterSpacing: "0.06em", color: C.chalk, textAlign: "center",
+            background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "14px 10px", marginBottom: 12,
+            userSelect: "all", wordBreak: "break-all",
+          }}>
+            {tempPassword}
+          </div>
+          <div style={{ ...body, fontSize: 12, color: C.steel, lineHeight: 1.5, marginBottom: 16 }}>
+            Send it to them privately. This is the only time it's shown. After signing in they can pick their own
+            under Change Password on their Profile tab.
+          </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={copy} style={{ ...button, border: `1px solid ${C.line}`, color: copied ? "#4ADE80" : C.steel, background: "transparent" }}>
+              {copied ? <><Check size={14} /> COPIED</> : <><Copy size={14} /> COPY</>}
+            </button>
+            <button onClick={onClose} style={{ ...button, border: "none", color: C.ink, background: C.amber }}>DONE</button>
+          </div>
+        </>
+      )}
+    </ModalShell>
   );
 }
 
