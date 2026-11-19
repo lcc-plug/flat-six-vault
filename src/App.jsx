@@ -1085,7 +1085,7 @@ function CatalogTab({ filtered, search, setSearch, seriesOptions, chassisOptions
                 )}
               </div>
               <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+                <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF", overflowWrap: "break-word", wordBreak: "break-word" }}>{pin.name}</div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
                   <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
                     {pin.variant}
@@ -1347,7 +1347,7 @@ function WishlistTab({ pins, onRemove, onOpenDetail, isAuthenticated, ownedIds, 
               )}
             </div>
             <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-              <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+              <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF", overflowWrap: "break-word", wordBreak: "break-word" }}>{pin.name}</div>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
                   {pin.variant}
@@ -1501,7 +1501,7 @@ function DropPinCard({ pin, wishlistIds, onToggleWishlist, ownedIds, onOpenDetai
         )}
       </div>
       <div style={{ padding: 10, textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
-        <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+        <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF", overflowWrap: "break-word", wordBreak: "break-word" }}>{pin.name}</div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
             {pin.variant}
@@ -1613,7 +1613,7 @@ function CollectionTab({ catalog, collection, stats, onAdd, onOpenDetail, isAuth
             >
               <PinPhoto pin={pin} height={130} radius={0} />
               <div style={{ padding: 10, flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+                <div style={{ ...display, fontSize: 16, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF", overflowWrap: "break-word", wordBreak: "break-word" }}>{pin.name}</div>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
                   <div style={{ ...body, fontSize: 12, color: C.steel, marginTop: 3 }}>
                     {pin.variant}
@@ -2068,7 +2068,7 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
             </div>
           )}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: 14, marginBottom: 4 }}>
-            <div style={{ ...display, fontSize: 22, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF" }}>{pin.name}</div>
+            <div style={{ ...display, fontSize: 22, fontWeight: 700, lineHeight: 1.15, color: "#FFFFFF", flex: 1, minWidth: 0, overflowWrap: "break-word", wordBreak: "break-word" }}>{pin.name}</div>
             {isAdmin && (
               <button onClick={() => setEditMode(true)} style={{ background: C.panelRaised, border: `1px solid ${C.line}`, borderRadius: 8, padding: 6, color: C.steel, flexShrink: 0, marginLeft: 8 }}>
                 <Pencil size={14} />
