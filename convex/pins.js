@@ -32,23 +32,10 @@ export const create = mutation({
 });
 
 export const update = mutation({
-  args: { id: v.id("pins"), suppressRecentlyReleased: v.optional(v.boolean()), ...pinFields },
-  handler: async (ctx, { id, suppressRecentlyReleased, ...fields }) => {
+  args: { id: v.id("pins"), ...pinFields },
+  handler: async (ctx, { id, ...fields }) => {
     await requireAdmin(ctx);
-    const existing = await ctx.db.get(id);
-    let releasedAt = existing?.releasedAt;
-    if (existing && existing.unreleased && !fields.unreleased) {
-      // Just flipped from unreleased to released — mark it for the
-      // "recently released" view. Automatic, no extra admin step.
-      releasedAt = Date.now();
-    } else if (fields.unreleased) {
-      // Re-marked unreleased (correcting a mistake) — it's not a release anymore.
-      releasedAt = undefined;
-    }
-    // Manual override — e.g. "unreleased" was checked by mistake and the
-    // admin doesn't want it showing up as a fresh release once unchecked.
-    if (suppressRecentlyReleased) releasedAt = undefined;
-    await ctx.db.patch(id, { ...fields, releasedAt });
+    await ctx.db.patch(id, fields);
   },
 });
 

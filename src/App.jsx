@@ -60,15 +60,6 @@ function formatDropDate(isoDate) {
   });
 }
 
-// releasedAt is an epoch-ms timestamp set automatically when a pin flips
-// from unreleased to released — rendered as "released 3 days ago".
-function formatReleasedAgo(releasedAt) {
-  const days = Math.floor((Date.now() - releasedAt) / (24 * 60 * 60 * 1000));
-  if (days <= 0) return "released today";
-  if (days === 1) return "released 1 day ago";
-  return `released ${days} days ago`;
-}
-
 // ---------- Pin photo (uploaded image, or placeholder mark) ----------
 const navBtnStyle = {
   position: "absolute", top: "50%", transform: "translateY(-50%)",
@@ -525,7 +516,6 @@ function MainApp() {
         addedBy: p.addedBy || "",
         unreleased: p.unreleased || false,
         releaseDate: p.releaseDate || "",
-        releasedAt: p.releasedAt || null,
       })),
     [pinsRaw]
   );
@@ -569,14 +559,6 @@ function MainApp() {
   const wishlistIds = useMemo(() => new Set(wishlist), [wishlist]);
   const wishlistPins = useMemo(() => catalog.filter((p) => wishlistIds.has(p.id)), [catalog, wishlistIds]);
   const dropPins = useMemo(() => catalog.filter((p) => p.unreleased), [catalog]);
-  const RECENT_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
-  const recentPins = useMemo(
-    () =>
-      catalog
-        .filter((p) => !p.unreleased && p.releasedAt && Date.now() - p.releasedAt < RECENT_WINDOW_MS)
-        .sort((a, b) => b.releasedAt - a.releasedAt),
-    [catalog]
-  );
 
   const seriesOptions = useMemo(() => Array.from(new Set(catalog.flatMap((p) => splitSeries(p.series)))).sort(), [catalog]);
   const chassisOptions = useMemo(() => Array.from(new Set(catalog.map((p) => p.chassisCode).filter(Boolean))).sort(), [catalog]);
@@ -628,7 +610,6 @@ function MainApp() {
       images: fields.images || [],
       unreleased: !!fields.unreleased,
       releaseDate: fields.releaseDate || "",
-      suppressRecentlyReleased: !!fields.suppressRecentlyReleased,
     })
       .then(() => flash("Catalog entry updated."))
       .catch((e) => flashWriteError(e, "Couldn't save — try again."));
@@ -741,7 +722,6 @@ function MainApp() {
           {tab === "drops" && (
             <DropsTab
               pins={dropPins}
-              recentPins={recentPins}
               wishlistIds={wishlistIds}
               onToggleWishlist={toggleWishlist}
               ownedIds={ownedIds}
@@ -1515,7 +1495,7 @@ function DropPinCard({ pin, wishlistIds, onToggleWishlist, ownedIds, onOpenDetai
   );
 }
 
-function DropsTab({ pins, recentPins, wishlistIds, onToggleWishlist, ownedIds, onOpenDetail }) {
+function DropsTab({ pins, wishlistIds, onToggleWishlist, ownedIds, onOpenDetail }) {
   const sorted = useMemo(() => {
     const withDate = pins.filter((p) => p.releaseDate).sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
     const withoutDate = pins.filter((p) => !p.releaseDate).sort((a, b) => a.chassisCode.localeCompare(b.chassisCode));
@@ -1544,30 +1524,6 @@ function DropsTab({ pins, recentPins, wishlistIds, onToggleWishlist, ownedIds, o
           />
         ))}
       </div>
-
-      {recentPins.length > 0 && (
-        <>
-          <div style={{ ...mono, fontSize: 11, color: C.steel, letterSpacing: "0.08em", marginTop: 24, marginBottom: 12 }}>
-            RECENTLY RELEASED
-          </div>
-          <div className="fsv-pin-grid">
-            {recentPins.map((pin) => (
-              <DropPinCard
-                key={pin.id}
-                pin={pin}
-                wishlistIds={wishlistIds}
-                onToggleWishlist={onToggleWishlist}
-                ownedIds={ownedIds}
-                onOpenDetail={onOpenDetail}
-                badgeLabel={formatReleasedAgo(pin.releasedAt).toUpperCase()}
-                badgeColor="#4ADE80"
-                badgeBg="rgba(10,40,16,0.9)"
-                badgeBorder="rgba(74,222,128,0.4)"
-              />
-            ))}
-          </div>
-        </>
-      )}
     </div>
   );
 }
@@ -1997,7 +1953,6 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const [confirmDelete, setConfirmDelete] = useState(false);
   const confirmDeleteAtRef = useRef(0);
-  const [suppressRecentlyReleased, setSuppressRecentlyReleased] = useState(false);
 
   const [qty, setQty] = useState(entry ? entry.quantity : 1);
   const [notes, setNotes] = useState(entry ? entry.notes || "" : "");
@@ -2010,12 +1965,11 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
     setF({ ...pin });
     setActiveImage(0);
     setConfirmDelete(false);
-    setSuppressRecentlyReleased(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pin.id]);
 
   function saveEdit() {
-    onSaveCatalogEdit({ ...f, year: Number(f.year) || f.year, suppressRecentlyReleased });
+    onSaveCatalogEdit({ ...f, year: Number(f.year) || f.year });
     setEditMode(false);
   }
 
@@ -2140,25 +2094,30 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
             <input style={inputStyle} value={f.tags || ""} onChange={set("tags")} placeholder="e.g. martini, le mans, rare" />
           </Field>
 
-          <div
-            role="button"
-            onClick={() => setF({ ...f, unreleased: !f.unreleased, releaseDate: f.unreleased ? "" : f.releaseDate })}
-            style={{
-              display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10,
-              border: `1px solid ${f.unreleased ? C.redDeep : C.line}`, background: f.unreleased ? "rgba(193,39,45,0.1)" : "transparent",
-              marginBottom: f.unreleased ? 10 : 16, cursor: "pointer",
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={!!f.unreleased}
-              onChange={() => {}}
-              style={{ width: 16, height: 16, accentColor: C.red, pointerEvents: "none" }}
-            />
-            <span style={{ ...body, fontSize: 13, color: f.unreleased ? "#F0A0A3" : C.chalk }}>
-              Not released yet — shows a red tag and lists it under Drops
-            </span>
-          </div>
+          <Field label="Release status">
+            <div style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: `1px solid ${C.line}` }}>
+              <button
+                type="button"
+                onClick={() => setF({ ...f, unreleased: false, releaseDate: "" })}
+                style={{
+                  ...mono, flex: 1, padding: "9px 0", fontSize: 12, letterSpacing: "0.05em", border: "none",
+                  background: !f.unreleased ? C.amber : "transparent", color: !f.unreleased ? C.ink : C.steel,
+                }}
+              >
+                RELEASED
+              </button>
+              <button
+                type="button"
+                onClick={() => setF({ ...f, unreleased: true })}
+                style={{
+                  ...mono, flex: 1, padding: "9px 0", fontSize: 12, letterSpacing: "0.05em", border: "none",
+                  background: f.unreleased ? C.red : "transparent", color: f.unreleased ? "#fff" : C.steel,
+                }}
+              >
+                UNRELEASED
+              </button>
+            </div>
+          </Field>
           {f.unreleased && (
             <Field label="Release date (optional)">
               <input
@@ -2168,26 +2127,6 @@ function PinDetailModal({ pin, entry, isAdmin, onClose, onSaveCatalogEdit, onAdd
                 onChange={set("releaseDate")}
               />
             </Field>
-          )}
-          {!f.unreleased && (pin.releasedAt || pin.unreleased) && (
-            <div
-              role="button"
-              onClick={() => setSuppressRecentlyReleased(!suppressRecentlyReleased)}
-              style={{
-                display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10,
-                border: `1px solid ${C.line}`, background: "transparent", marginBottom: 16, cursor: "pointer",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={suppressRecentlyReleased}
-                onChange={() => {}}
-                style={{ width: 16, height: 16, accentColor: C.red, pointerEvents: "none" }}
-              />
-              <span style={{ ...body, fontSize: 13, color: C.chalk }}>
-                Don't show in "Recently Released" (e.g. "Not released yet" was checked by mistake)
-              </span>
-            </div>
           )}
 
           <div style={{ display: "flex", gap: 10 }}>
