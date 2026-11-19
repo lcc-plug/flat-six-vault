@@ -5088,13 +5088,145 @@ export const SEED_CATALOG = [
   },
   {
     "id": "p393",
-    "chassisCode": "",
-    "name": "Porsche Motorsports Pin",
-    "series": "Porsche Motorsports",
+    "chassisCode": "992",
+    "name": "992 GT3 Cup - Red (@porschemotorsportnorthamerica)",
+    "series": "Porsche Motorsports, Raceborn",
     "year": "",
-    "variant": "",
+    "variant": "Red",
     "editionSize": "LE Unknown",
     "notes": "Part of Raceborn 75 Years of Porsche Motorsport box set \u2014 Soft enamel",
-    "images": []
+    "images": [
+      "/pins/p393.jpg"
+    ]
+  },
+  {
+    "id": "p394",
+    "chassisCode": "GT1",
+    "name": "911 GT1 Evo #38 - Champion Racing",
+    "series": "Champion Porsche",
+    "year": "",
+    "variant": "White, Multicolored",
+    "editionSize": "LE Unknown",
+    "notes": "Soft enamel",
+    "images": [
+      "/pins/p394.jpg"
+    ]
+  },
+  {
+    "id": "p395",
+    "chassisCode": "944",
+    "name": "944 S2 - Carlsen No. 7",
+    "series": "Porsche Redwood City",
+    "year": "",
+    "variant": "White",
+    "editionSize": "LE 500",
+    "notes": "Porsche Restoration Challenge 2026 \u2014 Soft enamel",
+    "images": [
+      "/pins/p395.jpg"
+    ]
+  },
+  {
+    "id": "p396",
+    "chassisCode": "F Series",
+    "name": "911 Carrera RS 2.7 - Rusnak",
+    "series": "Pasadena Porsche, Rusnak",
+    "year": "",
+    "variant": "White",
+    "editionSize": "LE Unknown",
+    "notes": "Soft enamel",
+    "images": [
+      "/pins/p396.jpg"
+    ]
+  },
+  {
+    "id": "p397",
+    "chassisCode": "992",
+    "name": "911 Carrera - Blue",
+    "series": "",
+    "year": "",
+    "variant": "Blue",
+    "editionSize": "LE Unknown",
+    "notes": "Soft enamel",
+    "images": [
+      "/pins/p397.jpg"
+    ]
+  },
+  {
+    "id": "p398",
+    "chassisCode": "F Series",
+    "name": "911 - Arizona Holiday",
+    "series": "Holiday, Arizona",
+    "year": "",
+    "variant": "Yellow, Light Green",
+    "editionSize": "LE 2000",
+    "notes": "Soft enamel",
+    "images": [
+      "/pins/p398.jpg"
+    ]
+  },
+  {
+    "id": "p399",
+    "chassisCode": "914",
+    "name": "914 - Orange (@built.by.zach)",
+    "series": "Toyo Tires, Sema",
+    "year": "",
+    "variant": "Orange, Black",
+    "editionSize": "LE Unknown",
+    "notes": "Sema 2026 \u2014 Soft enamel",
+    "images": [
+      "/pins/p399.jpg"
+    ]
+  },
+  {
+    "id": "p400",
+    "chassisCode": "935",
+    "name": "935 - Sunset Livery (@bisimoto)",
+    "series": "Toyo Tires, Sema, Bisimoto",
+    "year": "",
+    "variant": "White, Orange",
+    "editionSize": "LE 1000",
+    "notes": "Sema 2026, Baby Moby \u2014 Soft enamel",
+    "images": [
+      "/pins/p400.jpg"
+    ]
+  },
+  {
+    "id": "p401",
+    "chassisCode": "964",
+    "name": "964 - Matte Black (Hansel)",
+    "series": "Toyo Tires",
+    "year": "",
+    "variant": "Matte Black",
+    "editionSize": "LE 250",
+    "notes": "Hansels personal 964 C4 \u2014 Soft enamel",
+    "images": [
+      "/pins/p401.jpg"
+    ]
+  },
+  {
+    "id": "p402",
+    "chassisCode": "992",
+    "name": "GT3 RS - Black (@pikachupcar)",
+    "series": "Sema, Antigravity Batteries",
+    "year": "",
+    "variant": "Black",
+    "editionSize": "LE 500",
+    "notes": "Sema 2026 \u2014 Soft enamel",
+    "images": [
+      "/pins/p402.jpg"
+    ]
+  },
+  {
+    "id": "p403",
+    "chassisCode": "G Series",
+    "name": "911 Turbo - Purple",
+    "series": "Sema",
+    "year": "",
+    "variant": "Purple",
+    "editionSize": "LE 500",
+    "notes": "Sema 2026 \u2014 Soft enamel",
+    "images": [
+      "/pins/p403.jpg"
+    ]
   }
 ];
